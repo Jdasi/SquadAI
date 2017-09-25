@@ -10,7 +10,8 @@ public class FirstPersonMouseLook : MonoBehaviour
     [SerializeField] bool y_flipped;
 
     [Header("References")]
-    [SerializeField] Transform transform_to_rotate;
+    [SerializeField] Transform x_rotate_transform;
+    [SerializeField] Transform y_rotate_transform;
 
     private float pan_horizontal;
     private float pan_vertical;
@@ -18,8 +19,7 @@ public class FirstPersonMouseLook : MonoBehaviour
 
 	void Start()
     {
-        if (transform_to_rotate == null)
-            transform_to_rotate = this.transform;
+
 	}
 	
 
@@ -33,7 +33,8 @@ public class FirstPersonMouseLook : MonoBehaviour
 
         pan_vertical = Mathf.Clamp(pan_vertical, -90, 90);
 
-        transform_to_rotate.rotation = Quaternion.Euler(pan_vertical, pan_horizontal, 0);
+        x_rotate_transform.rotation = Quaternion.Euler(0, pan_horizontal, 0);
+        y_rotate_transform.rotation = Quaternion.Euler(pan_vertical, x_rotate_transform.eulerAngles.y, 0);
 	}
 
 }
