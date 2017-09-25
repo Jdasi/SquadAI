@@ -5,12 +5,13 @@ using UnityEngine;
 public class FirstPersonMovement : MonoBehaviour
 {
     [Header("Paramters")]
-    [SerializeField] float speed = 30;
+    [SerializeField] float speed = 10;
+    [SerializeField] float noclip_speed = 15;
     [SerializeField] float strafe_speed_modifier = 1;
     [SerializeField] float back_speed_modifier = 1;
     [SerializeField] bool noclip;
-    [SerializeField] LayerMask player_layer;
-    [SerializeField] LayerMask noclip_layer;
+    [SerializeField] string player_layer;
+    [SerializeField] string noclip_layer;
 
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
@@ -18,6 +19,10 @@ public class FirstPersonMovement : MonoBehaviour
 
     private float horizontal;
     private float vertical;
+    private bool sprinting;
+
+    private int player_layer_value;
+    private int noclip_layer_value;
 
 
     public void ToggleNoclip()
@@ -25,13 +30,14 @@ public class FirstPersonMovement : MonoBehaviour
         noclip = !noclip;
         rigid_body.isKinematic = noclip;
 
-        this.gameObject.layer = noclip ? noclip_layer : player_layer;
+        this.gameObject.layer = noclip ? noclip_layer_value : player_layer_value;
     }
     
 
     void Start()
     {
-
+        player_layer_value = LayerMask.NameToLayer(player_layer);
+        noclip_layer_value = LayerMask.NameToLayer(noclip_layer);
     }
 
 
@@ -40,8 +46,8 @@ public class FirstPersonMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N))
             ToggleNoclip();
 
-        horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * speed * strafe_speed_modifier;
-        vertical = Input.GetAxis("Vertical") * Time.deltaTime * speed;
+        horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * CurrentSpeed() * strafe_speed_modifier;
+        vertical = Input.GetAxis("Vertical") * Time.deltaTime * CurrentSpeed();
 
         if (vertical < 0)
             vertical *= back_speed_modifier;
@@ -74,11 +80,17 @@ public class FirstPersonMovement : MonoBehaviour
                     (vertical * forward);
             }
 
-            if (move.magnitude > speed)
-                move = move.normalized * speed;
+            if (horizontal != 0 && vertical != 0)
+                move *= strafe_speed_modifier;
 
             rigid_body.MovePosition(rigid_body.position + move);
         }
+    }
+
+
+    float CurrentSpeed()
+    {
+        return noclip ? noclip_speed : speed;
     }
 
 }
