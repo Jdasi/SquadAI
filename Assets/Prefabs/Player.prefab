@@ -341,7 +341,9 @@ MonoBehaviour:
   noclip_speed: 15
   strafe_speed_modifier: 0.8
   back_speed_modifier: 0.8
-  sprint_modifier: 1.5
+  sprint_speed_modifier: 1.5
+  crouch_speed_modifier: 0.5
+  crouch_shrink_factor: 0.5
   jump_force: 5
   player_layer: Player
   noclip_layer: Noclip
