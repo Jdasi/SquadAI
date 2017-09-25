@@ -9,7 +9,8 @@ public class FirstPersonMovement : MonoBehaviour
     [SerializeField] float noclip_speed = 15;
     [SerializeField] float strafe_speed_modifier = 1;
     [SerializeField] float back_speed_modifier = 1;
-    [SerializeField] bool noclip;
+    [SerializeField] float sprint_modifier = 1.5f;
+    [SerializeField] float jump_force;
     [SerializeField] string player_layer;
     [SerializeField] string noclip_layer;
 
@@ -19,7 +20,9 @@ public class FirstPersonMovement : MonoBehaviour
 
     private float horizontal;
     private float vertical;
+    private bool noclip;
     private bool sprinting;
+    private bool grounded;
 
     private int player_layer_value;
     private int noclip_layer_value;
@@ -48,6 +51,15 @@ public class FirstPersonMovement : MonoBehaviour
 
         horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * CurrentSpeed() * strafe_speed_modifier;
         vertical = Input.GetAxis("Vertical") * Time.deltaTime * CurrentSpeed();
+
+        sprinting = Input.GetButton("Sprint");
+        grounded = Physics.Raycast(transform.position, Vector3.down, 1, ~player_layer_value);
+
+        if (grounded && Input.GetButtonDown("Jump"))
+        {
+            grounded = false;
+            rigid_body.AddForce(Vector3.up * jump_force * 1000);
+        }
 
         if (vertical < 0)
             vertical *= back_speed_modifier;
@@ -90,7 +102,8 @@ public class FirstPersonMovement : MonoBehaviour
 
     float CurrentSpeed()
     {
-        return noclip ? noclip_speed : speed;
+        return (noclip ? noclip_speed : speed) * (1 +
+            (sprinting ? sprint_modifier : 0));
     }
 
 }
