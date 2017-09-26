@@ -6,6 +6,7 @@ public class SquadSpawner : MonoBehaviour
 {
     [Header("Parameters")]
     [SerializeField] KeyCode spawn_squaddie_key = KeyCode.RightBracket;
+    [SerializeField] KeyCode remove_squaddie_key = KeyCode.LeftBracket;
     [SerializeField] GameObject squaddie_prefab;
     [SerializeField] Vector3 squaddie_spawn_point;
 
@@ -23,6 +24,9 @@ public class SquadSpawner : MonoBehaviour
     {
         if (Input.GetKeyDown(spawn_squaddie_key))
             SpawnSquaddie();
+
+        if (Input.GetKeyDown(remove_squaddie_key))
+            player_squad_control.RemoveSquaddie();
     }
 
 

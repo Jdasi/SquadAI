@@ -29,6 +29,17 @@ public class SquadControl : MonoBehaviour
     }
 
 
+    public void RemoveSquaddie(int _squad_number = -1)
+    {
+        if (_squad_number < 0)
+            _squad_number = selected_squad_index;
+
+        squads[_squad_number].RemoveSquaddie();
+        squad_hud_manager.UpdateSquadBlockUnitCount(_squad_number,
+            squads[_squad_number].num_squaddies);
+    }
+
+
     void Start()
     {
         max_squads = Mathf.Clamp(max_squads, 0, 10);

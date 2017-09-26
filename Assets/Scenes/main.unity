@@ -2885,6 +2885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawn_squaddie_key: 93
+  remove_squaddie_key: 91
   squaddie_prefab: {fileID: 1116222830393566, guid: 93182f6c9f271434e8c5b72ef52f916c,
     type: 2}
   squaddie_spawn_point: {x: 0, y: 0, z: 0}

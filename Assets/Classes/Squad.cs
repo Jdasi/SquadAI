@@ -24,6 +24,16 @@ public class Squad
     }
 
 
+    public void RemoveSquaddie()
+    {
+        if (num_squaddies == 0)
+            return;
+
+        Object.Destroy(squaddies[squaddies.Count - 1].gameObject);
+        squaddies.Remove(squaddies[squaddies.Count - 1]);
+    }
+
+
     public void IssueContextCommand(ContextCommand _command)
     {
         switch (_command.type)
