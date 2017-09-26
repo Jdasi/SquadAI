@@ -19,7 +19,8 @@ public class FirstPersonMouseLook : MonoBehaviour
 
 	void Start()
     {
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 

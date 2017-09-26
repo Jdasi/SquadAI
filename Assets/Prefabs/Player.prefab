@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114467129234851988}
   - component: {fileID: 114928925687701330}
   - component: {fileID: 114536312683400648}
+  - component: {fileID: 114438397176304598}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -291,6 +292,20 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114438397176304598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1052003227015208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8225afaa817484db09d71e065716e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squaddies:
+  - {fileID: 0}
+  context_scanner: {fileID: 114536312683400648}
 --- !u!114 &114467129234851988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -315,7 +330,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1052003227015208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8232aac09c107c40b56f52d88d731a9, type: 3}
+  m_Script: {fileID: 11500000, guid: 756ce4a118f8ea5488b4619e3fa3fbcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dist_from_first_ray: 0.05
