@@ -303,8 +303,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8225afaa817484db09d71e065716e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_squads: 1
+  max_squads: 10
   context_scanner: {fileID: 114536312683400648}
+  squad_hud_manager: {fileID: 0}
 --- !u!114 &114467129234851988
 MonoBehaviour:
   m_ObjectHideFlags: 1

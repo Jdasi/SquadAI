@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Squad
 {
+    public int num_squaddies { get { return squaddies.Count; } }
+
     private List<Squaddie> squaddies = new List<Squaddie>();
 
 
