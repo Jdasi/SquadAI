@@ -47,7 +47,9 @@ public class ContextScanner : MonoBehaviour
             out first_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
 
         EvaluateContext(first_ray_success, first_hit);
-        context_indicator.transform.rotation = Quaternion.LookRotation(first_hit.normal);
+
+        if (first_ray_success)
+            context_indicator.transform.rotation = Quaternion.LookRotation(first_hit.normal);
 
         if (current_context != ContextType.NONE)
         {

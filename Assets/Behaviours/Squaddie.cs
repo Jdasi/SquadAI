@@ -9,10 +9,9 @@ public class Squaddie : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
 
 
-    public void IssueWaypoint(Vector3 _waypoint)
+    public void IssueWaypoint(Vector3 _target)
     {
-        agent.destination = _waypoint;
+        agent.destination = _target;
     }
-
 
 }
