@@ -5,8 +5,15 @@ using UnityEngine;
 public class Squad
 {
     public int num_squaddies { get { return squaddies.Count; } }
+    public SquadSettings settings;
 
     private List<Squaddie> squaddies = new List<Squaddie>();
+
+
+    public Squad(SquadSettings _settings)
+    {
+        settings = _settings;
+    }
 
 
     public void Update()
@@ -53,12 +60,16 @@ public class Squad
 
     void IssueMoveCommand(ContextCommand _command)
     {
-        /* TODO: Determine indidivdual destinations based on squaddie count
-         * and squad settings.
-         */
+        float padded_squaddie = settings.squaddie_size + settings.squaddie_spacing;
+        float line_width = padded_squaddie * num_squaddies;
 
-        foreach (Squaddie squaddie in squaddies)
-            squaddie.IssueWaypoint(_command.target);
+        for (int i = 0; i < num_squaddies; ++i)
+        {
+            Vector3 waypoint = _command.target + (_command.indicator_right * (padded_squaddie * i));
+            waypoint -= _command.indicator_right * ((line_width - padded_squaddie) / 2);
+
+            squaddies[i].IssueWaypoint(waypoint);
+        }
     }
 
 

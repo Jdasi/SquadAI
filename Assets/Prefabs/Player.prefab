@@ -304,6 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max_squads: 10
+  settings: {fileID: 11400000, guid: 84061cc01d0f8414e8e92e333a326a00, type: 2}
   context_scanner: {fileID: 114536312683400648}
   squad_hud_manager: {fileID: 0}
 --- !u!114 &114467129234851988

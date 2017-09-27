@@ -7,6 +7,7 @@ public class SquadControl : MonoBehaviour
 {
     [Header("Parameters")]
     [Range(0, 10)][SerializeField] int max_squads;
+    [SerializeField] SquadSettings settings;
 
     [Header("References")]
     [SerializeField] ContextScanner context_scanner;
@@ -22,6 +23,12 @@ public class SquadControl : MonoBehaviour
             return;
         else if (_squad_number < 0)
             _squad_number = selected_squad_index;
+
+        if (squads[_squad_number].num_squaddies >= settings.max_squaddies)
+        {
+            Destroy(_squaddie.gameObject);
+            return;
+        }
 
         squads[_squad_number].AddSquaddie(_squaddie);
         squad_hud_manager.UpdateSquadBlockUnitCount(_squad_number,
@@ -45,7 +52,7 @@ public class SquadControl : MonoBehaviour
         max_squads = Mathf.Clamp(max_squads, 0, 10);
 
         for (int i = 0; i < max_squads; ++i)
-            squads.Add(new Squad());
+            squads.Add(new Squad(settings));
 
         squad_hud_manager.InitSquadBlocks(squads.Count);
         squad_hud_manager.SelectSquadBlock(0);
@@ -118,6 +125,10 @@ public class SquadControl : MonoBehaviour
 
         command.direction = command.target - transform.position;
         command.direction = (command.direction - new Vector3(0, command.direction.y)).normalized;
+
+        command.indicator_forward = context_scanner.transform.forward;
+        command.indicator_right = context_scanner.transform.right;
+        command.indicator_up = context_scanner.transform.up;
 
         squads[selected_squad_index].IssueContextCommand(command);
     }
