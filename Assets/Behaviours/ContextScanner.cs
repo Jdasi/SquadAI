@@ -48,9 +48,6 @@ public class ContextScanner : MonoBehaviour
 
         EvaluateContext(first_ray_success, first_hit);
 
-        if (first_ray_success)
-            context_indicator.transform.rotation = Quaternion.LookRotation(first_hit.normal);
-
         if (current_context != ContextType.NONE)
         {
             ProcessContext(first_hit);
@@ -88,7 +85,11 @@ public class ContextScanner : MonoBehaviour
             case ContextType.FLOOR:
             {
                 context_indicator.transform.position = first_hit.point + (first_hit.normal * dist_from_first_ray);
-                context_indicator.transform.Rotate(180, 0, 0);
+
+                Vector3 pos = transform.position;
+                pos.y = 0;
+
+                context_indicator.transform.rotation = Quaternion.LookRotation(context_indicator.transform.position - pos);
             } break;
 
             case ContextType.COVER:
@@ -101,6 +102,7 @@ public class ContextScanner : MonoBehaviour
                 if (second_hit.collider != null && second_hit.collider.gameObject.layer == floor_layer_value)
                 {
                     context_indicator.transform.position = second_hit.point + (Vector3.up * dist_from_second_ray);
+                    context_indicator.transform.rotation = Quaternion.LookRotation(first_hit.normal);
                     context_indicator.transform.Rotate(0, -180, 0);
 
                     // Check for overhangs.
