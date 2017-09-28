@@ -6,6 +6,7 @@ public class ContextCommand
 {
     public ContextType type;
     public Vector3 target;
+    public Transform target_transform;
     public Vector3 direction;
 
     public Vector3 indicator_forward;

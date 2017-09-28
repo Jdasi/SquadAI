@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: DefaultSquadSettings
   m_EditorClassIdentifier: 
   max_squaddies: 4
-  squaddie_size: 1
-  squaddie_spacing: 1
+  squaddie_size: 0.5
+  squaddie_spacing: 1.5

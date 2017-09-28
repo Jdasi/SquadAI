@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FirstPersonMouseLook : MonoBehaviour
 {
+    public bool mouse_locked = true;
+
     [Header("Parameters")]
     [SerializeField] float horizontal_look_sensitivity = 150.0f;
     [SerializeField] float vertical_look_sensitivity = 100.0f;
@@ -19,12 +21,24 @@ public class FirstPersonMouseLook : MonoBehaviour
 
 	void Start()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
 	}
 	
 
 	void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            mouse_locked = !mouse_locked;
+
+        if (mouse_locked)
+            HandleMouseLook();
+
+        Cursor.visible = !mouse_locked;
+        Cursor.lockState = mouse_locked ? CursorLockMode.Locked : CursorLockMode.None;
+	}
+
+
+    void HandleMouseLook()
     {
         float horizontal = Input.GetAxis("Mouse X");
         float vertical = Input.GetAxis("Mouse Y");
@@ -36,6 +50,6 @@ public class FirstPersonMouseLook : MonoBehaviour
 
         x_rotate_transform.rotation = Quaternion.Euler(0, pan_horizontal, 0);
         y_rotate_transform.rotation = Quaternion.Euler(pan_vertical, x_rotate_transform.eulerAngles.y, 0);
-	}
+    }
 
 }

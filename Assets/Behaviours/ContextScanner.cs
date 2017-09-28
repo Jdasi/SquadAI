@@ -13,6 +13,7 @@ public class ContextScanner : MonoBehaviour
 {
     public ContextType current_context { get; private set; }
     public Vector3 indicator_position { get { return context_indicator.transform.position; } }
+    public Transform indicator_hit { get; private set; }
 
     [Header("Parameters")]
     [SerializeField] float dist_from_first_ray;
@@ -63,18 +64,31 @@ public class ContextScanner : MonoBehaviour
 
         if (!hit_valid)
         {
-            current_context = ContextType.NONE;
+            ResetContext();
         }
         else if (_first_hit.normal == Vector3.up &&
                  _first_hit.collider.gameObject.layer == floor_layer_value)
         {
             current_context = ContextType.FLOOR;
+            indicator_hit = _first_hit.transform;
         }
         else if (_first_hit.normal != Vector3.up &&
                  _first_hit.collider.gameObject.layer == wall_layer_value)
         {
             current_context = ContextType.COVER;
+            indicator_hit = _first_hit.transform;
         }
+        else
+        {
+            ResetContext();
+        }
+    }
+
+
+    void ResetContext()
+    {
+        current_context = ContextType.NONE;
+        indicator_hit = null;
     }
 
 
