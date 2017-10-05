@@ -62,7 +62,9 @@ public class FirstPersonMovement : MonoBehaviour
         crouched = Input.GetButton("Crouch");
         sprinting = !crouched && Input.GetButton("Sprint");
 
-        grounded = Physics.Raycast(transform.position, Vector3.down, 1, ~player_layer_value);
+        grounded = Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0),
+            Vector3.down, 0.2f, ~player_layer_value);
+
         body_transform.localScale = crouched ? crouch_scale : original_scale;
 
         if (grounded && Input.GetButtonDown("Jump"))
