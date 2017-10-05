@@ -20,7 +20,7 @@ public class CoverPointGeneratorEditor : Editor
         if (GUILayout.Button("Clear All"))
         {
             var t = (CoverPointGenerator)target;
-            t.Clear();
+            t.ClearCoverPoints();
         }
     }
 

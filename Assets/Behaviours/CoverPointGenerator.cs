@@ -27,7 +27,7 @@ public class CoverPointGenerator : MonoBehaviour
     public void GenerateCoverPoints()
     {
         // Prepare for new data.
-        Clear();
+        ClearCoverPoints();
 
         // Update important variables.
         wall_layer = LayerMask.NameToLayer("Wall");
@@ -36,94 +36,77 @@ public class CoverPointGenerator : MonoBehaviour
         // Generate cover points.
         for (int i = 0; i < segments; ++i)
         {
-            ray_packs.Add(ForwardLines(i));
-            ray_packs.Add(BackwardLines(i));
-            ray_packs.Add(LeftLines(i));
-            ray_packs.Add(RightLines(i));
+            // Forward.
+            ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, -half_extents.z),
+                new Vector3(0, 0, extents.z), Vector3.forward, extents.z, wall_layer);
+
+            // Backward.
+            ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, half_extents.z),
+                new Vector3(0, 0, -extents.z), -Vector3.forward, extents.z, wall_layer);
+
+            // Right.
+            ProcessLine(new Vector3(-half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
+                new Vector3(extents.x, 0, 0), Vector3.right, extents.x, wall_layer);
+
+            // Left.
+            ProcessLine(new Vector3(half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
+                new Vector3(-extents.x, 0, 0), -Vector3.right, extents.x, wall_layer);
         }
     }
 
 
-    public void Clear()
+    public void ClearCoverPoints()
     {
         ray_packs.Clear();
         cover_points.Clear();
     }
 
 
-    RaycastPackage ForwardLines(int _i)
+    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, float _distance)
     {
-        RaycastPackage ray_pack = new RaycastPackage();
+        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
 
-        float x_offset = ((extents.x / segments) * _i) - half_extents.x;
-        float z_offset = half_extents.z;
+        foreach (CoverPoint cover_point in cover_points)
+        {
+            if (Vector3.Distance(_position, cover_point.position) <= _distance)
+                closest_cover_points.Add(cover_point);
+        }
 
-        ray_pack.from = transform.position - new Vector3(x_offset, 0, z_offset);
-        ray_pack.to = ray_pack.from + new Vector3(0, 0, extents.z);
-        ray_pack.direction = Vector3.forward;
-        ray_pack.length = extents.z;
-        ray_pack.layer = wall_layer;
-
-        EnumerateCoverPoints(ray_pack);
-
-        return ray_pack;
+        return closest_cover_points;
     }
 
 
-    RaycastPackage BackwardLines(int _i)
+    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, Vector3 _required_normal, float _distance)
     {
-        RaycastPackage ray_pack = new RaycastPackage();
+        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
 
-        float x_offset = ((extents.x / segments) * _i) - half_extents.x;
-        float z_offset = -half_extents.z;
+        foreach (CoverPoint cover_point in cover_points)
+        {
+            if (cover_point.normal != _required_normal)
+                continue;
 
-        ray_pack.from = transform.position - new Vector3(x_offset, 0, z_offset);
-        ray_pack.to = ray_pack.from - new Vector3(0, 0, extents.z);
-        ray_pack.direction = -Vector3.forward;
-        ray_pack.length = extents.z;
-        ray_pack.layer = wall_layer;
+            if (Vector3.Distance(_position, cover_point.position) <= _distance)
+                closest_cover_points.Add(cover_point);
+        }
 
-        EnumerateCoverPoints(ray_pack);
-
-        return ray_pack;
+        return closest_cover_points;
     }
 
 
-    RaycastPackage LeftLines(int _i)
+    void ProcessLine(Vector3 _from_offset, Vector3 _to_offset, Vector3 _direction,
+        float _length, int _layer)
     {
         RaycastPackage ray_pack = new RaycastPackage();
 
-        float x_offset = -half_extents.x;
-        float z_offset = ((extents.z / segments) * _i) - half_extents.z;
-
-        ray_pack.from = transform.position + new Vector3(x_offset, 0, z_offset);
-        ray_pack.to = ray_pack.from + new Vector3(extents.x, 0, 0);
-        ray_pack.direction = Vector3.right;
-        ray_pack.length = extents.x;
-        ray_pack.layer = wall_layer;
+        ray_pack.from = transform.position + _from_offset;
+        ray_pack.to = ray_pack.from + _to_offset;
+        ray_pack.direction = _direction;
+        ray_pack.length = _length;
+        ray_pack.layer = _layer;
 
         EnumerateCoverPoints(ray_pack);
 
-        return ray_pack;
-    }
-
-
-    RaycastPackage RightLines(int _i)
-    {
-        RaycastPackage ray_pack = new RaycastPackage();
-
-        float x_offset = half_extents.x;
-        float z_offset = ((extents.z / segments) * _i) - half_extents.z;
-
-        ray_pack.from = transform.position + new Vector3(x_offset, 0, z_offset);
-        ray_pack.to = ray_pack.from - new Vector3(extents.x, 0, 0);
-        ray_pack.direction = -Vector3.right;
-        ray_pack.length = extents.x;
-        ray_pack.layer = wall_layer;
-
-        EnumerateCoverPoints(ray_pack);
-
-        return ray_pack;
+        ray_packs.Add(ray_pack);
     }
 
 
@@ -156,14 +139,9 @@ public class CoverPointGenerator : MonoBehaviour
     }
 
 
-    void Update()
-    {
-        
-    }
-
-
     void OnDrawGizmosSelected()
     {
+        // Debug update.
         if (update_on_select)
             GenerateCoverPoints();
 

@@ -2589,7 +2589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extents: {x: 60, y: 0, z: 60}
-  segments: 23
+  segments: 28
   nav_search_radius: 0.5
   wall_layer: 11
   grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
