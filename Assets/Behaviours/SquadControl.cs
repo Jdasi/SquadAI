@@ -118,20 +118,7 @@ public class SquadControl : MonoBehaviour
         if (selected_squad_index >= squads.Count)
             return;
 
-        ContextCommand command = new ContextCommand();
-
-        command.type = context_scanner.current_context;
-        command.target = context_scanner.indicator_position;
-        command.target_transform = context_scanner.indicator_hit;
-
-        command.direction = command.target - transform.position;
-        command.direction = (command.direction - new Vector3(0, command.direction.y)).normalized;
-
-        command.indicator_forward = context_scanner.transform.forward;
-        command.indicator_right = context_scanner.transform.right;
-        command.indicator_up = context_scanner.transform.up;
-
-        squads[selected_squad_index].IssueContextCommand(command);
+        squads[selected_squad_index].IssueContextCommand(context_scanner.current_context);
     }
 
 }

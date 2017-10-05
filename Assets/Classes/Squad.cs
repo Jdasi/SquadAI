@@ -41,41 +41,53 @@ public class Squad
     }
 
 
-    public void IssueContextCommand(ContextCommand _command)
+    public void IssueContextCommand(CurrentContext _context)
     {
-        switch (_command.type)
+        switch (_context.type)
         {
             case ContextType.FLOOR:
             {
-                IssueMoveCommand(_command);
+                IssueMoveCommand(_context);
             } break;
 
             case ContextType.COVER:
             {
-                IssueCoverCommand(_command);
+                IssueCoverCommand(_context);
             } break;
         }
     }
 
 
-    void IssueMoveCommand(ContextCommand _command)
+    void IssueMoveCommand(CurrentContext _context)
     {
         float padded_squaddie = settings.squaddie_size + settings.squaddie_spacing;
         float line_width = padded_squaddie * num_squaddies;
 
         for (int i = 0; i < num_squaddies; ++i)
         {
-            Vector3 waypoint = _command.target + (_command.indicator_right * (padded_squaddie * i));
-            waypoint -= _command.indicator_right * ((line_width - padded_squaddie) / 2);
+            Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
+            waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);
 
             squaddies[i].IssueWaypoint(waypoint);
         }
     }
 
 
-    void IssueCoverCommand(ContextCommand _command)
+    void IssueCoverCommand(CurrentContext _context)
     {
+        var cover_points = GameManager.scene.cover_point_generator.ClosestCoverPoints(
+            _context.indicator_position, _context.indicator_normal, settings.cover_search_radius);
 
+        foreach (Squaddie squaddie in squaddies)
+        {
+            if (cover_points.Count <= 0)
+                break;
+
+            CoverPoint cover_point = cover_points[Random.Range(0, cover_points.Count)];
+            cover_points.Remove(cover_point);
+
+            squaddie.IssueWaypoint(cover_point.position);
+        }
     }
 
 }

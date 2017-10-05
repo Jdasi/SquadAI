@@ -9,11 +9,10 @@ public enum ContextType
     COVER
 }
 
+
 public class ContextScanner : MonoBehaviour
 {
-    public ContextType current_context { get; private set; }
-    public Vector3 indicator_position { get { return context_indicator.transform.position; } }
-    public Transform indicator_hit { get; private set; }
+    public CurrentContext current_context = new CurrentContext();
 
     [Header("Parameters")]
     [SerializeField] float dist_from_first_ray;
@@ -49,7 +48,7 @@ public class ContextScanner : MonoBehaviour
 
         EvaluateContext(first_ray_success, first_hit);
 
-        if (current_context != ContextType.NONE)
+        if (current_context.type != ContextType.NONE)
         {
             ProcessContext(first_hit);
         }
@@ -60,23 +59,27 @@ public class ContextScanner : MonoBehaviour
 
     void EvaluateContext(bool _hit_successful, RaycastHit _first_hit)
     {
-        bool hit_valid = _hit_successful && _first_hit.normal != Vector3.down;
+        UpdateContextValues();
 
-        if (!hit_valid)
+        if (_hit_successful)
         {
-            ResetContext();
-        }
-        else if (_first_hit.normal == Vector3.up &&
-                 _first_hit.collider.gameObject.layer == floor_layer_value)
-        {
-            current_context = ContextType.FLOOR;
-            indicator_hit = _first_hit.transform;
-        }
-        else if (_first_hit.normal != Vector3.up &&
-                 _first_hit.collider.gameObject.layer == wall_layer_value)
-        {
-            current_context = ContextType.COVER;
-            indicator_hit = _first_hit.transform;
+            current_context.indicator_normal = _first_hit.normal;
+            current_context.indicator_hit = _first_hit.transform;
+
+            if (_first_hit.normal == Vector3.up &&
+                _first_hit.collider.gameObject.layer == floor_layer_value)
+            {
+                current_context.type = ContextType.FLOOR;
+            }
+            else if (_first_hit.normal != Vector3.up &&
+                     _first_hit.collider.gameObject.layer == wall_layer_value)
+            {
+                current_context.type = ContextType.COVER;
+            }
+            else
+            {
+                ResetContext();
+            }
         }
         else
         {
@@ -85,20 +88,30 @@ public class ContextScanner : MonoBehaviour
     }
 
 
-    void ResetContext()
+    void UpdateContextValues()
     {
-        current_context = ContextType.NONE;
-        indicator_hit = null;
+        current_context.indicator_position = context_indicator.transform.position;
+        current_context.indicator_forward = context_indicator.transform.forward;
+        current_context.indicator_up = context_indicator.transform.up;
+        current_context.indicator_right = context_indicator.transform.right;
     }
 
 
-    void ProcessContext(RaycastHit first_hit)
+    void ResetContext()
     {
-        switch (current_context)
+        current_context.type = ContextType.NONE;
+        current_context.indicator_hit = null;
+        current_context.indicator_normal = Vector3.zero;
+    }
+
+
+    void ProcessContext(RaycastHit _first_hit)
+    {
+        switch (current_context.type)
         {
             case ContextType.FLOOR:
             {
-                context_indicator.transform.position = first_hit.point + (first_hit.normal * dist_from_first_ray);
+                context_indicator.transform.position = _first_hit.point + (_first_hit.normal * dist_from_first_ray);
 
                 Vector3 pos = transform.position;
                 pos.y = 0;
@@ -110,25 +123,25 @@ public class ContextScanner : MonoBehaviour
             {
                 // Find Floor from Wall.
                 RaycastHit second_hit;
-                bool ray_2 = Physics.Raycast(first_hit.point + (first_hit.normal * dist_from_first_ray),
+                bool ray_2 = Physics.Raycast(_first_hit.point + (_first_hit.normal * dist_from_first_ray),
                     -Vector3.up, out second_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
 
                 if (second_hit.collider != null && second_hit.collider.gameObject.layer == floor_layer_value)
                 {
                     context_indicator.transform.position = second_hit.point + (Vector3.up * dist_from_second_ray);
-                    context_indicator.transform.rotation = Quaternion.LookRotation(first_hit.normal);
+                    context_indicator.transform.rotation = Quaternion.LookRotation(_first_hit.normal);
                     context_indicator.transform.Rotate(0, -180, 0);
 
                     // Check for overhangs.
-                    if (!Physics.Raycast(second_hit.point + (Vector3.up * dist_from_second_ray), -first_hit.normal, 1,
+                    if (!Physics.Raycast(second_hit.point + (Vector3.up * dist_from_second_ray), -_first_hit.normal, 1,
                         1 << floor_layer_value | 1 << wall_layer_value))
                     {
-                        current_context = ContextType.NONE;
+                        current_context.type = ContextType.NONE;
                     }
                 }
                 else
                 {
-                    current_context = ContextType.NONE;
+                    current_context.type = ContextType.NONE;
                 }
             } break;
         }
@@ -137,8 +150,8 @@ public class ContextScanner : MonoBehaviour
 
     void UpdateIndicators(RaycastHit _first_hit)
     {
-        waypoint_indicator.SetActive(current_context == ContextType.FLOOR);
-        cover_indicator.SetActive(current_context == ContextType.COVER);
+        waypoint_indicator.SetActive(current_context.type == ContextType.FLOOR);
+        cover_indicator.SetActive(current_context.type == ContextType.COVER);
     }
 
 }

@@ -14,3 +14,4 @@ MonoBehaviour:
   max_squaddies: 4
   squaddie_size: 0.5
   squaddie_spacing: 1.5
+  cover_search_radius: 10
