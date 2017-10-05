@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4447132450563332}
   - component: {fileID: 54392084295809804}
-  - component: {fileID: 136134286260638026}
   - component: {fileID: 114467129234851988}
   - component: {fileID: 114928925687701330}
   - component: {fileID: 114536312683400648}
@@ -79,7 +78,7 @@ GameObject:
   - component: {fileID: 65023805120015824}
   - component: {fileID: 23784150032129424}
   m_Layer: 8
-  m_Name: Mesh
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,7 +163,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -318,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1551441785895b4db51f40cd8555f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouse_locked: 1
   horizontal_look_sensitivity: 150
   vertical_look_sensitivity: 125
   y_flipped: 0
@@ -359,12 +359,13 @@ MonoBehaviour:
   back_speed_modifier: 0.8
   sprint_speed_modifier: 1.5
   crouch_speed_modifier: 0.5
-  crouch_shrink_factor: 0.5
+  crouch_scale: {x: 1.3, y: 1.1, z: 1.3}
   jump_force: 5
   player_layer: Player
   noclip_layer: Noclip
   rigid_body: {fileID: 54392084295809804}
   movement_relation: {fileID: 4348519151207818}
+  body_transform: {fileID: 4924976268493998}
 --- !u!124 &124552054754863912
 Behaviour:
   m_ObjectHideFlags: 1
@@ -372,16 +373,3 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1306175128836102}
   m_Enabled: 1
---- !u!136 &136134286260638026
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1052003227015208}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.7
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

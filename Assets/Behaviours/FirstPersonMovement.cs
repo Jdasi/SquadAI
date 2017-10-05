@@ -11,7 +11,7 @@ public class FirstPersonMovement : MonoBehaviour
     [SerializeField] float back_speed_modifier = 1;
     [SerializeField] float sprint_speed_modifier = 1.5f;
     [SerializeField] float crouch_speed_modifier = 0.5f;
-    [SerializeField] float crouch_shrink_factor = 0.5f;
+    [SerializeField] Vector3 crouch_scale;
     [SerializeField] float jump_force;
     [SerializeField] string player_layer;
     [SerializeField] string noclip_layer;
@@ -19,6 +19,7 @@ public class FirstPersonMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
     [SerializeField] Transform movement_relation;
+    [SerializeField] Transform body_transform;
 
     private float horizontal;
     private float vertical;
@@ -46,7 +47,7 @@ public class FirstPersonMovement : MonoBehaviour
         player_layer_value = LayerMask.NameToLayer(player_layer);
         noclip_layer_value = LayerMask.NameToLayer(noclip_layer);
 
-        original_scale = transform.localScale;
+        original_scale =  body_transform.localScale;
     }
 
 
@@ -60,10 +61,9 @@ public class FirstPersonMovement : MonoBehaviour
 
         crouched = Input.GetButton("Crouch");
         sprinting = !crouched && Input.GetButton("Sprint");
-        grounded = Physics.Raycast(transform.position, Vector3.down, 1, ~player_layer_value);
 
-        transform.localScale = crouched ? new Vector3(original_scale.x,
-            original_scale.y * crouch_shrink_factor, original_scale.z) : original_scale;
+        grounded = Physics.Raycast(transform.position, Vector3.down, 1, ~player_layer_value);
+        body_transform.localScale = crouched ? crouch_scale : original_scale;
 
         if (grounded && Input.GetButtonDown("Jump"))
         {
