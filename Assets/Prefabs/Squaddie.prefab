@@ -11,6 +11,21 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1116222830393566}
   m_IsPrefabParent: 1
+--- !u!1 &1065767526915460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4022209247994706}
+  m_Layer: 0
+  m_Name: Viewpoint
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1114849376020850
 GameObject:
   m_ObjectHideFlags: 0
@@ -19,12 +34,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4324605077270122}
-  - component: {fileID: 33567094720640714}
   - component: {fileID: 65245185951067836}
-  - component: {fileID: 23196185087604998}
   m_Layer: 0
-  m_Name: Body
-  m_TagString: Untagged
+  m_Name: Collider
+  m_TagString: DamagableBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,6 +52,8 @@ GameObject:
   - component: {fileID: 4837019511088688}
   - component: {fileID: 195571041401606838}
   - component: {fileID: 114087022303636138}
+  - component: {fileID: 114385367672789828}
+  - component: {fileID: 114537214391118060}
   m_Layer: 0
   m_Name: Squaddie
   m_TagString: Untagged
@@ -99,6 +114,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1434267621200832
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4615409893530334}
+  m_Layer: 0
+  m_Name: GunMount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1779424133173664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4435669294826484}
+  - component: {fileID: 33567094720640714}
+  - component: {fileID: 23196185087604998}
+  - component: {fileID: 114254179805863974}
+  m_Layer: 0
+  m_Name: Body
+  m_TagString: DamagableBody
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1789522948071260
 GameObject:
   m_ObjectHideFlags: 1
@@ -116,17 +164,57 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4022209247994706
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1065767526915460}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.6999999, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4615409893530334}
+  m_Father: {fileID: 4837019511088688}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4324605077270122
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1114849376020850}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4837019511088688}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4435669294826484
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1779424133173664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 4837019511088688}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4615409893530334
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1434267621200832}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.669, y: -0.25, z: 0.449}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4022209247994706}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4837019511088688
@@ -136,9 +224,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116222830393566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.6220155, y: 0.00000011920929, z: 7.338232}
+  m_LocalPosition: {x: -2.487737, y: 0.00000011920929, z: -0.30371332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4022209247994706}
+  - {fileID: 4435669294826484}
   - {fileID: 4324605077270122}
   - {fileID: 224376098945093014}
   m_Father: {fileID: 0}
@@ -149,7 +239,7 @@ MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1114849376020850}
+  m_GameObject: {fileID: 1779424133173664}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -181,7 +271,7 @@ MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1114849376020850}
+  m_GameObject: {fileID: 1779424133173664}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &65245185951067836
 BoxCollider:
@@ -208,6 +298,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 195571041401606838}
   mesh: {fileID: 23196185087604998}
+--- !u!114 &114254179805863974
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1779424133173664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d5a8f88f72ab2144b62dddd9e9bf4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paused: 0
+  decay_rate:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.5124999
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 0.50416666
+      value: 1.0124999
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 1.0041667
+      value: 0.012499999
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114258534509138324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -246,6 +372,27 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114385367672789828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1116222830393566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53efb72a14c26754188e2a82acd84363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instantiate_parent: {fileID: 4615409893530334}
+  ray_cast_origin: {fileID: 4022209247994706}
+  instantiate_layer: 
+  instantiation_events:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+ChainGunEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  chain_gun_prefab: {fileID: 1377725240009212, guid: 7a6282417a6f8ac439111d1e8d7255a8,
+    type: 2}
 --- !u!114 &114491628647442638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -262,6 +409,53 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114537214391118060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1116222830393566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15e9eb96a302744090a9e6abdef6c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starting_health: 100
+  damage_events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114537214391118060}
+        m_MethodName: DamageShake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  death_events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114537214391118060}
+        m_MethodName: DestroySquaddie
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  shake_module: {fileID: 114254179805863974}
+  explosion_particle_prefab: {fileID: 167800, guid: 8d456f7bd5c07734ba38a2a95e20797a,
+    type: 2}
 --- !u!114 &114613353987122280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -434,7 +628,7 @@ RectTransform:
   m_Children:
   - {fileID: 224181150333584780}
   m_Father: {fileID: 4837019511088688}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

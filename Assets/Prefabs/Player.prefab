@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 114438397176304598}
   - component: {fileID: 114611498175746318}
   - component: {fileID: 114432360575913182}
+  - component: {fileID: 114264375939669702}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -83,7 +84,7 @@ GameObject:
   - component: {fileID: 23784150032129424}
   m_Layer: 8
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: DamagableBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -331,6 +332,30 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1306175128836102}
   m_Enabled: 1
+--- !u!114 &114264375939669702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1052003227015208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15e9eb96a302744090a9e6abdef6c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starting_health: 100
+  damage_events:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  death_events:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  shake_module: {fileID: 0}
+  explosion_particle_prefab: {fileID: 0}
 --- !u!114 &114432360575913182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -472,7 +497,7 @@ MonoBehaviour:
   back_speed_modifier: 0.8
   sprint_speed_modifier: 1.5
   crouch_speed_modifier: 0.5
-  crouch_scale: {x: 1.3, y: 1.1, z: 1.3}
+  crouch_scale: {x: 1.3, y: 1.2, z: 1.3}
   jump_force: 5
   player_layer: Player
   noclip_layer: Noclip

@@ -10,6 +10,9 @@ public class ChainGun : MonoBehaviour
     [SerializeField] float acceleration_speed;
     [SerializeField] float deceleration_speed;
     [SerializeField] float max_cycle_speed;
+
+    [Space]
+    [SerializeField] int damage_per_shot;
     [SerializeField] float shoot_delay;
 
     [Space]
@@ -116,8 +119,21 @@ public class ChainGun : MonoBehaviour
         if (hit.collider == null)
             return;
 
-        var ricochet_clone = Instantiate(ricochet_particle_prefab, hit.point,
+        Vector3 ricochet_position = hit.point + (hit.normal / 5);
+        var ricochet_clone = Instantiate(ricochet_particle_prefab, ricochet_position,
             Quaternion.LookRotation(hit.normal));
+
+        if (hit.collider.CompareTag("DamagableBody"))
+            DamageEntity(hit.transform.GetComponentInParent<DamageableBehaviour>());
+    }
+
+
+    void DamageEntity(DamageableBehaviour _damageable)
+    {
+        if (_damageable == null)
+            return;
+
+        _damageable.Damage(damage_per_shot);
     }
 
 

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198337280406281942}
   - component: {fileID: 199300007842836478}
   - component: {fileID: 114345309721892140}
-  m_Layer: 12
+  m_Layer: 13
   m_Name: RicochetParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1014,7 +1014,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 0.39215687}
+        key0: {r: 1, g: 1, b: 1, a: 0.78431374}
         key1: {r: 1, g: 1, b: 1, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}

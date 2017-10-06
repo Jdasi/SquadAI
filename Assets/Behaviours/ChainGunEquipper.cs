@@ -27,10 +27,7 @@ public class ChainGunEquipper : MonoBehaviour
         chain_gun.Init(ray_cast_origin);
 
         // Set layer for rendering / collisions.
-        if (instantiate_layer == "")
-            instantiate_layer = "Default";
-
-        int layer = LayerMask.NameToLayer(instantiate_layer);
+        int layer = instantiate_layer != "" ? LayerMask.NameToLayer(instantiate_layer) : 0;
         JHelper.SetLayerRecursive(gun_clone, layer);
 
         instantiation_events.Invoke(chain_gun);

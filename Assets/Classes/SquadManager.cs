@@ -56,7 +56,6 @@ public class SquadManager
             return;
 
         Object.Destroy(squaddies[squaddies.Count - 1].gameObject);
-        ui_block.UpdateUnitCount(squaddies.Count - 1);
     }
 
 
@@ -79,7 +78,17 @@ public class SquadManager
 
     public void Update()
     {
+        GarbageCollect();
+    }
+
+
+    void GarbageCollect()
+    {
+        int prev_count = squaddies.Count;
         squaddies.RemoveAll(elem => elem == null);
+
+        if (squaddies.Count != prev_count)
+            ui_block.UpdateUnitCount(squaddies.Count);
     }
 
 
