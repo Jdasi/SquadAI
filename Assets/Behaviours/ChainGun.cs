@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-public class FirstPersonGunControl : MonoBehaviour
+public class ChainGun : MonoBehaviour
 {
     public bool cycle;
 
@@ -13,16 +12,28 @@ public class FirstPersonGunControl : MonoBehaviour
     [SerializeField] float max_cycle_speed;
     [SerializeField] float shoot_delay;
 
+    [Space]
+    [SerializeField] float case_ejection_speed;
+    [SerializeField] float case_ejection_variance;
+
     [Header("References")]
     [SerializeField] Transform gun_cycler;
     [SerializeField] Transform shot_point;
-    [SerializeField] Transform raycast_transform;
-    [SerializeField] GameObject shot_particle;
-    [SerializeField] GameObject ricochet_particle;
+    [SerializeField] Transform case_ejection_point;
+    [SerializeField] GameObject shot_particle_prefab;
+    [SerializeField] GameObject ricochet_particle_prefab;
+    [SerializeField] GameObject bullet_casing_prefab;
 
+    private Transform raycast_transform;
     private float current_cycling_speed;
     private bool can_shoot = true;
     private float shoot_timer;
+
+
+    public void Init(Transform _raycast_transform)
+    {
+        raycast_transform = _raycast_transform;
+    }
 
 
     public void EnableShooting()
@@ -46,8 +57,6 @@ public class FirstPersonGunControl : MonoBehaviour
 
     void HandleCycling()
     {
-        cycle = Input.GetMouseButton(0);
-
         if (cycle && can_shoot)
         {
             current_cycling_speed += acceleration_speed * Time.deltaTime;
@@ -90,18 +99,38 @@ public class FirstPersonGunControl : MonoBehaviour
 
     void HandleShot()
     {
-        var shot_clone = Instantiate(shot_particle, shot_point.position,
+        var shot_clone = Instantiate(shot_particle_prefab, shot_point.position,
             Quaternion.LookRotation(shot_point.forward));
 
+        HitScan();
+        EjectCasing();
+    }
+
+
+    void HitScan()
+    {
         RaycastHit hit;
         Physics.Raycast(raycast_transform.position, raycast_transform.forward,
             out hit, Mathf.Infinity);
 
-        if (hit.collider != null)
-        {
-            var ricochet_clone = Instantiate(ricochet_particle, hit.point,
-                Quaternion.LookRotation(hit.normal));
-        }
+        if (hit.collider == null)
+            return;
+
+        var ricochet_clone = Instantiate(ricochet_particle_prefab, hit.point,
+            Quaternion.LookRotation(hit.normal));
+    }
+
+
+    void EjectCasing()
+    {
+        var ejected_casing = Instantiate(bullet_casing_prefab, case_ejection_point.position,
+            Quaternion.LookRotation(raycast_transform.forward));
+
+        Vector3 ejection_velocity = case_ejection_point.right * case_ejection_speed;
+        Vector3 variance = Vector3.one * (Random.Range(-case_ejection_speed, case_ejection_speed) * case_ejection_variance);
+        ejection_velocity += variance;
+
+        ejected_casing.GetComponent<Rigidbody>().velocity = ejection_velocity;
     }
 
 }
