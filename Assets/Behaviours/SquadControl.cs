@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SquadControl : MonoBehaviour
 {
+    public bool issuing_order { get; private set; }
+
     [Header("Parameters")]
     [Range(0, 10)][SerializeField] int max_squads;
     [SerializeField] SquadSettings settings;
@@ -13,7 +15,7 @@ public class SquadControl : MonoBehaviour
     [SerializeField] ContextScanner context_scanner;
     [SerializeField] SquadHUDManager squad_hud_manager;
 
-    private List<Squad> squads = new List<Squad>();
+    private List<SquadManager> squads = new List<SquadManager>();
     private int selected_squad_index;
 
 
@@ -24,6 +26,7 @@ public class SquadControl : MonoBehaviour
         else if (_squad_number < 0)
             _squad_number = selected_squad_index;
 
+        // Debug contingency.
         if (squads[_squad_number].num_squaddies >= settings.max_squaddies)
         {
             Destroy(_squaddie.gameObject);
@@ -31,8 +34,6 @@ public class SquadControl : MonoBehaviour
         }
 
         squads[_squad_number].AddSquaddie(_squaddie);
-        squad_hud_manager.UpdateSquadBlockUnitCount(_squad_number,
-            squads[_squad_number].num_squaddies);
     }
 
 
@@ -42,20 +43,19 @@ public class SquadControl : MonoBehaviour
             _squad_number = selected_squad_index;
 
         squads[_squad_number].RemoveSquaddie();
-        squad_hud_manager.UpdateSquadBlockUnitCount(_squad_number,
-            squads[_squad_number].num_squaddies);
     }
 
 
     void Start()
     {
         max_squads = Mathf.Clamp(max_squads, 0, 10);
+        squad_hud_manager.InitSquadBlocks(max_squads);
 
         for (int i = 0; i < max_squads; ++i)
-            squads.Add(new Squad(settings));
-
-        squad_hud_manager.InitSquadBlocks(squads.Count);
-        squad_hud_manager.SelectSquadBlock(0);
+        {
+            SquadBlock ui_block = squad_hud_manager.GetSquadBlock(i);
+            squads.Add(new SquadManager(settings, ref ui_block));
+        }
     }
 
 
@@ -66,8 +66,10 @@ public class SquadControl : MonoBehaviour
         if (Input.GetButtonDown("Command"))
             IssueContextCommand();
 
-        foreach (Squad squad in squads)
+        foreach (SquadManager squad in squads)
             squad.Update();
+
+        context_scanner.enabled = issuing_order;
     }
 
 
@@ -100,16 +102,20 @@ public class SquadControl : MonoBehaviour
             squad_number = 9;
 
         ChangeSquadSelection(squad_number);
-        squad_hud_manager.SelectSquadBlock(squad_number);
+
+        issuing_order = true;
     }
 
 
     void ChangeSquadSelection(int _squad_number)
     {
+        squads[selected_squad_index].DeselectSquad();
+
         if (_squad_number >= squads.Count || _squad_number < 0)
-            return;
+            _squad_number = 0;
 
         selected_squad_index = _squad_number;
+        squads[selected_squad_index].SelectSquad();
     }
 
 
@@ -119,6 +125,9 @@ public class SquadControl : MonoBehaviour
             return;
 
         squads[selected_squad_index].IssueContextCommand(context_scanner.current_context);
+        squads[selected_squad_index].DeselectSquad();
+
+        issuing_order = false;
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FirstPersonMouseLook : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class FirstPersonMouseLook : MonoBehaviour
     [SerializeField] float horizontal_look_sensitivity = 150.0f;
     [SerializeField] float vertical_look_sensitivity = 100.0f;
     [SerializeField] bool y_flipped;
+    [SerializeField] UnityEvent look_enabled_events;
+    [SerializeField] UnityEvent look_disabled_events;
 
     [Header("References")]
     [SerializeField] Transform x_rotate_transform;
@@ -21,14 +24,13 @@ public class FirstPersonMouseLook : MonoBehaviour
 
 	void Start()
     {
-
+        MouseLockEvents();
 	}
 	
 
 	void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            mouse_locked = !mouse_locked;
+        HandleMouseLookToggle();
 
         if (mouse_locked)
             HandleMouseLook();
@@ -36,6 +38,16 @@ public class FirstPersonMouseLook : MonoBehaviour
         Cursor.visible = !mouse_locked;
         Cursor.lockState = mouse_locked ? CursorLockMode.Locked : CursorLockMode.None;
 	}
+
+
+    void HandleMouseLookToggle()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            mouse_locked = !mouse_locked;
+            MouseLockEvents();
+        }
+    }
 
 
     void HandleMouseLook()
@@ -50,6 +62,19 @@ public class FirstPersonMouseLook : MonoBehaviour
 
         x_rotate_transform.rotation = Quaternion.Euler(0, pan_horizontal, 0);
         y_rotate_transform.rotation = Quaternion.Euler(pan_vertical, x_rotate_transform.eulerAngles.y, 0);
+    }
+
+
+    void MouseLockEvents()
+    {
+        if (mouse_locked)
+        {
+            look_enabled_events.Invoke();
+        }
+        else
+        {
+            look_disabled_events.Invoke();
+        }
     }
 
 }

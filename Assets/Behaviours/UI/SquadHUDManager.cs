@@ -27,6 +27,15 @@ public class SquadHUDManager : MonoBehaviour
     }
 
 
+    public SquadBlock GetSquadBlock(int _index)
+    {
+        if (!IndexValid(_index))
+            return null;
+
+        return squad_blocks[_index];
+    }
+
+
     public void SelectSquadBlock(int _block_index)
     {
         if (!IndexValid(_block_index))

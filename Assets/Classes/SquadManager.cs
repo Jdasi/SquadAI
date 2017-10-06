@@ -2,23 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Squad
+public class SquadManager
 {
     public int num_squaddies { get { return squaddies.Count; } }
     public SquadSettings settings;
 
     private List<Squaddie> squaddies = new List<Squaddie>();
+    private SquadBlock ui_block;
 
 
-    public Squad(SquadSettings _settings)
+    public SquadManager(SquadSettings _settings, ref SquadBlock _ui_block)
     {
         settings = _settings;
+        ui_block = _ui_block;
     }
 
 
-    public void Update()
+    public void SelectSquad()
     {
-        squaddies.RemoveAll(elem => elem == null);
+        foreach (Squaddie squaddie in squaddies)
+            squaddie.ChangeMaterial(settings.select_material);
+
+        ui_block.Select();
+    }
+
+
+    public void DeselectSquad()
+    {
+        foreach (Squaddie squaddie in squaddies)
+            squaddie.ChangeMaterial(settings.deselect_material);
+
+        ui_block.Deselect();
     }
 
 
@@ -28,6 +42,11 @@ public class Squad
             return;
 
         squaddies.Add(_squaddie);
+
+        _squaddie.LinkSquaddieList(ref squaddies);
+        _squaddie.ChangeMaterial(settings.select_material);
+
+        ui_block.UpdateUnitCount(squaddies.Count);
     }
 
 
@@ -37,7 +56,7 @@ public class Squad
             return;
 
         Object.Destroy(squaddies[squaddies.Count - 1].gameObject);
-        squaddies.Remove(squaddies[squaddies.Count - 1]);
+        ui_block.UpdateUnitCount(squaddies.Count - 1);
     }
 
 
@@ -55,6 +74,12 @@ public class Squad
                 IssueCoverCommand(_context);
             } break;
         }
+    }
+
+
+    public void Update()
+    {
+        squaddies.RemoveAll(elem => elem == null);
     }
 
 

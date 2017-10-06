@@ -32,6 +32,9 @@ public class SquadSpawner : MonoBehaviour
 
     void SpawnSquaddie()
     {
+        if (!player_squad_control.issuing_order)
+            return;
+
         GameObject clone = Instantiate(squaddie_prefab, squaddie_spawn_point, Quaternion.identity);
         player_squad_control.AddSquaddie(clone.GetComponent<Squaddie>());
     }

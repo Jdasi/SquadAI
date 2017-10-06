@@ -9,7 +9,6 @@ public enum ContextType
     COVER
 }
 
-
 public class ContextScanner : MonoBehaviour
 {
     public CurrentContext current_context = new CurrentContext();
@@ -22,9 +21,7 @@ public class ContextScanner : MonoBehaviour
 
     [Header("References")]
     [SerializeField] Transform forward_transform;
-    [SerializeField] GameObject context_indicator;
-    [SerializeField] GameObject waypoint_indicator;
-    [SerializeField] GameObject cover_indicator;
+    [SerializeField] ContextIndicator context_indicator;
 
     private int floor_layer_value;
     private int wall_layer_value;
@@ -53,7 +50,7 @@ public class ContextScanner : MonoBehaviour
             ProcessContext(first_hit);
         }
 
-        UpdateIndicators(first_hit);
+        context_indicator.ChangeIndicator(current_context.type);
     }
 
 
@@ -148,10 +145,18 @@ public class ContextScanner : MonoBehaviour
     }
 
 
-    void UpdateIndicators(RaycastHit _first_hit)
+    void OnEnable()
     {
-        waypoint_indicator.SetActive(current_context.type == ContextType.FLOOR);
-        cover_indicator.SetActive(current_context.type == ContextType.COVER);
+        InvokeRepeating("Raycast", 0, 0.005f);
+    }
+
+
+    void OnDisable()
+    {
+        CancelInvoke("Raycast");
+
+        current_context.type = ContextType.NONE;
+        context_indicator.ChangeIndicator(current_context.type);
     }
 
 }
