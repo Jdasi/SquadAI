@@ -634,8 +634,9 @@ MonoBehaviour:
   max_cycle_speed: 20
   damage_per_shot: 5
   shoot_delay: 0.1
+  shoot_spread: 0.05
   case_ejection_speed: 10
-  case_ejection_variance: 0.1
+  case_ejection_variance: 0.2
   gun_cycler: {fileID: 4263938500344278}
   shot_point: {fileID: 4084826257684664}
   case_ejection_point: {fileID: 4918872365062104}

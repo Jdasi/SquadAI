@@ -14,6 +14,7 @@ public class ChainGun : MonoBehaviour
     [Space]
     [SerializeField] int damage_per_shot;
     [SerializeField] float shoot_delay;
+    [SerializeField] float shoot_spread;
 
     [Space]
     [SerializeField] float case_ejection_speed;
@@ -112,8 +113,15 @@ public class ChainGun : MonoBehaviour
 
     void HitScan()
     {
+        Vector3 shot_forward = raycast_transform.forward;
+        Vector3 variance = new Vector3(
+            Random.Range(-shoot_spread, shoot_spread),
+            Random.Range(-shoot_spread, shoot_spread),
+            Random.Range(-shoot_spread, shoot_spread));
+        shot_forward += variance;
+
         RaycastHit hit;
-        Physics.Raycast(raycast_transform.position, raycast_transform.forward,
+        Physics.Raycast(raycast_transform.position, shot_forward,
             out hit, Mathf.Infinity);
 
         if (hit.collider == null)
