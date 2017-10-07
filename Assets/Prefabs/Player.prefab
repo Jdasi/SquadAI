@@ -48,7 +48,23 @@ GameObject:
   - component: {fileID: 114264375939669702}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Squaddie
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1115169832657870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4148123536857092}
+  - component: {fileID: 65332834722683408}
+  m_Layer: 14
+  m_Name: Collider
+  m_TagString: DamageableBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,11 +96,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4924976268493998}
   - component: {fileID: 33988319881738242}
-  - component: {fileID: 65023805120015824}
   - component: {fileID: 23784150032129424}
   m_Layer: 8
   m_Name: Body
-  m_TagString: DamagableBody
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,6 +119,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4148123536857092
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1115169832657870}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4447132450563332}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4204696551115548
 Transform:
   m_ObjectHideFlags: 1
@@ -157,6 +185,7 @@ Transform:
   m_Children:
   - {fileID: 4204696551115548}
   - {fileID: 4924976268493998}
+  - {fileID: 4148123536857092}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -298,18 +327,18 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!65 &65023805120015824
+  m_CollisionDetection: 1
+--- !u!65 &65332834722683408
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1536232360282864}
+  m_GameObject: {fileID: 1115169832657870}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81363003894395020
 AudioListener:
@@ -354,6 +383,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  faction_settings: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
   shake_module: {fileID: 0}
   explosion_particle_prefab: {fileID: 0}
 --- !u!114 &114432360575913182

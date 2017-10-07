@@ -10,7 +10,4 @@ public class SquadSettings : ScriptableObject
     public float squaddie_spacing;
     public float cover_search_radius;
 
-    public Material select_material;
-    public Material deselect_material;
-
 }

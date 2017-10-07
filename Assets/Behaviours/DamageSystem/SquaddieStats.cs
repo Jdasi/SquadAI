@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SquaddieHealth : DamageableBehaviour
+public class SquaddieStats : DamageableBehaviour
 {
+    [Header("Parameters")]
+    public FactionSettings faction_settings;
+
     [Header("References")]
     [SerializeField] ShakeModule shake_module;
     [SerializeField] GameObject explosion_particle_prefab;
@@ -31,6 +34,7 @@ public class SquaddieHealth : DamageableBehaviour
     {
         
     }
+
 
     protected override void DerivedDeath()
     {

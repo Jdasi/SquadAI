@@ -432,6 +432,46 @@ Transform:
   m_PrefabParentObject: {fileID: 4670684135853950, guid: 8407bfa8bb8096c42aacad7c9005c1c0,
     type: 2}
   m_PrefabInternal: {fileID: 2029764385}
+--- !u!1 &277788068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 277788069}
+  - component: {fileID: 277788070}
+  m_Layer: 0
+  m_Name: SquadSpawner_Enemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &277788069
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 277788068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &277788070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 277788068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d3bc756175a55348babeda51fba5b59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &346405967 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4670684135853950, guid: 8407bfa8bb8096c42aacad7c9005c1c0,
@@ -818,7 +858,7 @@ GameObject:
   - component: {fileID: 488481984}
   - component: {fileID: 488481983}
   - component: {fileID: 488481982}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1376,7 +1416,7 @@ GameObject:
   - component: {fileID: 846882318}
   - component: {fileID: 846882317}
   - component: {fileID: 846882316}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2514,7 +2554,7 @@ GameObject:
   - component: {fileID: 1284932647}
   - component: {fileID: 1284932646}
   - component: {fileID: 1284932645}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2612,7 +2652,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1327448868
 MonoBehaviour:
@@ -2939,7 +2979,7 @@ GameObject:
   - component: {fileID: 1638676977}
   - component: {fileID: 1638676978}
   m_Layer: 8
-  m_Name: SquadSpawner
+  m_Name: SquadSpawner_Friendly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2974,6 +3014,7 @@ MonoBehaviour:
   squaddie_prefab: {fileID: 1116222830393566, guid: 93182f6c9f271434e8c5b72ef52f916c,
     type: 2}
   squaddie_spawn_point: {x: 0, y: 0, z: 0}
+  spawn_faction: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
   player_squad_control: {fileID: 795109814}
 --- !u!1001 &1662466031
 Prefab:
@@ -4016,7 +4057,7 @@ GameObject:
   - component: {fileID: 2082809013}
   - component: {fileID: 2082809012}
   - component: {fileID: 2082809011}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

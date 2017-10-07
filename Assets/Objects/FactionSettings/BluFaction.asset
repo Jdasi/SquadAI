@@ -8,12 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a2ab8668e9113c44ab062ca82772990, type: 3}
-  m_Name: DefaultSquadSettings
+  m_Script: {fileID: 11500000, guid: 2a9ed337efd34074c89ca28b72a830ed, type: 3}
+  m_Name: BluFaction
   m_EditorClassIdentifier: 
-  max_squaddies: 4
-  squaddie_size: 0.5
-  squaddie_spacing: 1.5
-  cover_search_radius: 10
+  faction: 0
   select_material: {fileID: 2100000, guid: 2260ede504dd4294b9fece2e86dbc3da, type: 2}
   deselect_material: {fileID: 2100000, guid: 5ed834b87bcb2c84b9c57fa77133beac, type: 2}
+  arrow_color: {r: 0, g: 0.91724133, b: 1, a: 1}
+  text_color: {r: 0, g: 0.91724133, b: 1, a: 1}

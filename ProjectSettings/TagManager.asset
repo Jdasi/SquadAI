@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Squaddie
+  - DamageableBody
   - DamagableBody
   layers:
   - Default
@@ -20,9 +22,9 @@ TagManager:
   - Wall
   - PlayerGun
   - Particle
-  - 
-  - 
-  - 
+  - Damageable
+  - Prop
+  - ScanRadius
   - 
   - 
   - 

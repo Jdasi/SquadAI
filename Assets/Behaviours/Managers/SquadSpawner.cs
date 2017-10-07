@@ -9,6 +9,7 @@ public class SquadSpawner : MonoBehaviour
     [SerializeField] KeyCode remove_squaddie_key = KeyCode.LeftBracket;
     [SerializeField] GameObject squaddie_prefab;
     [SerializeField] Vector3 squaddie_spawn_point;
+    [SerializeField] FactionSettings spawn_faction;
 
     [Header("References")]
     [SerializeField] SquadControl player_squad_control;
@@ -36,7 +37,13 @@ public class SquadSpawner : MonoBehaviour
             return;
 
         GameObject clone = Instantiate(squaddie_prefab, squaddie_spawn_point, Quaternion.identity);
-        player_squad_control.AddSquaddie(clone.GetComponent<Squaddie>());
+
+        clone.GetComponent<SquaddieStats>().faction_settings = spawn_faction;
+
+        var agent = clone.GetComponent<SquaddieAgent>();
+        agent.Init();
+
+        player_squad_control.AddSquaddie(agent);
     }
 
 

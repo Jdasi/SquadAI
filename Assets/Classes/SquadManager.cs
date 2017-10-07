@@ -7,7 +7,7 @@ public class SquadManager
     public int num_squaddies { get { return squaddies.Count; } }
     public SquadSettings settings;
 
-    private List<Squaddie> squaddies = new List<Squaddie>();
+    private List<SquaddieAgent> squaddies = new List<SquaddieAgent>();
     private SquadBlock ui_block;
 
 
@@ -20,8 +20,8 @@ public class SquadManager
 
     public void SelectSquad()
     {
-        foreach (Squaddie squaddie in squaddies)
-            squaddie.ChangeMaterial(settings.select_material);
+        foreach (SquaddieAgent squaddie in squaddies)
+            squaddie.Select();
 
         ui_block.Select();
     }
@@ -29,22 +29,22 @@ public class SquadManager
 
     public void DeselectSquad()
     {
-        foreach (Squaddie squaddie in squaddies)
-            squaddie.ChangeMaterial(settings.deselect_material);
+        foreach (SquaddieAgent squaddie in squaddies)
+            squaddie.Deselect();
 
         ui_block.Deselect();
     }
 
 
-    public void AddSquaddie(Squaddie _squaddie)
+    public void AddSquaddie(SquaddieAgent _squaddie_agent)
     {
-        if (squaddies.Contains(_squaddie))
+        if (squaddies.Contains(_squaddie_agent))
             return;
 
-        squaddies.Add(_squaddie);
+        squaddies.Add(_squaddie_agent);
 
-        _squaddie.LinkSquaddieList(ref squaddies);
-        _squaddie.ChangeMaterial(settings.select_material);
+        _squaddie_agent.LinkSquaddieList(ref squaddies);
+        _squaddie_agent.Select();
 
         ui_block.UpdateUnitCount(squaddies.Count);
     }
@@ -112,7 +112,7 @@ public class SquadManager
         var cover_points = GameManager.scene.cover_point_generator.ClosestCoverPoints(
             _context.indicator_position, _context.indicator_normal, settings.cover_search_radius);
 
-        foreach (Squaddie squaddie in squaddies)
+        foreach (SquaddieAgent squaddie in squaddies)
         {
             if (cover_points.Count <= 0)
                 break;

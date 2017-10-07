@@ -27,4 +27,16 @@ public class JHelper
             SetLayerRecursive(child.gameObject, _layer);
     }
 
+
+    public static bool SameFaction(FactionSettings _a, FactionSettings _b)
+    {
+        if (_a == null || _b == null)
+            return false;
+
+        if (_a.faction == _b.faction)
+            return true;
+
+        return false;
+    }
+
 }
