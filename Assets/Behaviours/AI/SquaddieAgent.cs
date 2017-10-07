@@ -15,6 +15,9 @@ public enum SquaddieState
 
 public class SquaddieAgent : MonoBehaviour
 {
+    [Header("Parameters")]
+    [SerializeField] bool engage_at_will = true;
+
     [Header("References")]
     [SerializeField] NavMeshAgent agent;
     [SerializeField] MeshRenderer mesh;
@@ -119,6 +122,46 @@ public class SquaddieAgent : MonoBehaviour
 
     void IdleState()
     {
+        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            state = SquaddieState.MOVING;
+        }
+
+        if (nearby_targets.Count > 0)
+        {
+            state = SquaddieState.ENGAGING;
+        }
+    }
+
+
+    void MovingState()
+    {
+        if (agent.isStopped && agent.hasPath)
+            agent.isStopped = false;
+
+        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            state = SquaddieState.IDLE;
+            agent.isStopped = true;
+        }
+
+        if (engage_at_will && nearby_targets.Count > 0)
+        {
+            state = SquaddieState.ENGAGING;
+        }
+    }
+
+
+    void TakingCoverState()
+    {
+
+    }
+
+
+    void EngagingState()
+    {
+        agent.isStopped = true;
+
         Transform closest_target = null;
         float closest_distance = Mathf.Infinity;
 
@@ -150,31 +193,11 @@ public class SquaddieAgent : MonoBehaviour
         }
 
         chain_gun.cycle = target_hit;
-    }
 
-
-    void MovingState()
-    {
-        if (agent.isStopped && agent.hasPath)
-            agent.isStopped = false;
-
-        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+        if (nearby_targets.Count == 0)
         {
             state = SquaddieState.IDLE;
-            agent.isStopped = true;
         }
-    }
-
-
-    void TakingCoverState()
-    {
-
-    }
-
-
-    void EngagingState()
-    {
-
     }
 
 

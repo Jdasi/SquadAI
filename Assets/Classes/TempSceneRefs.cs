@@ -16,6 +16,19 @@ public struct TempSceneRefs
     }
 
 
+    public ContextScanner context_scanner
+    {
+        get
+        {
+            if (context_scanner_ == null)
+                context_scanner_ = GameObject.FindObjectOfType<ContextScanner>();
+
+            return context_scanner_;
+        }
+    }
+
+
     private CoverPointGenerator cover_point_generator_;
+    private ContextScanner context_scanner_;
 
 }
