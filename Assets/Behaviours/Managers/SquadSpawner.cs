@@ -26,7 +26,10 @@ public class SquadSpawner : MonoBehaviour
             SpawnSquaddie();
 
         if (Input.GetKeyDown(remove_squaddie_key))
-            player_squad_control.RemoveSquaddie();
+        {
+            if (player_squad_control.issuing_order)
+                player_squad_control.RemoveSquaddie();
+        }
     }
 
 

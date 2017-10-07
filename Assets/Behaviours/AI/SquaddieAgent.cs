@@ -122,11 +122,6 @@ public class SquaddieAgent : MonoBehaviour
 
     void IdleState()
     {
-        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
-        {
-            state = SquaddieState.MOVING;
-        }
-
         if (nearby_targets.Count > 0)
         {
             state = SquaddieState.ENGAGING;
