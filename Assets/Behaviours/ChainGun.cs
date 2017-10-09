@@ -27,9 +27,8 @@ public class ChainGun : MonoBehaviour
     [SerializeField] GameObject shot_particle_prefab;
     [SerializeField] GameObject ricochet_particle_prefab;
     [SerializeField] GameObject bullet_casing_prefab;
-    [SerializeField] List<string> hit_layer_names;
+    [SerializeField] LayerMask hit_layers;
 
-    private List<int> hit_layers = new List<int>();
     private Transform raycast_transform;
     private float current_cycling_speed;
     private bool can_shoot = true;
@@ -51,13 +50,6 @@ public class ChainGun : MonoBehaviour
     public void DisableShooting()
     {
         can_shoot = false;
-    }
-
-
-    void Start()
-    {
-        foreach (string layer_name in hit_layer_names)
-            hit_layers.Add(LayerMask.NameToLayer(layer_name));
     }
 
 
@@ -131,7 +123,7 @@ public class ChainGun : MonoBehaviour
 
         RaycastHit hit;
         Physics.Raycast(raycast_transform.position, shot_forward,
-            out hit, Mathf.Infinity, EvaluateValidLayers());
+            out hit, Mathf.Infinity, hit_layers);
 
         if (hit.collider == null)
             return;
@@ -141,11 +133,11 @@ public class ChainGun : MonoBehaviour
             Quaternion.LookRotation(hit.normal));
 
         if (hit.collider.CompareTag("DamageableBody"))
-            DamageEntity(hit.transform.GetComponentInParent<DamageableBehaviour>());
+            DamageEntity(hit.collider.GetComponent<DamageComponent>());
     }
 
 
-    void DamageEntity(DamageableBehaviour _damageable)
+    void DamageEntity(DamageComponent _damageable)
     {
         if (_damageable == null)
             return;
@@ -164,19 +156,6 @@ public class ChainGun : MonoBehaviour
         ejection_velocity += variance;
 
         ejected_casing.GetComponent<Rigidbody>().velocity = ejection_velocity;
-    }
-
-
-    int EvaluateValidLayers()
-    {
-        int mask = 0;
-
-        foreach (int hit_layer in hit_layers)
-        {
-            mask |= 1 << hit_layer;
-        }
-
-        return mask;
     }
 
 }

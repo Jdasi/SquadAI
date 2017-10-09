@@ -19,7 +19,7 @@ public class SquadControl : MonoBehaviour
     private int selected_squad_index;
 
 
-    public void AddSquaddie(SquaddieAgent _squaddie_agent, int _squad_number = -1)
+    public void AddSquaddie(SquaddieAI _squaddie_ai, int _squad_number = -1)
     {
         if (_squad_number >= squads.Count)
             return;
@@ -29,11 +29,11 @@ public class SquadControl : MonoBehaviour
         // Debug contingency.
         if (squads[_squad_number].num_squaddies >= settings.max_squaddies)
         {
-            Destroy(_squaddie_agent.gameObject);
+            Destroy(_squaddie_ai.gameObject);
             return;
         }
 
-        squads[_squad_number].AddSquaddie(_squaddie_agent);
+        squads[_squad_number].AddSquaddie(_squaddie_ai);
     }
 
 

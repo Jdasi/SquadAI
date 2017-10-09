@@ -45,7 +45,7 @@ public class SquadSpawner : MonoBehaviour
 
         clone.GetComponent<SquaddieStats>().faction_settings = spawn_faction;
 
-        var agent = clone.GetComponent<SquaddieAgent>();
+        var agent = clone.GetComponent<SquaddieAI>();
         agent.Init();
 
         player_squad_control.AddSquaddie(agent);

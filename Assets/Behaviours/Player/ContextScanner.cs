@@ -16,6 +16,7 @@ public class ContextScanner : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] float dist_from_first_ray;
     [SerializeField] float dist_from_second_ray;
+    [SerializeField] LayerMask hit_layers;
     [SerializeField] string floor_layer = "Floor";
     [SerializeField] string wall_layer = "Wall";
 
@@ -41,7 +42,7 @@ public class ContextScanner : MonoBehaviour
         // Find Wall or Floor.
         RaycastHit first_hit;
         bool first_ray_success = Physics.Raycast(forward_transform.position, forward_transform.forward,
-            out first_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
+            out first_hit, Mathf.Infinity, hit_layers);
 
         EvaluateContext(first_ray_success, first_hit);
 

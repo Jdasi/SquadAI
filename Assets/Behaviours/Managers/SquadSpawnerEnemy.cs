@@ -28,7 +28,7 @@ public class SquadSpawnerEnemy : MonoBehaviour
 
         clone.GetComponent<SquaddieStats>().faction_settings = spawn_faction;
 
-        var agent = clone.GetComponent<SquaddieAgent>();
+        var agent = clone.GetComponent<SquaddieAI>();
         agent.Init();
 
         agent.IssueWaypoint(enemy_waypoint);

@@ -62,6 +62,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4148123536857092}
   - component: {fileID: 65332834722683408}
+  - component: {fileID: 114283071024140060}
   m_Layer: 14
   m_Name: Collider
   m_TagString: DamageableBody
@@ -373,19 +374,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starting_health: 100
+  faction_settings: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
   damage_events:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   death_events:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  faction_settings: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
   shake_module: {fileID: 0}
   explosion_particle_prefab: {fileID: 0}
+  current_health: 0
+--- !u!114 &114283071024140060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1115169832657870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a8b4664e49cea43aed2e4cdd4f48fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage_events:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &114432360575913182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -474,6 +492,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dist_from_first_ray: 0.05
   dist_from_second_ray: 0.5
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 3072
   floor_layer: Floor
   wall_layer: Wall
   forward_transform: {fileID: 4204696551115548}
@@ -529,10 +550,8 @@ MonoBehaviour:
   crouch_speed_modifier: 0.5
   crouch_scale: {x: 1.3, y: 1.2, z: 1.3}
   jump_force: 5
-  player_layer: Player
-  noclip_layer: Noclip
   rigid_body: {fileID: 54392084295809804}
-  movement_relation: {fileID: 4204696551115548}
+  perspective_transform: {fileID: 4204696551115548}
   body_transform: {fileID: 4924976268493998}
 --- !u!124 &124371597872749666
 Behaviour:

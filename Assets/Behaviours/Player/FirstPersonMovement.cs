@@ -13,12 +13,10 @@ public class FirstPersonMovement : MonoBehaviour
     [SerializeField] float crouch_speed_modifier = 0.5f;
     [SerializeField] Vector3 crouch_scale;
     [SerializeField] float jump_force;
-    [SerializeField] string player_layer;
-    [SerializeField] string noclip_layer;
 
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
-    [SerializeField] Transform movement_relation;
+    [SerializeField] Transform perspective_transform;
     [SerializeField] Transform body_transform;
 
     private float horizontal;
@@ -37,16 +35,11 @@ public class FirstPersonMovement : MonoBehaviour
     {
         noclip = !noclip;
         rigid_body.isKinematic = noclip;
-
-        this.gameObject.layer = noclip ? noclip_layer_value : player_layer_value;
     }
     
 
     void Start()
     {
-        player_layer_value = LayerMask.NameToLayer(player_layer);
-        noclip_layer_value = LayerMask.NameToLayer(noclip_layer);
-
         original_scale =  body_transform.localScale;
     }
 
@@ -80,7 +73,7 @@ public class FirstPersonMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (movement_relation == null)
+        if (perspective_transform == null)
         {
             transform.position += new Vector3(horizontal, 0, vertical);
         }
@@ -90,18 +83,13 @@ public class FirstPersonMovement : MonoBehaviour
 
             if (noclip)
             {
-                move = (horizontal * movement_relation.transform.right) +
-                       (vertical * movement_relation.transform.forward);
+                move = (horizontal * perspective_transform.transform.right) +
+                       (vertical * perspective_transform.forward);
             }
             else
             {
-                Vector3 forward = movement_relation.forward;
-
-                forward.y = 0;
-                forward.Normalize();
-
-                move = (horizontal * movement_relation.transform.right) +
-                    (vertical * forward);
+                move = (horizontal * perspective_transform.transform.right) +
+                    (vertical * body_transform.forward);
             }
 
             if (horizontal != 0 && vertical != 0)

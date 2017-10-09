@@ -13,42 +13,43 @@ public enum SquaddieState
     ENGAGING
 }
 
-public class SquaddieAgent : MonoBehaviour
+public class SquaddieAI : MonoBehaviour
 {
     [Header("Parameters")]
     [SerializeField] bool engage_at_will = true;
 
     [Header("References")]
-    [SerializeField] NavMeshAgent agent;
-    [SerializeField] MeshRenderer mesh;
-    [SerializeField] SquaddieStats squaddie_stats;
+    [SerializeField] NavMeshAgent nav;
+    [SerializeField] MeshRenderer body_mesh;
+    [SerializeField] Transform view_point;
+    [SerializeField] SquaddieStats stats;
     [SerializeField] SquaddieCanvas squaddie_canvas;
 
     private SquaddieState state = SquaddieState.IDLE;
-    private List<SquaddieAgent> squad_members; // Reference.
+    private List<SquaddieAI> squad_members; // Reference.
     private List<Transform> nearby_targets = new List<Transform>();
     private ChainGun chain_gun;
 
 
     public void Init()
     {
-        if (squaddie_stats.faction_settings == null)
+        if (stats.faction_settings == null)
             return;
 
-        squaddie_canvas.Init(squaddie_stats.faction_settings);
+        squaddie_canvas.Init(stats.faction_settings);
         Deselect();
     }
 
 
     public void Select()
     {
-        mesh.material = squaddie_stats.faction_settings.select_material;
+        body_mesh.material = stats.faction_settings.select_material;
     }
 
 
     public void Deselect()
     {
-        mesh.material = squaddie_stats.faction_settings.deselect_material;
+        body_mesh.material = stats.faction_settings.deselect_material;
     }
 
 
@@ -60,11 +61,11 @@ public class SquaddieAgent : MonoBehaviour
 
     public void ChangeMaterial(Material _material)
     {
-        mesh.material = _material;
+        body_mesh.material = _material;
     }
 
 
-    public void LinkSquaddieList(ref List<SquaddieAgent> _squaddies)
+    public void LinkSquaddieList(ref List<SquaddieAI> _squaddies)
     {
         squad_members = _squaddies;
     }
@@ -72,7 +73,7 @@ public class SquaddieAgent : MonoBehaviour
 
     public void IssueWaypoint(Vector3 _target)
     {
-        agent.destination = _target;
+        nav.destination = _target;
         state = SquaddieState.MOVING;
     }
 
@@ -85,7 +86,7 @@ public class SquaddieAgent : MonoBehaviour
         SquaddieStats squaddie = _other.GetComponentInParent<SquaddieStats>();
 
         if (squaddie == null || JHelper.SameFaction(squaddie.faction_settings,
-            squaddie_stats.faction_settings))
+            stats.faction_settings))
         {
             return;
         }
@@ -131,13 +132,13 @@ public class SquaddieAgent : MonoBehaviour
 
     void MovingState()
     {
-        if (agent.isStopped && agent.hasPath)
-            agent.isStopped = false;
+        if (nav.isStopped && nav.hasPath)
+            nav.isStopped = false;
 
-        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+        if (nav.hasPath && nav.remainingDistance <= nav.stoppingDistance)
         {
             state = SquaddieState.IDLE;
-            agent.isStopped = true;
+            nav.isStopped = true;
         }
 
         if (engage_at_will && nearby_targets.Count > 0)
@@ -155,7 +156,7 @@ public class SquaddieAgent : MonoBehaviour
 
     void EngagingState()
     {
-        agent.isStopped = true;
+        nav.isStopped = true;
 
         Transform closest_target = null;
         float closest_distance = Mathf.Infinity;
@@ -177,7 +178,7 @@ public class SquaddieAgent : MonoBehaviour
             transform.LookAt(closest_target);
 
             RaycastHit hit;
-            bool hit_success = Physics.Raycast(transform.position + new Vector3(0, 1), transform.forward, out hit, Mathf.Infinity,
+            bool hit_success = Physics.Raycast(view_point.position, transform.forward, out hit, Mathf.Infinity,
                 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Damageable"));
 
             if (hit_success)
@@ -199,7 +200,7 @@ public class SquaddieAgent : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position + new Vector3(0, 1),
+        Gizmos.DrawLine(view_point.position,
             transform.position + (transform.forward * 100));
     }
 

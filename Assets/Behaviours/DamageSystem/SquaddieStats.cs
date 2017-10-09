@@ -1,15 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class SquaddieStats : DamageableBehaviour
+public class SquaddieStats : MonoBehaviour
 {
     [Header("Parameters")]
+    [SerializeField] int starting_health;
     public FactionSettings faction_settings;
+    [SerializeField] UnityEvent damage_events;
+    [SerializeField] UnityEvent death_events;
 
     [Header("References")]
     [SerializeField] ShakeModule shake_module;
     [SerializeField] GameObject explosion_particle_prefab;
+
+    [Header("Debug")]
+    [SerializeField] int current_health;
+
+
+    public bool alive { get { return current_health > 0; } }
+
+
+    public void TakeDamage(int _amount)
+    {
+        if (_amount <= 0 || !alive)
+            return;
+
+        current_health -= _amount;
+        damage_events.Invoke();
+
+        if (!alive)
+        {
+            death_events.Invoke();
+        }
+    }
 
 
     public void DamageShake()
@@ -30,15 +55,9 @@ public class SquaddieStats : DamageableBehaviour
     }
 
 
-    protected override void DerivedDamage(int _amount)
+    void Start()
     {
-        
-    }
-
-
-    protected override void DerivedDeath()
-    {
-        
+        current_health = starting_health;
     }
 
 }

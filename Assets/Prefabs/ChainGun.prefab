@@ -646,8 +646,6 @@ MonoBehaviour:
     type: 2}
   bullet_casing_prefab: {fileID: 1558819531369080, guid: fd547a3d67e47604d98b8db9bfde8048,
     type: 2}
-  hit_layer_names:
-  - Floor
-  - Wall
-  - Damageable
-  - Prop
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 52224
