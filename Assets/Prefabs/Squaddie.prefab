@@ -346,7 +346,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6120775a6061ba46b4b82b195583921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  engage_at_will: 1
+  current_state: {fileID: 11400000, guid: ae2ee41950312c9488f45d6ea25c4f87, type: 2}
+  knowledge:
+    squad_members: []
+    nearby_targets: []
+    chain_gun: {fileID: 0}
+    state_time_elapsed: 0
+    has_order: 0
+    order_waypoint: {x: 0, y: 0, z: 0}
   nav: {fileID: 195571041401606838}
   body_mesh: {fileID: 23196185087604998}
   view_point: {fileID: 4022209247994706}

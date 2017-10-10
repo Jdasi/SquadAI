@@ -17,19 +17,10 @@ public class SquaddieCanvas : MonoBehaviour
     }
 
 
-    public void UpdateStateDisplay(SquaddieState _state)
+
+    public void UpdateStateDisplay(string _str)
     {
-        string state_str = "";
-
-        switch (_state)
-        {
-            case SquaddieState.IDLE: state_str          = "IDLE"; break;
-            case SquaddieState.MOVING: state_str        = "MOVING"; break;
-            case SquaddieState.TAKING_COVER: state_str  = "TAKING COVER"; break;
-            case SquaddieState.ENGAGING: state_str      = "ENGAGING ENEMY"; break;
-        }
-
-        state_display.text = state_str;
+        state_display.text = _str;
     }
 
 }
