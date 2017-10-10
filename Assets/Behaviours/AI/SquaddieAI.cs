@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -156,7 +154,7 @@ public class SquaddieAI : MonoBehaviour
 
     void EngagingState()
     {
-        nav.isStopped = true;
+        //nav.isStopped = true;
 
         Transform closest_target = null;
         float closest_distance = Mathf.Infinity;

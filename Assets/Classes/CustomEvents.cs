@@ -32,4 +32,7 @@ public class CustomEvents
     [System.Serializable]
     public class ChainGunEvent : UnityEvent<ChainGun> {}
 
+    [System.Serializable]
+    public class RaycastHitEvent : UnityEvent<RaycastHit> {}
+
 }

@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 114385367672789828}
   - component: {fileID: 114537214391118060}
   - component: {fileID: 54403128435849688}
+  - component: {fileID: 114942883376339752}
   m_Layer: 0
   m_Name: Squaddie
   m_TagString: Squaddie
@@ -622,6 +623,87 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrow: {fileID: 114384051838518746}
   state_display: {fileID: 114724078666703342}
+--- !u!114 &114942883376339752
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1116222830393566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ace1185568defb49ba959b4bee32abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  update_delay: 0
+  rays:
+  - offset: {x: 0, y: 0.5, z: 0}
+    direction: {x: -1, y: 0, z: 0}
+    distance: 1.5
+    color: {r: 0, g: 0.91724133, b: 1, a: 1}
+    hit_layers:
+      serializedVersion: 2
+      m_Bits: 2048
+    hit_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: CustomEvents+RaycastHitEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    miss_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - offset: {x: 0, y: 0.5, z: 0}
+    direction: {x: 0, y: 0, z: -1}
+    distance: 1.5
+    color: {r: 1, g: 0.9724138, b: 0, a: 1}
+    hit_layers:
+      serializedVersion: 2
+      m_Bits: 2048
+    hit_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: CustomEvents+RaycastHitEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    miss_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - offset: {x: 0, y: 0.5, z: 0}
+    direction: {x: 1, y: 0, z: 0}
+    distance: 1.5
+    color: {r: 1, g: 0, b: 0, a: 1}
+    hit_layers:
+      serializedVersion: 2
+      m_Bits: 2048
+    hit_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: CustomEvents+RaycastHitEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    miss_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - offset: {x: 0, y: 0.5, z: 0}
+    direction: {x: 0, y: 0, z: 1}
+    distance: 1.5
+    color: {r: 0, g: 0.33793116, b: 1, a: 1}
+    hit_layers:
+      serializedVersion: 2
+      m_Bits: 2048
+    hit_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: CustomEvents+RaycastHitEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    miss_events:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
 --- !u!114 &114950698699534956
 MonoBehaviour:
   m_ObjectHideFlags: 1
