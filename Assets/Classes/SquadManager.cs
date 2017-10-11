@@ -109,7 +109,7 @@ public class SquadManager
 
     void IssueCoverCommand(CurrentContext _context)
     {
-        var cover_points = GameManager.scene.cover_point_generator.ClosestCoverPoints(
+        var cover_points = GameManager.scene.cover_point_manager.ClosestCoverPoints(
             _context.indicator_position, _context.indicator_normal, settings.cover_search_radius);
 
         foreach (SquaddieAI squaddie in squaddies)

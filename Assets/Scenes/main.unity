@@ -2747,7 +2747,7 @@ GameObject:
   - component: {fileID: 1327448866}
   - component: {fileID: 1327448868}
   m_Layer: 8
-  m_Name: CoverPointGenerator
+  m_Name: CoverPointManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2783,6 +2783,8 @@ MonoBehaviour:
   hit_layers:
     serializedVersion: 2
     m_Bits: 2048
+  cover_point_settings: {fileID: 11400000, guid: 696eeaa3aaf35d447828334671d5a78c,
+    type: 2}
   grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
   cover_point_color: {r: 0, g: 1, b: 1, a: 1}
   cover_point_size: 0.5

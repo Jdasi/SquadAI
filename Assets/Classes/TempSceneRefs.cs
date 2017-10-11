@@ -4,14 +4,14 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
-    public CoverPointGenerator cover_point_generator
+    public CoverPointManager cover_point_manager
     {
         get
         {
-            if (cover_point_generator_ == null)
-                cover_point_generator_ = GameObject.FindObjectOfType<CoverPointGenerator>();
+            if (cover_point_manager_ == null)
+                cover_point_manager_ = GameObject.FindObjectOfType<CoverPointManager>();
 
-            return cover_point_generator_;
+            return cover_point_manager_;
         }
     }
 
@@ -28,7 +28,7 @@ public struct TempSceneRefs
     }
 
 
-    private CoverPointGenerator cover_point_generator_;
+    private CoverPointManager cover_point_manager_;
     private ContextScanner context_scanner_;
 
 }

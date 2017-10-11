@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CoverPointGenerator : MonoBehaviour
+public class CoverPointManager : MonoBehaviour
 {
     [Header("Parameters")]
     [SerializeField] Vector3 extents;
     [Range(2, 50)][SerializeField] int segments = 25;
     [SerializeField] float nav_search_radius = 0.5f;
     [SerializeField] LayerMask hit_layers;
+    [SerializeField] CoverPointSettings cover_point_settings;
 
     [Header("Debug")]
     [SerializeField] Color grid_color = Color.yellow;
-    [SerializeField] Color cover_point_color = Color.cyan;
     [SerializeField] float cover_point_size = 0.5f;
     [SerializeField] bool update_on_select;
 
@@ -65,6 +65,9 @@ public class CoverPointGenerator : MonoBehaviour
 
         foreach (CoverPoint cover_point in cover_points)
         {
+            if (cover_point.occupied)
+                continue;
+
             if (Vector3.Distance(_position, cover_point.position) <= _distance)
                 closest_cover_points.Add(cover_point);
         }
@@ -79,7 +82,7 @@ public class CoverPointGenerator : MonoBehaviour
 
         foreach (CoverPoint cover_point in cover_points)
         {
-            if (cover_point.normal != _required_normal)
+            if (cover_point.occupied || cover_point.normal != _required_normal)
                 continue;
 
             if (Vector3.Distance(_position, cover_point.position) <= _distance)
@@ -118,7 +121,7 @@ public class CoverPointGenerator : MonoBehaviour
             if (NavMesh.SamplePosition(hit.point + hit.normal, out nav_hit,
                 nav_search_radius, NavMesh.AllAreas))
             {
-                CoverPoint cover_point = new CoverPoint();
+                CoverPoint cover_point = new CoverPoint(cover_point_settings);
 
                 cover_point.position = hit.point + hit.normal;
                 cover_point.normal = hit.normal;
@@ -132,6 +135,13 @@ public class CoverPointGenerator : MonoBehaviour
     void Awake()
     {
         GenerateCoverPoints();
+    }
+
+
+    void Update()
+    {
+        foreach (CoverPoint cover_point in cover_points)
+            cover_point.DetermineOccupiedStatus();
     }
 
 
@@ -149,9 +159,13 @@ public class CoverPointGenerator : MonoBehaviour
             Gizmos.DrawLine(ray_pack.from, ray_pack.to);
 
         // Draw cover points.
-        Gizmos.color = cover_point_color;
         foreach (CoverPoint cover_point in cover_points)
+        {
+            Gizmos.color = cover_point.occupied ? cover_point_settings.occupied_color :
+                cover_point_settings.unoccupied_color;
+
             Gizmos.DrawSphere(cover_point.position, cover_point_size);
+        }
     }
 
 }
