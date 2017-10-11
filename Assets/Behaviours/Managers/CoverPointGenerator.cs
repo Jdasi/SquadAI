@@ -9,9 +9,7 @@ public class CoverPointGenerator : MonoBehaviour
     [SerializeField] Vector3 extents;
     [Range(2, 50)][SerializeField] int segments = 25;
     [SerializeField] float nav_search_radius = 0.5f;
-
-    [Header("References")]
-    [SerializeField] int wall_layer;
+    [SerializeField] LayerMask hit_layers;
 
     [Header("Debug")]
     [SerializeField] Color grid_color = Color.yellow;
@@ -30,7 +28,6 @@ public class CoverPointGenerator : MonoBehaviour
         ClearCoverPoints();
 
         // Update important variables.
-        wall_layer = LayerMask.NameToLayer("Wall");
         half_extents = extents / 2;
 
         // Generate cover points.
@@ -38,19 +35,19 @@ public class CoverPointGenerator : MonoBehaviour
         {
             // Forward.
             ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, -half_extents.z),
-                new Vector3(0, 0, extents.z), Vector3.forward, extents.z, wall_layer);
+                new Vector3(0, 0, extents.z), Vector3.forward, extents.z);
 
             // Backward.
             ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, half_extents.z),
-                new Vector3(0, 0, -extents.z), -Vector3.forward, extents.z, wall_layer);
+                new Vector3(0, 0, -extents.z), -Vector3.forward, extents.z);
 
             // Right.
             ProcessLine(new Vector3(-half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
-                new Vector3(extents.x, 0, 0), Vector3.right, extents.x, wall_layer);
+                new Vector3(extents.x, 0, 0), Vector3.right, extents.x);
 
             // Left.
             ProcessLine(new Vector3(half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
-                new Vector3(-extents.x, 0, 0), -Vector3.right, extents.x, wall_layer);
+                new Vector3(-extents.x, 0, 0), -Vector3.right, extents.x);
         }
     }
 
@@ -94,7 +91,7 @@ public class CoverPointGenerator : MonoBehaviour
 
 
     void ProcessLine(Vector3 _from_offset, Vector3 _to_offset, Vector3 _direction,
-        float _length, int _layer)
+        float _length)
     {
         RaycastPackage ray_pack = new RaycastPackage();
 
@@ -102,7 +99,6 @@ public class CoverPointGenerator : MonoBehaviour
         ray_pack.to = ray_pack.from + _to_offset;
         ray_pack.direction = _direction;
         ray_pack.length = _length;
-        ray_pack.layer = _layer;
 
         EnumerateCoverPoints(ray_pack);
 
@@ -113,7 +109,7 @@ public class CoverPointGenerator : MonoBehaviour
     void EnumerateCoverPoints(RaycastPackage _ray_pack)
     {
         var hits = Physics.RaycastAll(_ray_pack.from, _ray_pack.direction,
-            _ray_pack.length, 1 << _ray_pack.layer);
+            _ray_pack.length, hit_layers);
 
         foreach (var hit in hits)
         {

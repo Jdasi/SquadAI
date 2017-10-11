@@ -2780,7 +2780,9 @@ MonoBehaviour:
   extents: {x: 60, y: 0, z: 60}
   segments: 28
   nav_search_radius: 0.5
-  wall_layer: 11
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 2048
   grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
   cover_point_color: {r: 0, g: 1, b: 1, a: 1}
   cover_point_size: 0.5
