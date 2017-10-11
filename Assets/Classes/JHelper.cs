@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 public class JHelper
 {
@@ -37,6 +38,24 @@ public class JHelper
             return true;
 
         return false;
+    }
+
+
+    public static bool SameFaction(SquaddieAI _a, SquaddieAI _b)
+    {
+        if (_a == null || _b == null)
+            return false;
+
+        return SameFaction(_a.stats.faction_settings, _b.stats.faction_settings);
+    }
+
+
+    public static bool SameFaction(SquaddieAI _a, FactionSettings _b)
+    {
+        if (_a == null || _b == null)
+            return false;
+
+        return SameFaction(_a.stats.faction_settings, _b);
     }
 
 }

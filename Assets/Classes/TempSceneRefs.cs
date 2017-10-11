@@ -4,6 +4,18 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
+    public SquadSpawner squad_spawner
+    {
+        get
+        {
+            if (squad_spawner_ == null)
+                squad_spawner_ = GameObject.FindObjectOfType<SquadSpawner>();
+
+            return squad_spawner_;
+        }
+    }
+
+
     public CoverPointManager cover_point_manager
     {
         get
@@ -28,6 +40,7 @@ public struct TempSceneRefs
     }
 
 
+    private SquadSpawner squad_spawner_;
     private CoverPointManager cover_point_manager_;
     private ContextScanner context_scanner_;
 

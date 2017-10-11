@@ -86,8 +86,7 @@ public class SquaddieAI : MonoBehaviour
 
         SquaddieAI squaddie = _other.GetComponent<SquaddieAI>();
 
-        if (squaddie == null || JHelper.SameFaction(squaddie.stats.faction_settings,
-            stats.faction_settings))
+        if (squaddie == null || JHelper.SameFaction(squaddie, this))
         {
             return;
         }

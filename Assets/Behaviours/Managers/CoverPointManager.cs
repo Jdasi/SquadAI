@@ -11,6 +11,7 @@ public class CoverPointManager : MonoBehaviour
     [SerializeField] float nav_search_radius = 0.5f;
     [SerializeField] LayerMask hit_layers;
     [SerializeField] CoverPointSettings cover_point_settings;
+    [SerializeField] WeightingModule[] weighting_modules;
 
     [Header("Debug")]
     [SerializeField] Color grid_color = Color.yellow;
@@ -22,6 +23,7 @@ public class CoverPointManager : MonoBehaviour
     private List<CoverPoint> cover_points = new List<CoverPoint>();
 
 
+    // Public only so the Editor script can access it.
     public void GenerateCoverPoints()
     {
         // Prepare for new data.
@@ -52,6 +54,7 @@ public class CoverPointManager : MonoBehaviour
     }
 
 
+    // Public only so the Editor script can access it.
     public void ClearCoverPoints()
     {
         ray_packs.Clear();
@@ -65,11 +68,10 @@ public class CoverPointManager : MonoBehaviour
 
         foreach (CoverPoint cover_point in cover_points)
         {
-            if (cover_point.occupied)
+            if (cover_point.occupied || Vector3.Distance(_position, cover_point.position) > _distance)
                 continue;
 
-            if (Vector3.Distance(_position, cover_point.position) <= _distance)
-                closest_cover_points.Add(cover_point);
+            closest_cover_points.Add(cover_point);
         }
 
         return closest_cover_points;

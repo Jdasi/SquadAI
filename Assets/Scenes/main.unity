@@ -447,7 +447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &277788069
 Transform:
   m_ObjectHideFlags: 0
@@ -2746,7 +2746,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1327448866}
   - component: {fileID: 1327448868}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: CoverPointManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2785,8 +2785,9 @@ MonoBehaviour:
     m_Bits: 2048
   cover_point_settings: {fileID: 11400000, guid: 696eeaa3aaf35d447828334671d5a78c,
     type: 2}
+  weighting_modules:
+  - {fileID: 11400000, guid: 73666785273e06f45946fad1f59446d3, type: 2}
   grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
-  cover_point_color: {r: 0, g: 1, b: 1, a: 1}
   cover_point_size: 0.5
   update_on_select: 0
 --- !u!1001 &1352327417
@@ -3094,8 +3095,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1638676977}
   - component: {fileID: 1638676978}
-  m_Layer: 8
-  m_Name: SquadSpawner_Friendly
+  m_Layer: 0
+  m_Name: SquadSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3125,12 +3126,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2199e38af8e390c4184fb23d13572e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawn_squaddie_key: 93
-  remove_squaddie_key: 91
+  all_units: []
+  friendly_settings:
+    spawn_key: 93
+    faction: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
+  enemy_settings:
+    spawn_key: 91
+    faction: {fileID: 11400000, guid: 3a1ba0df674700043abc8c72c776a39b, type: 2}
+  remove_squaddie_key: 8
+  player_squad_control: {fileID: 795109814}
   squaddie_prefab: {fileID: 1116222830393566, guid: 93182f6c9f271434e8c5b72ef52f916c,
     type: 2}
-  spawn_faction: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
-  player_squad_control: {fileID: 795109814}
 --- !u!1001 &1662466031
 Prefab:
   m_ObjectHideFlags: 0
