@@ -6,11 +6,15 @@ using UnityEngine;
 public class WorkingKnowledge
 {
     public List<SquaddieAI> squad_members; // Reference.
-    public List<Transform> nearby_targets = new List<Transform>();
+
+    public List<SquaddieAI> nearby_targets = new List<SquaddieAI>();
+    public SquaddieAI current_target;
+
     public ChainGun chain_gun;
     public float state_time_elapsed;
 
     public bool has_order;
     public Vector3 order_waypoint;
+    public SquaddieAI order_target;
 
 }

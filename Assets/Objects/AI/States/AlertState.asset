@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
+  m_Name: AlertState
+  m_EditorClassIdentifier: 
+  display_text: ALERT
+  actions: []
+  transitions:
+  - decision: {fileID: 11400000, guid: f9ef1c329075ac048984127a74fb92e0, type: 2}
+    true_state: {fileID: 11400000, guid: 4f9794f8c340a3f41b2d73f0cf82e104, type: 2}
+    true_triggers: []
+    false_state: {fileID: 0}
+    false_triggers: []
+  state_color: {r: 0, g: 1, b: 0.04827571, a: 1}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
+  m_Name: ObeyState
+  m_EditorClassIdentifier: 
+  display_text: OBEYING ORDERS
+  actions:
+  - {fileID: 11400000, guid: 0619c565e4e0495448c96cdd012474fc, type: 2}
+  transitions:
+  - decision: {fileID: 11400000, guid: 1ed63ed4aa9cf014593c7e981243f0d6, type: 2}
+    true_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
+    true_triggers:
+    - {fileID: 11400000, guid: bbe0d740d4baba24eaa90a359bfd2d57, type: 2}
+    false_state: {fileID: 0}
+    false_triggers: []
+  state_color: {r: 1, g: 0.93103445, b: 0, a: 1}

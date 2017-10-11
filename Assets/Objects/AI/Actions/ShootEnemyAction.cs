@@ -13,12 +13,12 @@ public class ShootEnemyAction : Action
 
     void ShootEnemy(SquaddieAI _squaddie)
     {
-        Transform closest_target = null;
+        SquaddieAI closest_target = null;
         float closest_distance = Mathf.Infinity;
 
-        foreach (Transform target in _squaddie.knowledge.nearby_targets)
+        foreach (SquaddieAI target in _squaddie.knowledge.nearby_targets)
         {
-            float distance = (target.position - _squaddie.transform.position).sqrMagnitude;
+            float distance = (target.transform.position - _squaddie.transform.position).sqrMagnitude;
             if (distance >= closest_distance)
                 continue;
 
@@ -30,7 +30,7 @@ public class ShootEnemyAction : Action
 
         if (closest_target != null)
         {
-            _squaddie.transform.LookAt(closest_target);
+            _squaddie.transform.LookAt(closest_target.transform);
 
             RaycastHit hit;
             bool hit_success = Physics.Raycast(_squaddie.view_point.position, _squaddie.transform.forward, out hit, Mathf.Infinity,

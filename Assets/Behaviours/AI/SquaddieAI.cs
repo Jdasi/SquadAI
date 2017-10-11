@@ -84,15 +84,15 @@ public class SquaddieAI : MonoBehaviour
         if (!_other.CompareTag("DamageableBody"))
             return;
 
-        SquaddieStats squaddie = _other.GetComponentInParent<SquaddieStats>();
+        SquaddieAI squaddie = _other.GetComponent<SquaddieAI>();
 
-        if (squaddie == null || JHelper.SameFaction(squaddie.faction_settings,
+        if (squaddie == null || JHelper.SameFaction(squaddie.stats.faction_settings,
             stats.faction_settings))
         {
             return;
         }
 
-        knowledge.nearby_targets.Add(squaddie.transform);
+        knowledge.nearby_targets.Add(squaddie);
     }
 
 
@@ -101,8 +101,20 @@ public class SquaddieAI : MonoBehaviour
         if (!_other.CompareTag("DamageableBody"))
             return;
 
-        if (knowledge.nearby_targets.Contains(_other.transform.parent))
-            knowledge.nearby_targets.Remove(_other.transform.parent);
+        SquaddieAI squaddie = _other.GetComponentInParent<SquaddieAI>();
+
+        if (squaddie == null)
+            return;
+
+        if (knowledge.nearby_targets.Contains(squaddie))
+            knowledge.nearby_targets.Remove(squaddie);
+    }
+
+
+    void Start()
+    {
+        nav.isStopped = true;
+        TransitionToState(current_state);
     }
 
 
@@ -115,7 +127,7 @@ public class SquaddieAI : MonoBehaviour
 
     void OnStateEnter(State _state)
     {
-        squaddie_canvas.UpdateStateDisplay(_state.name);
+        squaddie_canvas.UpdateStateDisplay(_state.display_text);
     }
 
 
@@ -127,7 +139,7 @@ public class SquaddieAI : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = current_state.state_color;
         Gizmos.DrawLine(view_point.position,
             view_point.position + (view_point.forward * 100));
     }

@@ -9,10 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
-  m_Name: DefaultState
+  m_Name: FleeState
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: 0619c565e4e0495448c96cdd012474fc, type: 2}
-  - {fileID: 11400000, guid: 5ffea411dda2e8142b0af4fce19d7b89, type: 2}
+  display_text: FLEEING
+  actions: []
   transitions: []
-  state_color: {r: 0.07586193, g: 1, b: 0, a: 1}
+  state_color: {r: 0.9034481, g: 0, b: 1, a: 1}

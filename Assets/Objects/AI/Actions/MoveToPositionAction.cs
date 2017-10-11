@@ -19,7 +19,7 @@ public class MoveToPositionAction : Action
         if (_squaddie.nav.hasPath && _squaddie.nav.remainingDistance <= _squaddie.nav.stoppingDistance)
         {
             _squaddie.nav.isStopped = true;
-            _squaddie.knowledge.has_order = false;
+            _squaddie.nav.ResetPath();
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "PluggableAI/State")]
 public class State : ScriptableObject
 {
+    public string display_text;
     public Action[] actions;
     public Transition[] transitions;
     public Color state_color = Color.grey;
@@ -32,9 +33,21 @@ public class State : ScriptableObject
     {
         foreach (Transition transition in transitions) 
         {
-            bool decisionSucceeded = transition.decision.Decide(_squaddie);
+            bool decision_success = transition.decision.Decide(_squaddie);
 
-            State target_state = decisionSucceeded ? transition.true_state : transition.false_state;
+            State target_state = decision_success ? transition.true_state : transition.false_state;
+
+            if (decision_success)
+            {
+                foreach (TransitionTrigger trigger in transition.true_triggers)
+                    trigger.Trigger(_squaddie);
+            }
+            else
+            {
+                foreach (TransitionTrigger trigger in transition.false_triggers)
+                    trigger.Trigger(_squaddie);
+            }
+
             _squaddie.TransitionToState(target_state);
         }
     }
