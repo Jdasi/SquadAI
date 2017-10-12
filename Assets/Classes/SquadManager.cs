@@ -109,18 +109,30 @@ public class SquadManager
 
     void IssueCoverCommand(CurrentContext _context)
     {
-        var cover_points = GameManager.scene.cover_point_manager.ClosestCoverPoints(
-            _context.indicator_position, _context.indicator_normal, settings.cover_search_radius);
+        List<CoverPoint> allocated_points = new List<CoverPoint>();
 
         foreach (SquaddieAI squaddie in squaddies)
         {
+            var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
+                _context.indicator_position, settings.cover_search_radius, squaddie);
+
             if (cover_points.Count <= 0)
                 break;
 
-            CoverPoint cover_point = cover_points[Random.Range(0, cover_points.Count)];
-            cover_points.Remove(cover_point);
+            CoverPoint target_point = null;
+            foreach (CoverPoint cover_point in cover_points)
+            {
+                if (allocated_points.Contains(cover_point))
+                    continue;
 
-            squaddie.IssueWaypoint(cover_point.position);
+                target_point = cover_point;
+            }
+
+            if (target_point == null)
+                break;
+
+            allocated_points.Add(target_point);
+            squaddie.IssueWaypoint(target_point.position);
         }
     }
 

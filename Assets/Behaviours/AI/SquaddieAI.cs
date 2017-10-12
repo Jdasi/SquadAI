@@ -84,7 +84,7 @@ public class SquaddieAI : MonoBehaviour
         if (!_other.CompareTag("DamageableBody"))
             return;
 
-        SquaddieAI squaddie = _other.GetComponent<SquaddieAI>();
+        SquaddieAI squaddie = _other.GetComponentInParent<SquaddieAI>();
 
         if (squaddie == null || JHelper.SameFaction(squaddie, this))
         {

@@ -4,6 +4,18 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
+    public TacticalAssessor tactical_assessor
+    {
+        get
+        {
+            if (tactical_assessor_ == null)
+                tactical_assessor_ = GameObject.FindObjectOfType<TacticalAssessor>();
+
+            return tactical_assessor_;
+        }
+    }
+
+
     public SquadSpawner squad_spawner
     {
         get
@@ -16,14 +28,14 @@ public struct TempSceneRefs
     }
 
 
-    public CoverPointManager cover_point_manager
+    public CoverPointGenerator cover_point_generator
     {
         get
         {
-            if (cover_point_manager_ == null)
-                cover_point_manager_ = GameObject.FindObjectOfType<CoverPointManager>();
+            if (cover_point_generator_ == null)
+                cover_point_generator_ = GameObject.FindObjectOfType<CoverPointGenerator>();
 
-            return cover_point_manager_;
+            return cover_point_generator_;
         }
     }
 
@@ -40,8 +52,9 @@ public struct TempSceneRefs
     }
 
 
+    private TacticalAssessor tactical_assessor_;
     private SquadSpawner squad_spawner_;
-    private CoverPointManager cover_point_manager_;
+    private CoverPointGenerator cover_point_generator_;
     private ContextScanner context_scanner_;
 
 }

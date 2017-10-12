@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(CoverPointManager))]
+[CustomEditor(typeof(CoverPointGenerator))]
 public class CoverPointGeneratorEditor : Editor
 {
 
@@ -13,13 +13,13 @@ public class CoverPointGeneratorEditor : Editor
         
         if (GUILayout.Button("Generate Cover Points"))
         {
-            var t = (CoverPointManager)target;
+            var t = (CoverPointGenerator)target;
             t.GenerateCoverPoints();
         }
 
         if (GUILayout.Button("Clear All"))
         {
-            var t = (CoverPointManager)target;
+            var t = (CoverPointGenerator)target;
             t.ClearCoverPoints();
         }
     }

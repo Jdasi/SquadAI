@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd581c8760bf622448d351d49a2811c8, type: 3}
   m_Name: LineOfSightWeight
   m_EditorClassIdentifier: 
-  true_adjustment: 25
-  false_adjustment: 0
   blocking_layers:
     serializedVersion: 2
-    m_Bits: 51200
+    m_Bits: 34816
+  vulnerability_adjustment: 100
+  flanking_adjustment: -25

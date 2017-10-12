@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CoverPointManager : MonoBehaviour
+public class CoverPointGenerator : MonoBehaviour
 {
+    public List<CoverPoint> cover_points = new List<CoverPoint>();
+
     [Header("Parameters")]
     [SerializeField] Vector3 extents;
     [Range(2, 50)][SerializeField] int segments = 25;
@@ -20,7 +22,6 @@ public class CoverPointManager : MonoBehaviour
 
     private Vector3 half_extents;
     private List<RaycastPackage> ray_packs = new List<RaycastPackage>();
-    private List<CoverPoint> cover_points = new List<CoverPoint>();
 
 
     // Public only so the Editor script can access it.
@@ -59,39 +60,6 @@ public class CoverPointManager : MonoBehaviour
     {
         ray_packs.Clear();
         cover_points.Clear();
-    }
-
-
-    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, float _distance)
-    {
-        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
-
-        foreach (CoverPoint cover_point in cover_points)
-        {
-            if (cover_point.occupied || Vector3.Distance(_position, cover_point.position) > _distance)
-                continue;
-
-            closest_cover_points.Add(cover_point);
-        }
-
-        return closest_cover_points;
-    }
-
-
-    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, Vector3 _required_normal, float _distance)
-    {
-        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
-
-        foreach (CoverPoint cover_point in cover_points)
-        {
-            if (cover_point.occupied || cover_point.normal != _required_normal)
-                continue;
-
-            if (Vector3.Distance(_position, cover_point.position) <= _distance)
-                closest_cover_points.Add(cover_point);
-        }
-
-        return closest_cover_points;
     }
 
 

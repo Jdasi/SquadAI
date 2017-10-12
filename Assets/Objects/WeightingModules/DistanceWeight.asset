@@ -8,9 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e43db44676d8844811ec14db699550, type: 3}
-  m_Name: ShootEnemy
+  m_Script: {fileID: 11500000, guid: b18ade7c8fdd6d446a29f287b61ae04d, type: 3}
+  m_Name: DistanceWeight
   m_EditorClassIdentifier: 
-  hit_layers:
-    serializedVersion: 2
-    m_Bits: 18432
+  adjustment_per_unit: 1

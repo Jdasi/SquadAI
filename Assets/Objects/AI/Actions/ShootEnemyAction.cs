@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "PluggableAI/Actions/Shoot Enemy")]
 public class ShootEnemyAction : Action
 {
+    [SerializeField] LayerMask hit_layers;
+
+
     public override void Act(SquaddieAI _squaddie)
     {
         ShootEnemy(_squaddie);
@@ -13,7 +16,7 @@ public class ShootEnemyAction : Action
 
     void ShootEnemy(SquaddieAI _squaddie)
     {
-        SquaddieAI closest_target = null;
+        Transform closest_target = null;
         float closest_distance = Mathf.Infinity;
 
         foreach (SquaddieAI target in _squaddie.knowledge.nearby_targets)
@@ -22,7 +25,7 @@ public class ShootEnemyAction : Action
             if (distance >= closest_distance)
                 continue;
 
-            closest_target = target;
+            closest_target = target.transform;
             closest_distance = distance;
         }
 
@@ -33,8 +36,8 @@ public class ShootEnemyAction : Action
             _squaddie.transform.LookAt(closest_target.transform);
 
             RaycastHit hit;
-            bool hit_success = Physics.Raycast(_squaddie.view_point.position, _squaddie.transform.forward, out hit, Mathf.Infinity,
-                1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Damageable"));
+            bool hit_success = Physics.Raycast(_squaddie.view_point.position, _squaddie.transform.forward,
+                out hit, Mathf.Infinity, hit_layers);
 
             if (hit_success)
             {
