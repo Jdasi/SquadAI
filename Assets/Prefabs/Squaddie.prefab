@@ -347,6 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   current_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
+  settings: {fileID: 11400000, guid: 6ab6e7a7b3deaf24890d5573afc1e011, type: 2}
   knowledge:
     squad_members: []
     nearby_targets: []
@@ -830,7 +831,7 @@ NavMeshAgent:
   m_Radius: 0.75
   m_Speed: 5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 70
   m_AngularSpeed: 120
   m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1

@@ -7,6 +7,7 @@ public class SquaddieAI : MonoBehaviour
 {
     [Header("Parameters")]
     public State current_state;
+    public SquaddieSettings settings;
 
     [Header("Knowledge")]
     public WorkingKnowledge knowledge = new WorkingKnowledge();

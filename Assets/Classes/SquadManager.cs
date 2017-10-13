@@ -94,11 +94,19 @@ public class SquadManager
 
     void IssueMoveCommand(CurrentContext _context)
     {
-        float padded_squaddie = settings.squaddie_size + settings.squaddie_spacing;
-        float line_width = padded_squaddie * num_squaddies;
+        List<float> squaddie_sizes = new List<float>();
+        float line_width = 0;
+
+        foreach (SquaddieAI squaddie in squaddies)
+        {
+            line_width += squaddie.nav.radius + settings.squaddie_spacing;
+            squaddie_sizes.Add(squaddie.nav.radius);
+        }
 
         for (int i = 0; i < num_squaddies; ++i)
         {
+            float padded_squaddie = squaddies[i].nav.radius + settings.squaddie_spacing;
+
             Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
             waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);
 
@@ -114,7 +122,7 @@ public class SquadManager
         foreach (SquaddieAI squaddie in squaddies)
         {
             var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
-                _context.indicator_position, settings.cover_search_radius, squaddie);
+                _context.indicator_position, squaddie.settings.cover_search_radius, squaddie);
 
             if (cover_points.Count <= 0)
                 break;
