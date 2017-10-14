@@ -19,6 +19,10 @@ public class OrderObeyedDecision : Decision
         {
             order_obeyed &= _squaddie.knowledge.order_target == null;
         }
+        else if (_squaddie.knowledge.current_order == OrderType.FOLLOW)
+        {
+            order_obeyed = false;
+        }
 
         return order_obeyed;
     }

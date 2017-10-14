@@ -8,10 +8,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
-  m_Name: FollowingPlayer
+  m_Script: {fileID: 11500000, guid: ecd812a72aaa93e439e8448370030e0b, type: 3}
+  m_Name: FollowPlayer
   m_EditorClassIdentifier: 
-  display_text: 
-  actions: []
-  transitions: []
-  state_color: {r: 0, g: 0.5862069, b: 1, a: 1}

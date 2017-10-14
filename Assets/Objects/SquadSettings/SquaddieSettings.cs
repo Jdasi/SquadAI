@@ -7,6 +7,8 @@ public class SquaddieSettings : ScriptableObject
 {
     [Header("Navigation")]
     public float cover_search_radius;
+    public float move_stop_distance;
+    public float follow_stop_distance;
 
     [Header("Senses")]
     public float field_of_view;

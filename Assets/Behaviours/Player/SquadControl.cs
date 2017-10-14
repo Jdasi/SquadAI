@@ -73,7 +73,9 @@ public class SquadControl : MonoBehaviour
         if (Input.GetButtonDown("Command"))
             IssueContextCommand();
         else if (Input.GetButtonDown("CancelOrder"))
-            CancelOrder();
+            ResetSelection();
+        else if (Input.GetKeyDown(KeyCode.F))
+            IssueFollowCommand();
 
         foreach (SquadManager squad in squads)
             squad.Update();
@@ -134,13 +136,23 @@ public class SquadControl : MonoBehaviour
             return;
 
         squads[selected_squad_index].IssueContextCommand(context_scanner.current_context);
-        squads[selected_squad_index].DeselectSquad();
 
-        issuing_order = false;
+        ResetSelection();
     }
 
 
-    void CancelOrder()
+    void IssueFollowCommand()
+    {
+        if (selected_squad_index >= squads.Count)
+            return;
+
+        squads[selected_squad_index].IssueFollowCommand();
+
+        ResetSelection();
+    }
+
+
+    void ResetSelection()
     {
         if (selected_squad_index >= squads.Count)
             return;

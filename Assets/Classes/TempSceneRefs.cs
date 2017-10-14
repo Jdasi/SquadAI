@@ -4,6 +4,18 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
+    public FirstPersonMovement player
+    {
+        get
+        {
+            if (player_ == null)
+                player_ = GameObject.FindObjectOfType<FirstPersonMovement>();
+
+            return player_;
+        }
+    }
+
+
     public TacticalAssessor tactical_assessor
     {
         get
@@ -52,6 +64,7 @@ public struct TempSceneRefs
     }
 
 
+    private FirstPersonMovement player_;
     private TacticalAssessor tactical_assessor_;
     private SquadSpawner squad_spawner_;
     private CoverPointGenerator cover_point_generator_;

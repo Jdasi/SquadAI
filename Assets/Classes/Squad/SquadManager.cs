@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class SquadManager
@@ -76,6 +77,28 @@ public class SquadManager
     }
 
 
+    public void IssueFollowCommand()
+    {
+        squad_sense.follow_targets.Clear();
+        squad_sense.follow_targets.Add(GameManager.scene.player.transform);
+
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+        {
+            squad_sense.follow_targets.Add(squaddie.transform);
+
+            squaddie.nav.stoppingDistance = squaddie.settings.follow_stop_distance;
+            squaddie.knowledge.current_order = OrderType.FOLLOW;
+        }
+
+        for (int i = 0; i < squad_sense.squaddies.Count; ++i)
+        {
+            squad_sense.squaddies[i].knowledge.follow_target = squad_sense.follow_targets[i];
+        }
+
+        squad_sense.follow_targets.Clear();
+    }
+
+
     public void Update()
     {
         GarbageCollect();
@@ -112,6 +135,8 @@ public class SquadManager
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
+            squaddie.nav.stoppingDistance = squaddie.settings.move_stop_distance;
+
             line_width += squaddie.nav.radius + settings.squaddie_spacing;
             squaddie_sizes.Add(squaddie.nav.radius);
         }
@@ -134,6 +159,8 @@ public class SquadManager
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
+            squaddie.nav.stoppingDistance = squaddie.settings.move_stop_distance;
+
             var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
                 _context.indicator_position, squaddie.settings.cover_search_radius);
 

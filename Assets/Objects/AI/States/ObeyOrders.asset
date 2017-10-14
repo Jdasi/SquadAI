@@ -14,6 +14,8 @@ MonoBehaviour:
   display_text: OBEYING ORDERS
   actions:
   - {fileID: 11400000, guid: 0619c565e4e0495448c96cdd012474fc, type: 2}
+  - {fileID: 11400000, guid: d097fa339d7923b45b6d2d773c673d09, type: 2}
+  - {fileID: 11400000, guid: 5ffea411dda2e8142b0af4fce19d7b89, type: 2}
   transitions:
   - decision: {fileID: 11400000, guid: 1ed63ed4aa9cf014593c7e981243f0d6, type: 2}
     true_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}

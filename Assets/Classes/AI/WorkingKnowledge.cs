@@ -14,6 +14,7 @@ public class WorkingKnowledge
 
     public OrderType current_order;
     public Vector3 order_waypoint;
+    public Transform follow_target;
 
     public SquaddieAI closest_target;
     public SquaddieAI order_target;

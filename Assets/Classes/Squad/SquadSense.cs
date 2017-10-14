@@ -9,4 +9,6 @@ public class SquadSense
     public Vector3 squad_center;
     public SquaddieAI squad_target;
 
+    public List<Transform> follow_targets = new List<Transform>();
+
 }
