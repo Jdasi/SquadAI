@@ -86,6 +86,12 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    public void MoveToFlankEnemy(SquaddieAI _target)
+    {
+        
+    }
+
+
     public bool TestSightToPosition(Vector3 _position)
     {
         Vector3 dir = (_position - view_point.position).normalized;
@@ -164,7 +170,7 @@ public class SquaddieAI : MonoBehaviour
     {
         EvaluateSightHit();
         EvaluateClosestTarget();
-        EvaluateClosestTargetInSight();
+        EvaluateClosestTargetVisibility();
     }
 
 
@@ -195,7 +201,7 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    void EvaluateClosestTargetInSight()
+    void EvaluateClosestTargetVisibility()
     {
         if (knowledge.closest_target == null)
             return;

@@ -31,7 +31,7 @@ public class ShootEnemyAction : Action
         Quaternion rot = Quaternion.LookRotation(_squaddie.knowledge.closest_target.transform.position -
             _squaddie.transform.position);
         _squaddie.transform.rotation = Quaternion.RotateTowards(_squaddie.transform.rotation,
-            rot, _squaddie.nav.angularSpeed * Time.deltaTime);
+            rot, (_squaddie.nav.angularSpeed * 2) * Time.deltaTime);
 
         _squaddie.knowledge.chain_gun.cycle = _squaddie.knowledge.sight_hit.transform ==
             _squaddie.knowledge.closest_target.transform;

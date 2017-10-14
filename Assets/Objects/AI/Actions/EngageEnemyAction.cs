@@ -10,8 +10,11 @@ public class EngageEnemyAction : Action
 
     public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
-        if (_squaddie.knowledge.closest_target == null)
+        if (_squaddie.knowledge.closest_target == null ||
+            _squaddie.knowledge.closest_target_visible)
+        {
             return false;
+        }
 
         return true;
     }
@@ -19,26 +22,14 @@ public class EngageEnemyAction : Action
 
     public override void Act(SquaddieAI _squaddie)
     {
-        //MoveToEngage(_squaddie);
+        MoveToEngage(_squaddie);
     }
 
 
     void MoveToEngage(SquaddieAI _squaddie)
     {
         SquaddieAI current_target = _squaddie.knowledge.closest_target;
-
-        RaycastHit hit;
-        Physics.Raycast(_squaddie.view_point.position, current_target.transform.position,
-            out hit, Mathf.Infinity, blocking_layers);
-
-        if (hit.collider == null)
-            return;
-
-        if (hit.collider.transform != current_target.collider_transform ||
-            hit.distance > _squaddie.settings.minimum_engage_distance)
-        {
-            _squaddie.MoveToCoverNearPosition(current_target.transform.position);
-        }
+        _squaddie.MoveToCoverNearPosition(current_target.transform.position);
     }
 
 }
