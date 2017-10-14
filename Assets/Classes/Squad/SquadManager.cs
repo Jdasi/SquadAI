@@ -143,6 +143,9 @@ public class SquadManager
             CoverPoint target_point = null;
             foreach (CoverPoint cover_point in cover_points)
             {
+                if (target_point != null)
+                    break;
+
                 if (allocated_points.Contains(cover_point))
                     continue;
 

@@ -363,7 +363,7 @@ MonoBehaviour:
     nearby_targets: []
     chain_gun: {fileID: 0}
     state_time_elapsed: 0
-    has_order: 0
+    current_order: 0
     order_waypoint: {x: 0, y: 0, z: 0}
     closest_target: {fileID: 0}
     order_target: {fileID: 0}

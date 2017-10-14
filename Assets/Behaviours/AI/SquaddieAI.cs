@@ -66,7 +66,7 @@ public class SquaddieAI : MonoBehaviour
 
     public void IssueMoveCommand(Vector3 _target)
     {
-        knowledge.has_order = true;
+        knowledge.current_order = OrderType.MOVE;
         knowledge.order_waypoint = _target;
 
         nav.destination = _target;
@@ -88,7 +88,14 @@ public class SquaddieAI : MonoBehaviour
 
     public void MoveToFlankEnemy(SquaddieAI _target)
     {
-        
+        var cover_points = GameManager.scene.tactical_assessor.FlankingPositions(
+            this, _target, settings.cover_search_radius);
+
+        if (cover_points.Count <= 0)
+            return;
+
+        CoverPoint target_point = cover_points[0];
+        nav.destination = target_point.position;
     }
 
 

@@ -7,7 +7,7 @@ public class HasOrderDecision : Decision
 {
     public override bool Decide(SquaddieAI _squaddie)
     {
-        return _squaddie.knowledge.has_order;
+        return _squaddie.knowledge.current_order != OrderType.NONE;
     }
 
 }

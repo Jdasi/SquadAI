@@ -1,7 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+
+public enum OrderType
+{
+    NONE,
+    MOVE,
+    FOLLOW,
+    ATTACK
+}
 
 public class SquadControl : MonoBehaviour
 {
@@ -65,6 +72,8 @@ public class SquadControl : MonoBehaviour
 
         if (Input.GetButtonDown("Command"))
             IssueContextCommand();
+        else if (Input.GetButtonDown("CancelOrder"))
+            CancelOrder();
 
         foreach (SquadManager squad in squads)
             squad.Update();
@@ -127,6 +136,16 @@ public class SquadControl : MonoBehaviour
         squads[selected_squad_index].IssueContextCommand(context_scanner.current_context);
         squads[selected_squad_index].DeselectSquad();
 
+        issuing_order = false;
+    }
+
+
+    void CancelOrder()
+    {
+        if (selected_squad_index >= squads.Count)
+            return;
+
+        squads[selected_squad_index].DeselectSquad();
         issuing_order = false;
     }
 

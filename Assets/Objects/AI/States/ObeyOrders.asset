@@ -21,10 +21,4 @@ MonoBehaviour:
     - {fileID: 11400000, guid: bbe0d740d4baba24eaa90a359bfd2d57, type: 2}
     false_state: {fileID: 0}
     false_triggers: []
-  - decision: {fileID: 11400000, guid: 0354905f0aa4afa47a14411b5dbb02e3, type: 2}
-    true_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
-    true_triggers:
-    - {fileID: 11400000, guid: bbe0d740d4baba24eaa90a359bfd2d57, type: 2}
-    false_state: {fileID: 0}
-    false_triggers: []
   state_color: {r: 1, g: 0.93103445, b: 0, a: 1}

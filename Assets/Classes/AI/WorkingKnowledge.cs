@@ -12,7 +12,7 @@ public class WorkingKnowledge
     public ChainGun chain_gun;
     public float state_time_elapsed;
 
-    public bool has_order;
+    public OrderType current_order;
     public Vector3 order_waypoint;
 
     public SquaddieAI closest_target;

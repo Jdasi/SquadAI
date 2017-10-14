@@ -28,8 +28,10 @@ public class EngageEnemyAction : Action
 
     void MoveToEngage(SquaddieAI _squaddie)
     {
+        _squaddie.nav.isStopped = false;
+
         SquaddieAI current_target = _squaddie.knowledge.closest_target;
-        _squaddie.MoveToCoverNearPosition(current_target.transform.position);
+        _squaddie.MoveToFlankEnemy(current_target);
     }
 
 }

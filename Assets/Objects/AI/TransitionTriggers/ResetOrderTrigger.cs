@@ -7,7 +7,7 @@ public class ResetOrderTrigger : TransitionTrigger
 {
     public override void Trigger(SquaddieAI _squaddie)
     {
-        _squaddie.knowledge.has_order = false;
+        _squaddie.knowledge.current_order = OrderType.NONE;
         _squaddie.knowledge.order_waypoint = Vector3.zero;
     }
 

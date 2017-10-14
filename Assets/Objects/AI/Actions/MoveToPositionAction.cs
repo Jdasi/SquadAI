@@ -20,6 +20,12 @@ public class MoveToPositionAction : Action
 
     void MoveToPosition(SquaddieAI _squaddie)
     {
+        if (_squaddie.knowledge.current_order == OrderType.MOVE &&
+            _squaddie.nav.destination != _squaddie.knowledge.order_waypoint)
+        {
+            _squaddie.nav.destination = _squaddie.knowledge.order_waypoint;
+        }
+
         if (_squaddie.nav.isStopped && _squaddie.nav.hasPath)
             _squaddie.nav.isStopped = false;
 
