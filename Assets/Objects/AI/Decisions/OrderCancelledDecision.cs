@@ -10,7 +10,7 @@ public class OrderCancelledDecision : Decision
         float distance = (_squaddie.nav.destination - _squaddie.knowledge.order_waypoint).sqrMagnitude;
         bool waypoint_different = distance > 0.1f;
 
-        bool order_cancelled = waypoint_different;
+        bool order_cancelled = waypoint_different && !_squaddie.knowledge.has_order;
         return order_cancelled;
     }
 

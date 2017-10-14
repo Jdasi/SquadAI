@@ -24,6 +24,9 @@ public class State : ScriptableObject
     {
         foreach (Action action in actions)
         {
+            if (!action.PreconditionsMet(_squaddie))
+                continue;
+
             action.Act(_squaddie);
         }
     }

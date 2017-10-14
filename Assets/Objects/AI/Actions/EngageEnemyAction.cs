@@ -8,11 +8,17 @@ public class EngageEnemyAction : Action
     [SerializeField] LayerMask blocking_layers;
 
 
-    public override void Act(SquaddieAI _squaddie)
+    public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
         if (_squaddie.knowledge.closest_target == null)
-            return;
+            return false;
 
+        return true;
+    }
+
+
+    public override void Act(SquaddieAI _squaddie)
+    {
         //MoveToEngage(_squaddie);
     }
 
@@ -29,7 +35,7 @@ public class EngageEnemyAction : Action
             return;
 
         if (hit.collider.transform != current_target.collider_transform ||
-            hit.distance > _squaddie.settings.engage_distance)
+            hit.distance > _squaddie.settings.minimum_engage_distance)
         {
             _squaddie.MoveToCoverNearPosition(current_target.transform.position);
         }

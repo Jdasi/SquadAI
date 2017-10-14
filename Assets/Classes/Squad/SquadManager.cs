@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SquadManager
 {
-    public int num_squaddies { get { return squaddies.Count; } }
+    public int num_squaddies { get { return squad_sense.squaddies.Count; } }
     public SquadSettings settings;
 
-    private List<SquaddieAI> squaddies = new List<SquaddieAI>();
+    private SquadSense squad_sense = new SquadSense();
     private SquadBlock ui_block;
 
 
@@ -20,8 +20,8 @@ public class SquadManager
 
     public void SelectSquad()
     {
-        foreach (SquaddieAI squaddie in squaddies)
-            squaddie.Select();
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+            squaddie.SetSelected(true);
 
         ui_block.Select();
     }
@@ -29,8 +29,8 @@ public class SquadManager
 
     public void DeselectSquad()
     {
-        foreach (SquaddieAI squaddie in squaddies)
-            squaddie.Deselect();
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+            squaddie.SetSelected(false);
 
         ui_block.Deselect();
     }
@@ -38,15 +38,15 @@ public class SquadManager
 
     public void AddSquaddie(SquaddieAI _squaddie_ai)
     {
-        if (squaddies.Contains(_squaddie_ai))
+        if (squad_sense.squaddies.Contains(_squaddie_ai))
             return;
 
-        squaddies.Add(_squaddie_ai);
+        squad_sense.squaddies.Add(_squaddie_ai);
 
-        _squaddie_ai.LinkSquaddieList(ref squaddies);
-        _squaddie_ai.Select();
+        _squaddie_ai.LinkSquadSense(ref squad_sense);
+        _squaddie_ai.SetSelected(true);
 
-        ui_block.UpdateUnitCount(squaddies.Count);
+        ui_block.UpdateUnitCount(squad_sense.squaddies.Count);
     }
 
 
@@ -55,7 +55,7 @@ public class SquadManager
         if (num_squaddies == 0)
             return;
 
-        Object.Destroy(squaddies[squaddies.Count - 1].gameObject);
+        Object.Destroy(squad_sense.squaddies[squad_sense.squaddies.Count - 1].gameObject);
     }
 
 
@@ -79,16 +79,29 @@ public class SquadManager
     public void Update()
     {
         GarbageCollect();
+        EvaluateSquadCenter();
     }
 
 
     void GarbageCollect()
     {
-        int prev_count = squaddies.Count;
-        squaddies.RemoveAll(elem => elem == null);
+        int prev_count = squad_sense.squaddies.Count;
+        squad_sense.squaddies.RemoveAll(elem => elem == null);
 
-        if (squaddies.Count != prev_count)
-            ui_block.UpdateUnitCount(squaddies.Count);
+        if (squad_sense.squaddies.Count != prev_count)
+            ui_block.UpdateUnitCount(squad_sense.squaddies.Count);
+    }
+
+
+    void EvaluateSquadCenter()
+    {
+        Vector3 avg_pos = Vector3.zero;
+
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+            avg_pos += squaddie.transform.position;
+
+        avg_pos /= squad_sense.squaddies.Count;
+        squad_sense.squad_center = avg_pos;
     }
 
 
@@ -97,7 +110,7 @@ public class SquadManager
         List<float> squaddie_sizes = new List<float>();
         float line_width = 0;
 
-        foreach (SquaddieAI squaddie in squaddies)
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
             line_width += squaddie.nav.radius + settings.squaddie_spacing;
             squaddie_sizes.Add(squaddie.nav.radius);
@@ -105,12 +118,12 @@ public class SquadManager
 
         for (int i = 0; i < num_squaddies; ++i)
         {
-            float padded_squaddie = squaddies[i].nav.radius + settings.squaddie_spacing;
+            float padded_squaddie = squad_sense.squaddies[i].nav.radius + settings.squaddie_spacing;
 
             Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
             waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);
 
-            squaddies[i].IssueMoveCommand(waypoint);
+            squad_sense.squaddies[i].IssueMoveCommand(waypoint);
         }
     }
 
@@ -119,7 +132,7 @@ public class SquadManager
     {
         List<CoverPoint> allocated_points = new List<CoverPoint>();
 
-        foreach (SquaddieAI squaddie in squaddies)
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
             var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
                 _context.indicator_position, squaddie.settings.cover_search_radius);

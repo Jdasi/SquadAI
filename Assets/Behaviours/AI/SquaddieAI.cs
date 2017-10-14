@@ -8,6 +8,9 @@ public class SquaddieAI : MonoBehaviour
     [Header("Parameters")]
     public State current_state;
     public SquaddieSettings settings;
+    [SerializeField] LayerMask sight_blocking_layers;
+    [SerializeField] LayerMask sight_test_layers;
+    [SerializeField] float evaluation_interval = 0.1f;
 
     [Header("Knowledge")]
     public WorkingKnowledge knowledge = new WorkingKnowledge();
@@ -27,19 +30,14 @@ public class SquaddieAI : MonoBehaviour
             return;
 
         squaddie_canvas.Init(stats.faction_settings);
-        Deselect();
+        SetSelected(false);
     }
 
 
-    public void Select()
+    public void SetSelected(bool _selected)
     {
-        body_mesh.material = stats.faction_settings.select_material;
-    }
-
-
-    public void Deselect()
-    {
-        body_mesh.material = stats.faction_settings.deselect_material;
+        body_mesh.material = _selected ? stats.faction_settings.select_material :
+            stats.faction_settings.deselect_material;
     }
 
 
@@ -49,15 +47,9 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    public void ChangeMaterial(Material _material)
+    public void LinkSquadSense(ref SquadSense _squad_sense)
     {
-        body_mesh.material = _material;
-    }
-
-
-    public void LinkSquaddieList(ref List<SquaddieAI> _squaddies)
-    {
-        knowledge.squad_members = _squaddies;
+        knowledge.squad_sense = _squad_sense;
     }
 
 
@@ -94,6 +86,22 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    public bool TestSightToPosition(Vector3 _position)
+    {
+        Vector3 dir = (_position - view_point.position).normalized;
+        float dist = Vector3.Distance(_position, view_point.position);
+
+        RaycastHit hit;
+        bool ray_blocked = Physics.Raycast(view_point.position, dir, out hit,
+            settings.sight_distance, sight_test_layers);
+
+        if (ray_blocked && hit.distance > dist)
+            return true;
+
+        return !ray_blocked;
+    }
+
+
     public void TriggerEnter(Collider _other)
     {
         if (!_other.CompareTag("DamageableBody"))
@@ -125,38 +133,18 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    void EvaluateClosestTarget()
-    {
-        SquaddieAI target = null;
-        float closest = Mathf.Infinity;
-
-        foreach (SquaddieAI enemy in knowledge.nearby_targets)
-        {
-            float distance = (enemy.transform.position - transform.position).sqrMagnitude;
-            if (distance > closest)
-                continue;
-
-            closest = distance;
-            target = enemy;
-        }
-
-        knowledge.closest_target = target;
-    }
-
-
     void Start()
     {
         nav.isStopped = true;
         TransitionToState(current_state);
+
+        InvokeRepeating("EvaluationTick", 0, evaluation_interval);
     }
 
 
     void Update()
     {
-        knowledge.nearby_targets.RemoveAll(elem => elem == null);
         current_state.UpdateState(this);
-
-        EvaluateClosestTarget();
     }
 
 
@@ -172,18 +160,67 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    void EvaluationTick()
+    {
+        EvaluateSightHit();
+        EvaluateClosestTarget();
+        EvaluateClosestTargetInSight();
+    }
+
+
+    void EvaluateSightHit()
+    {
+        Physics.Raycast(view_point.position, view_point.forward, out knowledge.sight_hit,
+            settings.sight_distance, sight_blocking_layers);
+    }
+
+
+    void EvaluateClosestTarget()
+    {
+        SquaddieAI closest_target = null;
+        float closest = Mathf.Infinity;
+
+        knowledge.nearby_targets.RemoveAll(elem => elem == null);
+        foreach (SquaddieAI enemy in knowledge.nearby_targets)
+        {
+            float distance = (enemy.transform.position - transform.position).sqrMagnitude;
+            if (distance > closest)
+                continue;
+
+            closest = distance;
+            closest_target = enemy;
+        }
+
+        knowledge.closest_target = closest_target;
+    }
+
+
+    void EvaluateClosestTargetInSight()
+    {
+        if (knowledge.closest_target == null)
+            return;
+
+        knowledge.closest_target_visible = TestSightToPosition(
+            knowledge.closest_target.collider_transform.position);
+    }
+
+
     void OnDrawGizmos()
     {
         Gizmos.color = current_state.state_color;
+
         Gizmos.DrawSphere(nav.destination, 0.5f);
+        Gizmos.DrawSphere(view_point.position + (view_point.forward * settings.minimum_engage_distance), 0.33f);
+        Gizmos.DrawSphere(view_point.position + (view_point.forward * settings.maximum_engage_distance), 0.33f);
+
+        Gizmos.DrawLine(view_point.position,
+            view_point.position + (view_point.forward * settings.sight_distance));
     }
 
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = current_state.state_color;
-        Gizmos.DrawLine(view_point.position,
-            view_point.position + (view_point.forward * 100));
+
     }
 
 }

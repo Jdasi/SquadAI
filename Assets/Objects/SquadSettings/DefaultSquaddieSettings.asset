@@ -13,5 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover_search_radius: 10
   field_of_view: 90
-  sight_distance: 20
-  engage_distance: 15
+  sight_distance: 30
+  minimum_engage_distance: 5
+  maximum_engage_distance: 20

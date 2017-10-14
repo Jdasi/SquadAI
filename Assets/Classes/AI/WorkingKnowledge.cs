@@ -5,8 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class WorkingKnowledge
 {
-    public List<SquaddieAI> squad_members; // Reference.
+    public SquadSense squad_sense; // Reference.
     public List<SquaddieAI> nearby_targets = new List<SquaddieAI>();
+    public RaycastHit sight_hit;
 
     public ChainGun chain_gun;
     public float state_time_elapsed;
@@ -16,5 +17,7 @@ public class WorkingKnowledge
 
     public SquaddieAI closest_target;
     public SquaddieAI order_target;
+
+    public bool closest_target_visible;
 
 }

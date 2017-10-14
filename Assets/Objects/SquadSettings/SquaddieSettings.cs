@@ -13,6 +13,7 @@ public class SquaddieSettings : ScriptableObject
     public float sight_distance;
 
     [Header("Combat")]
-    public float engage_distance;
+    public float minimum_engage_distance;
+    public float maximum_engage_distance;
 
 }

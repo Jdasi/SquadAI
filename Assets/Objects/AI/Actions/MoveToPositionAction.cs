@@ -5,6 +5,13 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "PluggableAI/Actions/Move To Position")]
 public class MoveToPositionAction : Action
 {
+
+    public override bool PreconditionsMet(SquaddieAI _squaddie)
+    {
+        return true;
+    }
+
+
     public override void Act(SquaddieAI _squaddie)
     {
         MoveToPosition(_squaddie);
