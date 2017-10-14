@@ -9,13 +9,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
-  m_Name: AlertState
+  m_Name: Alert
   m_EditorClassIdentifier: 
   display_text: ALERT
   actions: []
   transitions:
   - decision: {fileID: 11400000, guid: f9ef1c329075ac048984127a74fb92e0, type: 2}
     true_state: {fileID: 11400000, guid: 4f9794f8c340a3f41b2d73f0cf82e104, type: 2}
+    true_triggers: []
+    false_state: {fileID: 0}
+    false_triggers: []
+  - decision: {fileID: 11400000, guid: a180c01c4dad2be4481dca98cfaeb982, type: 2}
+    true_state: {fileID: 11400000, guid: c19a19ed6ae59c84fb454ac546b84a24, type: 2}
     true_triggers: []
     false_state: {fileID: 0}
     false_triggers: []

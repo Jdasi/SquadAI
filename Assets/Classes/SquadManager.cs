@@ -65,12 +65,12 @@ public class SquadManager
         {
             case ContextType.FLOOR:
             {
-                IssueMoveCommand(_context);
+                SquadMoveCommand(_context);
             } break;
 
             case ContextType.COVER:
             {
-                IssueCoverCommand(_context);
+                SquadCoverCommand(_context);
             } break;
         }
     }
@@ -92,7 +92,7 @@ public class SquadManager
     }
 
 
-    void IssueMoveCommand(CurrentContext _context)
+    void SquadMoveCommand(CurrentContext _context)
     {
         List<float> squaddie_sizes = new List<float>();
         float line_width = 0;
@@ -110,19 +110,19 @@ public class SquadManager
             Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
             waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);
 
-            squaddies[i].IssueWaypoint(waypoint);
+            squaddies[i].IssueMoveCommand(waypoint);
         }
     }
 
 
-    void IssueCoverCommand(CurrentContext _context)
+    void SquadCoverCommand(CurrentContext _context)
     {
         List<CoverPoint> allocated_points = new List<CoverPoint>();
 
         foreach (SquaddieAI squaddie in squaddies)
         {
             var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
-                _context.indicator_position, squaddie.settings.cover_search_radius, squaddie);
+                _context.indicator_position, squaddie.settings.cover_search_radius);
 
             if (cover_points.Count <= 0)
                 break;
@@ -140,7 +140,7 @@ public class SquadManager
                 break;
 
             allocated_points.Add(target_point);
-            squaddie.IssueWaypoint(target_point.position);
+            squaddie.IssueMoveCommand(target_point.position);
         }
     }
 

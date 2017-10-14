@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Squaddie
   - DamageableBody
-  - DamagableBody
   layers:
   - Default
   - TransparentFX

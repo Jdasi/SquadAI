@@ -8,6 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5625be5981c114a43b6a3d3034a3b8b1, type: 3}
-  m_Name: OrderObeyedDecision
+  m_Script: {fileID: 11500000, guid: bf6daa1cf7fbb3e4180a93b9b4637732, type: 3}
+  m_Name: EngageEnemy
   m_EditorClassIdentifier: 
+  blocking_layers:
+    serializedVersion: 2
+    m_Bits: 18432

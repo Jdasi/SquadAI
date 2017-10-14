@@ -31,7 +31,7 @@ public class SquadSpawnerEnemy : MonoBehaviour
         var agent = clone.GetComponent<SquaddieAI>();
         agent.Init();
 
-        agent.IssueWaypoint(enemy_waypoint);
+        agent.IssueMoveCommand(enemy_waypoint);
     }
 
 }

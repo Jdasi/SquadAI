@@ -8,10 +8,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f08502be36342f047a6b28774704dde2, type: 3}
-  m_Name: EngageState
+  m_Script: {fileID: 11500000, guid: 27d3498dc607da34b9a01699dfeee38a, type: 3}
+  m_Name: OrderCancelled
   m_EditorClassIdentifier: 
-  display_text: ENGAGING
-  actions: []
-  transitions: []
-  state_color: {r: 1, g: 0, b: 0, a: 1}

@@ -33,11 +33,11 @@ public class ShootEnemyAction : Action
 
         if (closest_target != null)
         {
-            _squaddie.transform.LookAt(closest_target.transform);
+            Vector3 dir = (closest_target.position - _squaddie.transform.position).normalized;
 
             RaycastHit hit;
-            bool hit_success = Physics.Raycast(_squaddie.view_point.position, _squaddie.transform.forward,
-                out hit, Mathf.Infinity, hit_layers);
+            bool hit_success = Physics.Raycast(_squaddie.view_point.position, dir,
+                out hit, _squaddie.settings.engage_distance, hit_layers);
 
             if (hit_success)
             {
@@ -45,7 +45,16 @@ public class ShootEnemyAction : Action
             }
         }
 
-        _squaddie.knowledge.chain_gun.cycle = target_hit;
+        if (target_hit && Vector3.Distance(_squaddie.transform.position, closest_target.position)
+            <= _squaddie.settings.engage_distance)
+        {
+            _squaddie.transform.LookAt(closest_target.transform);
+            _squaddie.knowledge.chain_gun.cycle = true;
+        }
+        else
+        {
+            _squaddie.knowledge.chain_gun.cycle = false;
+        }
     }
 
 }

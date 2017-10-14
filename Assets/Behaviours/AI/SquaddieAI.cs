@@ -16,6 +16,7 @@ public class SquaddieAI : MonoBehaviour
     public NavMeshAgent nav;
     public MeshRenderer body_mesh;
     public Transform view_point;
+    public Transform collider_transform;
     public SquaddieStats stats;
     public SquaddieCanvas squaddie_canvas;
 
@@ -71,12 +72,25 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    public void IssueWaypoint(Vector3 _target)
+    public void IssueMoveCommand(Vector3 _target)
     {
         knowledge.has_order = true;
         knowledge.order_waypoint = _target;
 
         nav.destination = _target;
+    }
+
+
+    public void MoveToCoverNearPosition(Vector3 _position)
+    {
+        var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
+            _position, settings.cover_search_radius);
+
+        if (cover_points.Count <= 0)
+            return;
+
+        CoverPoint target_point = cover_points[0];
+        nav.destination = target_point.position;
     }
 
 
@@ -111,6 +125,25 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    void EvaluateClosestTarget()
+    {
+        SquaddieAI target = null;
+        float closest = Mathf.Infinity;
+
+        foreach (SquaddieAI enemy in knowledge.nearby_targets)
+        {
+            float distance = (enemy.transform.position - transform.position).sqrMagnitude;
+            if (distance > closest)
+                continue;
+
+            closest = distance;
+            target = enemy;
+        }
+
+        knowledge.closest_target = target;
+    }
+
+
     void Start()
     {
         nav.isStopped = true;
@@ -122,6 +155,8 @@ public class SquaddieAI : MonoBehaviour
     {
         knowledge.nearby_targets.RemoveAll(elem => elem == null);
         current_state.UpdateState(this);
+
+        EvaluateClosestTarget();
     }
 
 
@@ -134,6 +169,13 @@ public class SquaddieAI : MonoBehaviour
     void OnStateExit(State _state)
     {
         knowledge.state_time_elapsed = 0;
+    }
+
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = current_state.state_color;
+        Gizmos.DrawSphere(nav.destination, 0.5f);
     }
 
 

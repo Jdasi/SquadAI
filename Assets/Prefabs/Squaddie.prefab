@@ -258,7 +258,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116222830393566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.97, y: 0.00000011920929, z: -19.708965}
+  m_LocalPosition: {x: -0.97, y: 0.00000011920929, z: -34.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4022209247994706}
@@ -351,15 +351,15 @@ MonoBehaviour:
   knowledge:
     squad_members: []
     nearby_targets: []
-    current_target: {fileID: 0}
     chain_gun: {fileID: 0}
     state_time_elapsed: 0
     has_order: 0
     order_waypoint: {x: 0, y: 0, z: 0}
-    order_target: {fileID: 0}
+    closest_target: {fileID: 0}
   nav: {fileID: 195571041401606838}
   body_mesh: {fileID: 23196185087604998}
   view_point: {fileID: 4022209247994706}
+  collider_transform: {fileID: 4324605077270122}
   stats: {fileID: 114537214391118060}
   squaddie_canvas: {fileID: 114732633781502538}
 --- !u!114 &114232506876902822
@@ -818,7 +818,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 12
+  m_Radius: 30
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &195571041401606838
 NavMeshAgent:

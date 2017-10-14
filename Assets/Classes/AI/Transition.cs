@@ -8,11 +8,11 @@ public class Transition
 {
     public Decision decision;
 
-    [Space]
+    [Header("Decision True")]
     public State true_state;
     public TransitionTrigger[] true_triggers;
 
-    [Space]
+    [Header("Decision False")]
     public State false_state;
     public TransitionTrigger[] false_triggers;
 

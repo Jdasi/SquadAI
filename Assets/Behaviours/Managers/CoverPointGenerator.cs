@@ -13,7 +13,6 @@ public class CoverPointGenerator : MonoBehaviour
     [SerializeField] float nav_search_radius = 0.5f;
     [SerializeField] LayerMask hit_layers;
     [SerializeField] CoverPointSettings cover_point_settings;
-    [SerializeField] WeightingModule[] weighting_modules;
 
     [Header("Debug")]
     [SerializeField] Color grid_color = Color.yellow;
@@ -38,19 +37,19 @@ public class CoverPointGenerator : MonoBehaviour
         {
             // Forward.
             ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, -half_extents.z),
-                new Vector3(0, 0, extents.z), Vector3.forward, extents.z);
+                new Vector3(0, 0, extents.z));
 
             // Backward.
             ProcessLine(new Vector3(((extents.x / segments) * i) - half_extents.x, 0, half_extents.z),
-                new Vector3(0, 0, -extents.z), -Vector3.forward, extents.z);
+                new Vector3(0, 0, -extents.z));
 
             // Right.
             ProcessLine(new Vector3(-half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
-                new Vector3(extents.x, 0, 0), Vector3.right, extents.x);
+                new Vector3(extents.x, 0, 0));
 
             // Left.
             ProcessLine(new Vector3(half_extents.x, 0, ((extents.z / segments) * i) - half_extents.z),
-                new Vector3(-extents.x, 0, 0), -Vector3.right, extents.x);
+                new Vector3(-extents.x, 0, 0));
         }
     }
 
@@ -63,15 +62,14 @@ public class CoverPointGenerator : MonoBehaviour
     }
 
 
-    void ProcessLine(Vector3 _from_offset, Vector3 _to_offset, Vector3 _direction,
-        float _length)
+    void ProcessLine(Vector3 _from_offset, Vector3 _to_offset)
     {
         RaycastPackage ray_pack = new RaycastPackage();
 
         ray_pack.from = transform.position + _from_offset;
         ray_pack.to = ray_pack.from + _to_offset;
-        ray_pack.direction = _direction;
-        ray_pack.length = _length;
+        ray_pack.direction = (ray_pack.to - ray_pack.from).normalized;
+        ray_pack.length = Vector3.Distance(ray_pack.from, ray_pack.to);
 
         EnumerateCoverPoints(ray_pack);
 

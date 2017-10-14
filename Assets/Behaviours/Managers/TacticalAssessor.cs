@@ -8,52 +8,48 @@ public class TacticalAssessor : MonoBehaviour
     [SerializeField] WeightingModule[] weighting_modules;
 
 
-    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, float _distance,
-        SquaddieAI _squaddie)
+    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, float _radius)
     {
-        var cover_points = GameManager.scene.cover_point_generator.cover_points;
-        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
+        var cover_points = FindCoverPoints(_position, _radius);
 
         foreach (CoverPoint cover_point in cover_points)
         {
-            if (cover_point.occupied || Vector3.Distance(_position, cover_point.position) > _distance)
-                continue;
-
-            // Reset weighting and adjust for squaddie.
-            cover_point.weighting = 0;
-            foreach (WeightingModule weighting_module in weighting_modules)
-                weighting_module.AdjustWeight(cover_point, GameManager.scene.context_scanner.current_context, _squaddie);
-
-            closest_cover_points.Add(cover_point);
+            float distance = Vector3.Distance(_position, cover_point.position);
+            cover_point.weighting = distance;
         }
 
-        closest_cover_points = closest_cover_points.OrderByDescending(elem => elem.weighting).ToList();
-        return closest_cover_points;
+        cover_points = cover_points.OrderByDescending(elem => elem.weighting).ToList();
+        return cover_points;
     }
 
 
-    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, Vector3 _required_normal, float _distance,
-        SquaddieAI _squaddie)
+    public List<CoverPoint> ClosestCoverPoints(Vector3 _position, Vector3 _required_normal, float _radius)
     {
-        var cover_points = GameManager.scene.cover_point_generator.cover_points;
-        List<CoverPoint> closest_cover_points = new List<CoverPoint>();
+        var cover_points = ClosestCoverPoints(_position, _radius);
+        cover_points.RemoveAll(elem => elem.normal != _required_normal);
 
-        foreach (CoverPoint cover_point in cover_points)
+        return cover_points;
+    }
+
+
+    List<CoverPoint> FindCoverPoints(Vector3 _position, float _radius)
+    {
+        List<CoverPoint> cover_points = new List<CoverPoint>();
+
+        foreach (CoverPoint cover_point in GameManager.scene.cover_point_generator.cover_points)
         {
-            if (cover_point.occupied || cover_point.normal != _required_normal)
+            if (cover_point.occupied)
                 continue;
 
-            // Reset weighting and adjust for squaddie.
-            cover_point.weighting = 0;
-            foreach (WeightingModule weighting_module in weighting_modules)
-                weighting_module.AdjustWeight(cover_point, GameManager.scene.context_scanner.current_context, _squaddie);
+            float distance = Vector3.Distance(_position, cover_point.position);
 
-            if (Vector3.Distance(_position, cover_point.position) <= _distance)
-                closest_cover_points.Add(cover_point);
+            if (distance > _radius)
+                continue;
+
+            cover_points.Add(cover_point);
         }
 
-        closest_cover_points = closest_cover_points.OrderByDescending(elem => elem.weighting).ToList();
-        return closest_cover_points;
+        return cover_points;
     }
 
 }
