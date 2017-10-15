@@ -172,6 +172,7 @@ public class SquaddieAI : MonoBehaviour
     void OnStateExit(State _state)
     {
         knowledge.state_time_elapsed = 0;
+        knowledge.prev_state_time_elapsed = 0;
     }
 
 
@@ -236,6 +237,12 @@ public class SquaddieAI : MonoBehaviour
 
         knowledge.current_target_visible = TestSightToPosition(
             knowledge.current_target.collider_transform.position);
+    }
+
+
+    void OnDisable()
+    {
+        knowledge.chain_gun.cycle = false;
     }
 
 

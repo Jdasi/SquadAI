@@ -17,6 +17,9 @@ public class State : ScriptableObject
 
         DoActions(_squaddie);
         CheckTransitions(_squaddie);
+
+        _squaddie.knowledge.prev_state_time_elapsed =
+            _squaddie.knowledge.state_time_elapsed;
     }
 
 

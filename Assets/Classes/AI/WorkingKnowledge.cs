@@ -11,6 +11,7 @@ public class WorkingKnowledge
 
     public ChainGun chain_gun;
     public float state_time_elapsed;
+    public float prev_state_time_elapsed;
 
     public OrderType current_order;
     public Vector3 order_waypoint;
