@@ -18,7 +18,8 @@ public class WorkingKnowledge
 
     public SquaddieAI closest_target;
     public SquaddieAI order_target;
+    public SquaddieAI current_target;
 
-    public bool closest_target_visible;
+    public bool current_target_visible;
 
 }

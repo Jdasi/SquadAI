@@ -6,7 +6,8 @@ public enum ContextType
 {
     NONE,
     FLOOR,
-    COVER
+    COVER,
+    ATTACK
 }
 
 public class ContextScanner : MonoBehaviour
@@ -19,6 +20,7 @@ public class ContextScanner : MonoBehaviour
     [SerializeField] LayerMask hit_layers;
     [SerializeField] string floor_layer = "Floor";
     [SerializeField] string wall_layer = "Wall";
+    [SerializeField] string damageable_layer = "Damageable";
 
     [Header("References")]
     [SerializeField] Transform forward_transform;
@@ -26,12 +28,14 @@ public class ContextScanner : MonoBehaviour
 
     private int floor_layer_value;
     private int wall_layer_value;
+    private int damageable_layer_value;
 
 
     void Start()
     {
         floor_layer_value = LayerMask.NameToLayer(floor_layer);
         wall_layer_value = LayerMask.NameToLayer(wall_layer);
+        damageable_layer_value = LayerMask.NameToLayer(damageable_layer);
 
         InvokeRepeating("Raycast", 0, 0.005f);
     }
@@ -73,6 +77,10 @@ public class ContextScanner : MonoBehaviour
                      _first_hit.collider.gameObject.layer == wall_layer_value)
             {
                 current_context.type = ContextType.COVER;
+            }
+            else if (_first_hit.collider.gameObject.layer == damageable_layer_value)
+            {
+                current_context.type = ContextType.ATTACK;
             }
             else
             {
@@ -141,6 +149,11 @@ public class ContextScanner : MonoBehaviour
                 {
                     current_context.type = ContextType.NONE;
                 }
+            } break;
+
+            case ContextType.ATTACK:
+            {
+                context_indicator.transform.position = _first_hit.point;
             } break;
         }
     }

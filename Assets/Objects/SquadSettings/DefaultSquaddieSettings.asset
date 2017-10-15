@@ -15,6 +15,6 @@ MonoBehaviour:
   move_stop_distance: 0.1
   follow_stop_distance: 3
   field_of_view: 90
-  sight_distance: 30
+  sight_distance: 20
   minimum_engage_distance: 5
   maximum_engage_distance: 20

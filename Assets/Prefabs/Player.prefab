@@ -490,13 +490,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756ce4a118f8ea5488b4619e3fa3fbcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_context:
+    type: 0
+    indicator_position: {x: 0, y: 0, z: 0}
+    indicator_hit: {fileID: 0}
+    indicator_normal: {x: 0, y: 0, z: 0}
+    indicator_up: {x: 0, y: 0, z: 0}
+    indicator_right: {x: 0, y: 0, z: 0}
+    indicator_forward: {x: 0, y: 0, z: 0}
   dist_from_first_ray: 0.05
   dist_from_second_ray: 0.5
   hit_layers:
     serializedVersion: 2
-    m_Bits: 3072
+    m_Bits: 19456
   floor_layer: Floor
   wall_layer: Wall
+  damageable_layer: Damageable
   forward_transform: {fileID: 4204696551115548}
   context_indicator: {fileID: 0}
 --- !u!114 &114611498175746318

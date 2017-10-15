@@ -73,6 +73,11 @@ public class SquadManager
             {
                 SquadCoverCommand(_context);
             } break;
+
+            case ContextType.ATTACK:
+            {
+                SquadAttackCommand(_context);
+            } break;
         }
     }
 
@@ -184,6 +189,21 @@ public class SquadManager
 
             allocated_points.Add(target_point);
             squaddie.IssueMoveCommand(target_point.position);
+        }
+    }
+
+
+    void SquadAttackCommand(CurrentContext _context)
+    {
+        SquaddieAI target = _context.indicator_hit.GetComponent<SquaddieAI>();
+        
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+        {
+            if (JHelper.SameFaction(squaddie, target))
+                continue;
+
+            squaddie.knowledge.order_target = target;
+            squaddie.knowledge.current_order = OrderType.ATTACK;
         }
     }
 

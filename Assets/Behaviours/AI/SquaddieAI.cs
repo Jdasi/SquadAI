@@ -67,6 +67,8 @@ public class SquaddieAI : MonoBehaviour
     public void IssueMoveCommand(Vector3 _target)
     {
         knowledge.current_order = OrderType.MOVE;
+
+        knowledge.order_target = null;
         knowledge.order_waypoint = _target;
 
         nav.destination = _target;
@@ -111,7 +113,7 @@ public class SquaddieAI : MonoBehaviour
         if (ray_blocked && hit.distance > dist)
             return true;
 
-        return !ray_blocked;
+        return !ray_blocked && dist <= settings.sight_distance;
     }
 
 
@@ -177,7 +179,8 @@ public class SquaddieAI : MonoBehaviour
     {
         EvaluateSightHit();
         EvaluateClosestTarget();
-        EvaluateClosestTargetVisibility();
+        EvaluateCurrentTarget();
+        EvaluateCurrentTargetVisibility();
     }
 
 
@@ -208,13 +211,31 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    void EvaluateClosestTargetVisibility()
+    void EvaluateCurrentTarget()
     {
-        if (knowledge.closest_target == null)
+        knowledge.current_target = knowledge.closest_target;
+
+        if (knowledge.order_target != null)
+        {
+            float distance = Vector3.Distance(knowledge.order_target.transform.position,
+                transform.position);
+
+            if (distance < settings.maximum_engage_distance ||
+                knowledge.closest_target == null)
+            {
+                knowledge.current_target = knowledge.order_target;
+            }
+        }
+    }
+
+
+    void EvaluateCurrentTargetVisibility()
+    {
+        if (knowledge.current_target == null)
             return;
 
-        knowledge.closest_target_visible = TestSightToPosition(
-            knowledge.closest_target.collider_transform.position);
+        knowledge.current_target_visible = TestSightToPosition(
+            knowledge.current_target.collider_transform.position);
     }
 
 

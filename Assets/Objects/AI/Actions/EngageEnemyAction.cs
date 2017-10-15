@@ -5,13 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PluggableAI/Actions/Engage Enemy")]
 public class EngageEnemyAction : Action
 {
-    [SerializeField] LayerMask blocking_layers;
-
 
     public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
-        if (_squaddie.knowledge.closest_target == null ||
-            _squaddie.knowledge.closest_target_visible)
+        if (_squaddie.knowledge.current_target == null ||
+            _squaddie.knowledge.current_target_visible)
         {
             return false;
         }
@@ -29,9 +27,7 @@ public class EngageEnemyAction : Action
     void MoveToEngage(SquaddieAI _squaddie)
     {
         _squaddie.nav.isStopped = false;
-
-        SquaddieAI current_target = _squaddie.knowledge.closest_target;
-        _squaddie.MoveToFlankEnemy(current_target);
+        _squaddie.MoveToFlankEnemy(_squaddie.knowledge.current_target);
     }
 
 }

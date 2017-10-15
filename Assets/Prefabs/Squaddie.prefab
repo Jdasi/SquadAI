@@ -359,7 +359,6 @@ MonoBehaviour:
     squad_sense:
       squaddies: []
       squad_center: {x: 0, y: 0, z: 0}
-      squad_target: {fileID: 0}
       follow_targets: []
     nearby_targets: []
     chain_gun: {fileID: 0}
@@ -369,7 +368,8 @@ MonoBehaviour:
     follow_target: {fileID: 0}
     closest_target: {fileID: 0}
     order_target: {fileID: 0}
-    closest_target_visible: 0
+    current_target: {fileID: 0}
+    current_target_visible: 0
   nav: {fileID: 195571041401606838}
   body_mesh: {fileID: 23196185087604998}
   view_point: {fileID: 4022209247994706}
@@ -832,7 +832,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 30
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &195571041401606838
 NavMeshAgent:
