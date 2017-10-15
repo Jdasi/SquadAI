@@ -40,19 +40,16 @@ public class State : ScriptableObject
         foreach (Transition transition in transitions) 
         {
             bool decision_success = transition.decision.Decide(_squaddie);
-
             State target_state = decision_success ? transition.true_state : transition.false_state;
 
-            if (decision_success)
-            {
-                foreach (TransitionTrigger trigger in transition.true_triggers)
-                    trigger.Trigger(_squaddie);
-            }
-            else
-            {
-                foreach (TransitionTrigger trigger in transition.false_triggers)
-                    trigger.Trigger(_squaddie);
-            }
+            if (target_state == null)
+                continue;
+
+            TransitionTrigger[] triggers = decision_success ?
+                transition.true_triggers : transition.false_triggers;
+
+            foreach (TransitionTrigger trigger in triggers)
+                trigger.Trigger(_squaddie);
 
             _squaddie.TransitionToState(target_state);
         }
