@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Alert
   m_EditorClassIdentifier: 
   display_text: ALERT
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: f9231e12931d3de46a5175be90a0c6c7, type: 2}
   transitions:
   - decision: {fileID: 11400000, guid: f9ef1c329075ac048984127a74fb92e0, type: 2}
     true_state: {fileID: 11400000, guid: 4f9794f8c340a3f41b2d73f0cf82e104, type: 2}

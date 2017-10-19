@@ -648,4 +648,4 @@ MonoBehaviour:
     type: 2}
   hit_layers:
     serializedVersion: 2
-    m_Bits: 52224
+    m_Bits: 52480

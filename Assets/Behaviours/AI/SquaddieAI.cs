@@ -11,17 +11,28 @@ public class SquaddieAI : MonoBehaviour
     [SerializeField] LayerMask sight_blocking_layers;
     [SerializeField] LayerMask sight_test_layers;
     [SerializeField] float evaluation_interval = 0.1f;
+    [SerializeField] float crouch_height;
 
     [Header("Knowledge")]
     public WorkingKnowledge knowledge = new WorkingKnowledge();
 
     [Header("References")]
     public NavMeshAgent nav;
-    public MeshRenderer body_mesh;
+    public MeshRenderer[] meshes;
     public Transform view_point;
-    public Transform collider_transform;
+    public Transform mesh_transform;
+    public Transform torso_transform;
+    public Transform leg_transform;
     public SquaddieStats stats;
     public SquaddieCanvas squaddie_canvas;
+
+    private float original_height;
+    private Vector3 original_leg_scale;
+
+    private bool cover_forward;
+    private bool cover_backward;
+    private bool cover_left;
+    private bool cover_right;
 
 
     public void Init()
@@ -36,8 +47,11 @@ public class SquaddieAI : MonoBehaviour
 
     public void SetSelected(bool _selected)
     {
-        body_mesh.material = _selected ? stats.faction_settings.select_material :
+        Material material = _selected ? stats.faction_settings.select_material :
             stats.faction_settings.deselect_material;
+        
+        foreach (MeshRenderer mesh in meshes)
+            mesh.material = material;
     }
 
 
@@ -148,8 +162,41 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    public void CoverForward(RaycastHit _hit)
+    {
+        cover_forward = HitValid(_hit);
+    }
+
+
+    public void CoverBackward(RaycastHit _hit)
+    {
+        cover_backward = HitValid(_hit);
+    }
+
+
+    public void CoverLeft(RaycastHit _hit)
+    {
+        cover_left = HitValid(_hit);
+    }
+
+
+    public void CoverRight(RaycastHit _hit)
+    {
+        cover_right = HitValid(_hit);
+    }
+
+
+    bool HitValid(RaycastHit _hit)
+    {
+        return _hit.collider != null;
+    }
+
+
     void Start()
     {
+        original_height = mesh_transform.localPosition.y;
+        original_leg_scale = leg_transform.localScale;
+
         nav.isStopped = true;
         TransitionToState(current_state);
 
@@ -160,6 +207,29 @@ public class SquaddieAI : MonoBehaviour
     void Update()
     {
         current_state.UpdateState(this);
+
+        knowledge.in_cover = cover_backward || cover_forward ||
+                             cover_right || cover_left;
+
+        HandleCrouch();
+    }
+
+
+    void HandleCrouch()
+    {
+        // Move mesh down when crouched as nav agent always stays at same height.
+        Vector3 local_pos = mesh_transform.localPosition;
+        local_pos.y = knowledge.crouched ?
+            crouch_height : original_height;
+
+        mesh_transform.localPosition = local_pos;
+
+        // Also need to scale mesh so it doesn't clip through the floor.
+        Vector3 leg_scale = knowledge.crouched ? new Vector3(original_leg_scale.x,
+            crouch_height, original_leg_scale.z) : original_leg_scale;
+
+        leg_transform.localScale = leg_scale;
+            
     }
 
 
@@ -233,10 +303,13 @@ public class SquaddieAI : MonoBehaviour
     void EvaluateCurrentTargetVisibility()
     {
         if (knowledge.current_target == null)
+        {
+            knowledge.current_target_visible = false;
             return;
+        }
 
         knowledge.current_target_visible = TestSightToPosition(
-            knowledge.current_target.collider_transform.position);
+            knowledge.current_target.torso_transform.position);
     }
 
 

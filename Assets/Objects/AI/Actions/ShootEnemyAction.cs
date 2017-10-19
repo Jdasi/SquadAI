@@ -28,9 +28,9 @@ public class ShootEnemyAction : Action
 
     void ShootEnemy(SquaddieAI _squaddie)
     {
-        Quaternion rot = Quaternion.LookRotation(_squaddie.knowledge.current_target.transform.position -
-            _squaddie.transform.position);
-        _squaddie.transform.rotation = Quaternion.RotateTowards(_squaddie.transform.rotation,
+        Quaternion rot = Quaternion.LookRotation(_squaddie.knowledge.current_target.torso_transform.position -
+            _squaddie.torso_transform.position);
+        _squaddie.torso_transform.rotation = Quaternion.RotateTowards(_squaddie.torso_transform.rotation,
             rot, (_squaddie.nav.angularSpeed * 2) * Time.deltaTime);
 
         _squaddie.knowledge.chain_gun.cycle = _squaddie.knowledge.sight_hit.transform ==

@@ -6,14 +6,15 @@ using UnityEngine.Events;
 [System.Serializable]
 public class RaycastElement
 {
+    public string name;
+
     public Vector3 offset;
     public Vector3 direction;
     public float distance;
     public Color color;
     public LayerMask hit_layers;
 
-    public CustomEvents.RaycastHitEvent hit_events;
-    public UnityEvent miss_events;
+    public CustomEvents.RaycastHitEvent fire_events;
 
 }
 
@@ -36,17 +37,10 @@ public class RaycastArray : MonoBehaviour
         foreach (RaycastElement ray in rays)
         {
             RaycastHit hit;
-            bool ray_success = Physics.Raycast(transform.position + ray.offset, ray.direction, out hit,
+            Physics.Raycast(transform.position + ray.offset, ray.direction, out hit,
                 ray.distance, ray.hit_layers);
 
-            if (ray_success)
-            {
-                ray.hit_events.Invoke(hit);
-            }
-            else
-            {
-                ray.miss_events.Invoke();
-            }
+            ray.fire_events.Invoke(hit);
         }
     }
 

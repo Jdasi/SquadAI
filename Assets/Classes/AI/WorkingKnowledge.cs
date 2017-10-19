@@ -22,5 +22,7 @@ public class WorkingKnowledge
     public SquaddieAI current_target;
 
     public bool current_target_visible;
+    public bool crouched;
+    public bool in_cover;
 
 }

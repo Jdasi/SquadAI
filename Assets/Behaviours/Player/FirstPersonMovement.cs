@@ -17,7 +17,8 @@ public class FirstPersonMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
     [SerializeField] Transform perspective_transform;
-    [SerializeField] Transform body_transform;
+    [SerializeField] Transform torso_transform;
+    [SerializeField] Transform legs_transform;
 
     private float horizontal;
     private float vertical;
@@ -28,7 +29,8 @@ public class FirstPersonMovement : MonoBehaviour
 
     private int player_layer_value;
     private int noclip_layer_value;
-    private Vector3 original_scale;
+
+    private Vector3 original_leg_scale;
 
 
     public void ToggleNoclip()
@@ -40,7 +42,7 @@ public class FirstPersonMovement : MonoBehaviour
 
     void Start()
     {
-        original_scale =  body_transform.localScale;
+        original_leg_scale =  legs_transform.localScale;
     }
 
 
@@ -58,7 +60,7 @@ public class FirstPersonMovement : MonoBehaviour
         grounded = Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0),
             Vector3.down, 0.2f, ~player_layer_value);
 
-        body_transform.localScale = crouched ? crouch_scale : original_scale;
+        legs_transform.localScale = crouched ? crouch_scale : original_leg_scale;
 
         if (grounded && Input.GetButtonDown("Jump"))
         {
@@ -89,7 +91,7 @@ public class FirstPersonMovement : MonoBehaviour
             else
             {
                 move = (horizontal * perspective_transform.transform.right) +
-                    (vertical * body_transform.forward);
+                    (vertical * legs_transform.forward);
             }
 
             if (horizontal != 0 && vertical != 0)
