@@ -9,7 +9,9 @@ public class EngageEnemyAction : Action
     public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
         if (_squaddie.knowledge.current_target == null ||
-            _squaddie.knowledge.current_target_visible)
+            _squaddie.knowledge.current_order == OrderType.MOVE ||
+            (_squaddie.knowledge.current_target_visible &&
+            _squaddie.knowledge.current_target_in_range))
         {
             return false;
         }

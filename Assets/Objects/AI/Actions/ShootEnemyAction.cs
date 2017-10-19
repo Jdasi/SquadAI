@@ -10,7 +10,8 @@ public class ShootEnemyAction : Action
     {
         bool target_exists = _squaddie.knowledge.current_target != null;
 
-        if (!target_exists || !_squaddie.knowledge.current_target_visible)
+        if (!target_exists || !_squaddie.knowledge.current_target_visible ||
+            !_squaddie.knowledge.current_target_in_range)
         {
             _squaddie.knowledge.chain_gun.cycle = false;
             return false;

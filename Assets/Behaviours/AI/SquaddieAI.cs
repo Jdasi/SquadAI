@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class SquaddieAI : MonoBehaviour
 {
     [Header("Parameters")]
-    public State current_state;
     public SquaddieSettings settings;
+    [SerializeField] State current_state;
     [SerializeField] LayerMask sight_blocking_layers;
     [SerializeField] LayerMask sight_test_layers;
     [SerializeField] float evaluation_interval = 0.1f;
@@ -18,13 +18,14 @@ public class SquaddieAI : MonoBehaviour
 
     [Header("References")]
     public NavMeshAgent nav;
-    public MeshRenderer[] meshes;
     public Transform view_point;
-    public Transform mesh_transform;
     public Transform torso_transform;
-    public Transform leg_transform;
     public SquaddieStats stats;
-    public SquaddieCanvas squaddie_canvas;
+    [SerializeField] MeshRenderer[] meshes;
+    [SerializeField] Transform mesh_transform;
+    [SerializeField] Transform leg_transform;
+    [SerializeField] SquaddieCanvas squaddie_canvas;
+    [SerializeField] SphereCollider scan_sphere;
 
     private float original_height;
     private Vector3 original_leg_scale;
@@ -104,7 +105,7 @@ public class SquaddieAI : MonoBehaviour
 
     public void MoveToFlankEnemy(SquaddieAI _target)
     {
-        var cover_points = GameManager.scene.tactical_assessor.FlankingPositions(
+        var cover_points = GameManager.scene.tactical_assessor.FindFlankingPositions(
             this, _target, settings.cover_search_radius);
 
         if (cover_points.Count <= 0)
@@ -117,17 +118,15 @@ public class SquaddieAI : MonoBehaviour
 
     public bool TestSightToPosition(Vector3 _position)
     {
-        Vector3 dir = (_position - view_point.position).normalized;
-        float dist = Vector3.Distance(_position, view_point.position);
-
-        RaycastHit hit;
-        bool ray_blocked = Physics.Raycast(view_point.position, dir, out hit,
+        return JHelper.RaycastAToB(view_point.position, _position,
             settings.sight_distance, sight_test_layers);
+    }
 
-        if (ray_blocked && hit.distance > dist)
-            return true;
 
-        return !ray_blocked && dist <= settings.sight_distance;
+    public bool TestSightToPosition(Vector3 _standing_pos, Vector3 _position)
+    {
+        return JHelper.RaycastAToB(_standing_pos + new Vector3(0, view_point.position.y),
+            _position, settings.sight_distance, sight_test_layers);
     }
 
 
@@ -197,6 +196,8 @@ public class SquaddieAI : MonoBehaviour
         original_height = mesh_transform.localPosition.y;
         original_leg_scale = leg_transform.localScale;
 
+        scan_sphere.radius = settings.sight_distance;
+
         nav.isStopped = true;
         TransitionToState(current_state);
 
@@ -251,7 +252,17 @@ public class SquaddieAI : MonoBehaviour
         EvaluateSightHit();
         EvaluateClosestTarget();
         EvaluateCurrentTarget();
-        EvaluateCurrentTargetVisibility();
+
+        if (knowledge.current_target != null)
+        {
+            EvaluateCurrentTargetVisibility();
+            EvaluateCurrentTargetInRange();
+        }
+        else
+        {
+            knowledge.current_target_visible = false;
+            knowledge.current_target_in_range = false;
+        }
     }
 
 
@@ -302,14 +313,20 @@ public class SquaddieAI : MonoBehaviour
 
     void EvaluateCurrentTargetVisibility()
     {
-        if (knowledge.current_target == null)
-        {
-            knowledge.current_target_visible = false;
-            return;
-        }
-
         knowledge.current_target_visible = TestSightToPosition(
             knowledge.current_target.torso_transform.position);
+    }
+
+
+    void EvaluateCurrentTargetInRange()
+    {
+        float distance = Vector3.Distance(transform.position,
+            knowledge.current_target.transform.position);
+
+        bool too_close = distance < settings.minimum_engage_distance;
+        bool too_far = distance > settings.maximum_engage_distance;
+
+        knowledge.current_target_in_range = !too_close && !too_far;
     }
 
 

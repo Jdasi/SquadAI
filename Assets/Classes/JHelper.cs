@@ -58,4 +58,22 @@ public class JHelper
         return SameFaction(_a.stats.faction_settings, _b);
     }
 
+
+    // Returns True if raycast from A reaches B, otherwise returns False.
+    public static bool RaycastAToB(Vector3 _a, Vector3 _b, float _max_distance,
+        LayerMask _blocking_layers)
+    {
+        Vector3 dir = (_b - _a).normalized;
+        float dist = Vector3.Distance(_a, _b);
+
+        RaycastHit hit;
+        bool ray_blocked = Physics.Raycast(_a, dir, out hit,
+            _max_distance, _blocking_layers);
+
+        if (ray_blocked && hit.distance > dist)
+            return true;
+
+        return !ray_blocked && dist <= _max_distance;
+    }
+
 }

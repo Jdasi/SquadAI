@@ -515,15 +515,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6120775a6061ba46b4b82b195583921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  current_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
   settings: {fileID: 11400000, guid: 6ab6e7a7b3deaf24890d5573afc1e011, type: 2}
+  current_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
   sight_blocking_layers:
     serializedVersion: 2
     m_Bits: 18432
   sight_test_layers:
     serializedVersion: 2
     m_Bits: 2048
-  evaluation_interval: 0.2
+  evaluation_interval: 0.5
   crouch_height: 0.6
   knowledge:
     squad_sense:
@@ -541,18 +541,20 @@ MonoBehaviour:
     order_target: {fileID: 0}
     current_target: {fileID: 0}
     current_target_visible: 0
+    current_target_in_range: 0
     crouched: 0
     in_cover: 0
   nav: {fileID: 195571041401606838}
+  view_point: {fileID: 4022209247994706}
+  torso_transform: {fileID: 4031968911856356}
+  stats: {fileID: 114537214391118060}
   meshes:
   - {fileID: 23196185087604998}
   - {fileID: 23127679062100482}
-  view_point: {fileID: 4022209247994706}
   mesh_transform: {fileID: 4975400138607812}
-  torso_transform: {fileID: 4031968911856356}
   leg_transform: {fileID: 4524037545441600}
-  stats: {fileID: 114537214391118060}
   squaddie_canvas: {fileID: 114732633781502538}
+  scan_sphere: {fileID: 135838011062168982}
 --- !u!114 &114258534509138324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1037,7 +1039,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &195571041401606838
 NavMeshAgent:

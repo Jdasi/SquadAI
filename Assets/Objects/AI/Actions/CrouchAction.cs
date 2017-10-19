@@ -8,7 +8,7 @@ public class CrouchAction : Action
 
     public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
-        return !_squaddie.nav.hasPath;
+        return true;
     }
 
 
@@ -16,6 +16,8 @@ public class CrouchAction : Action
     {
         _squaddie.knowledge.crouched = _squaddie.knowledge.in_cover &&
             _squaddie.knowledge.current_target_visible;
+
+        _squaddie.knowledge.crouched &= !_squaddie.nav.hasPath;
     }
 
 }

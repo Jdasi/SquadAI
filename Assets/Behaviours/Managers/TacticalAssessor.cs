@@ -42,29 +42,27 @@ public class TacticalAssessor : MonoBehaviour
     }
 
 
-    public List<CoverPoint> FlankingPositions(SquaddieAI _flanker, SquaddieAI _flank_target, float _radius)
+    public List<CoverPoint> FindFlankingPositions(SquaddieAI _flanker, SquaddieAI _flank_target, float _radius)
     {
         var cover_points = ClosestCoverPoints(_flank_target.transform.position, _radius);
 
-        foreach (CoverPoint cover_point in cover_points)
+        for (int i = cover_points.Count - 1; i > 0; --i)
         {
-            float distance = Vector3.Distance(_flank_target.view_point.position, cover_point.position);
-            Vector3 direction = (cover_point.position - _flank_target.view_point.position).normalized;
+            CoverPoint cover_point = cover_points[i];
+            float distance = Vector3.Distance(_flank_target.transform.position, cover_point.position);
 
-            if (distance > _flanker.settings.maximum_engage_distance)
-                cover_point.weighting += 1000;
+            bool too_far = distance > _flanker.settings.maximum_engage_distance;
+            bool too_close = distance < _flanker.settings.minimum_engage_distance;
+            bool bad_flank = !_flanker.TestSightToPosition(cover_point.position, _flank_target.torso_transform.position);
+            bool enemy_los = _flank_target.TestSightToPosition(cover_point.position);
 
-            if (EnemyHasLOS(cover_point, _flanker, _flank_target, direction, distance))
+            if (too_far || too_close || bad_flank || enemy_los)
             {
-                cover_point.weighting += 100;
-            }
-            else if (GoodFlankSpot(cover_point, _flanker, _flank_target, distance))
-            {
-                cover_point.weighting += -25;
+                cover_points.Remove(cover_point);
             }
         }
 
-        cover_points = cover_points.OrderBy(elem => elem.weighting).ToList();
+        cover_points = cover_points.OrderByDescending(elem => elem.weighting).ToList();
         return cover_points;
     }
 
@@ -89,39 +87,6 @@ public class TacticalAssessor : MonoBehaviour
         }
 
         return cover_points;
-    }
-
-
-    bool EnemyHasLOS(CoverPoint _cover_point, SquaddieAI _squaddie, SquaddieAI _enemy,
-        Vector3 _direction, float _distance)
-    {
-        RaycastHit enemy_ray;
-        bool enemy_ray_blocked = Physics.Raycast(_enemy.view_point.position, _direction,
-            out enemy_ray, _distance, blocking_layers);
-
-        if (enemy_ray_blocked)
-            return false;
-
-        return true;
-    }
-
-
-    bool GoodFlankSpot(CoverPoint _cover_point, SquaddieAI _squaddie, SquaddieAI _enemy,
-        float _distance)
-    {
-        Vector3 view_pos = _cover_point.position;
-        view_pos.y = _squaddie.view_point.position.y;
-
-        Vector3 flank_dir = (_enemy.view_point.position - view_pos).normalized;
-
-        RaycastHit squaddie_ray;
-        bool squaddie_ray_blocked = Physics.Raycast(view_pos, flank_dir, out squaddie_ray,
-            _distance, blocking_layers);
-
-        if (squaddie_ray_blocked)
-            return false;
-
-        return true;
     }
 
 }
