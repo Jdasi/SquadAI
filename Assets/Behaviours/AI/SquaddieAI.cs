@@ -308,6 +308,11 @@ public class SquaddieAI : MonoBehaviour
                 knowledge.current_target = knowledge.order_target;
             }
         }
+        else if (knowledge.squad_sense.squad_target != null &&
+            knowledge.closest_target == null)
+        {
+            knowledge.current_target = knowledge.squad_sense.squad_target;
+        }
     }
 
 

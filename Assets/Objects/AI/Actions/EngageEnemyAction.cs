@@ -28,6 +28,9 @@ public class EngageEnemyAction : Action
 
     void MoveToEngage(SquaddieAI _squaddie)
     {
+        if (_squaddie.knowledge.squad_sense.squad_target == null)
+            _squaddie.knowledge.squad_sense.squad_target = _squaddie.knowledge.current_target;
+
         _squaddie.nav.isStopped = false;
         _squaddie.MoveToFlankEnemy(_squaddie.knowledge.current_target);
     }

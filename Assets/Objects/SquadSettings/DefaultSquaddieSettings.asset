@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c142d73e36281c946834450ff84b4c1a, type: 3}
   m_Name: DefaultSquaddieSettings
   m_EditorClassIdentifier: 
-  cover_search_radius: 20
+  cover_search_radius: 15
   move_stop_distance: 0.1
   follow_stop_distance: 3
   field_of_view: 90

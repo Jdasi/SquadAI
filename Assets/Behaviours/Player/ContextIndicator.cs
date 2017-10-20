@@ -14,34 +14,31 @@ public class ContextIndicator : MonoBehaviour
     {
         switch (_type)
         {
-            case ContextType.NONE:
-            {
-                waypoint_indicator.SetActive(false);
-                cover_indicator.SetActive(false);
-                attack_indicator.SetActive(false);
-            } break;
-
-            case ContextType.FLOOR:
-            {
-                waypoint_indicator.SetActive(true);
-                cover_indicator.SetActive(false);
-                attack_indicator.SetActive(false);
-            } break;
-
-            case ContextType.COVER:
-            {
-                waypoint_indicator.SetActive(false);
-                cover_indicator.SetActive(true);
-                attack_indicator.SetActive(false);
-            } break;
-
-            case ContextType.ATTACK:
-            {
-                waypoint_indicator.SetActive(false);
-                cover_indicator.SetActive(false);
-                attack_indicator.SetActive(true);
-            } break;
+            case ContextType.NONE: SwitchToIndicator(null); break;
+            case ContextType.FLOOR: SwitchToIndicator(waypoint_indicator); break;
+            case ContextType.COVER: SwitchToIndicator(cover_indicator); break;
+            case ContextType.ATTACK: SwitchToIndicator(attack_indicator); break;
         }
+    }
+
+
+    void SwitchToIndicator(GameObject _indicator)
+    {
+        SetIndicatorActive(waypoint_indicator, false);
+        SetIndicatorActive(cover_indicator, false);
+        SetIndicatorActive(attack_indicator, false);
+
+        if (_indicator != null)
+            _indicator.SetActive(true);
+    }
+
+
+    void SetIndicatorActive(GameObject _indicator, bool _active)
+    {
+        if (_indicator == null)
+            return;
+
+        _indicator.SetActive(_active);
     }
 
 }

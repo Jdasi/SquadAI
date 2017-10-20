@@ -7,7 +7,7 @@ public class Billboard : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.LookAt(Camera.main.transform.position);
+        transform.LookAt(JHelper.main_camera.transform);
     }
 
 }

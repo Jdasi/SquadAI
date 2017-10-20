@@ -10,8 +10,15 @@ public enum ContextType
     ATTACK
 }
 
+public enum ScannerViewMode
+{
+    FPS,
+    TACTICAL
+}
+
 public class ContextScanner : MonoBehaviour
 {
+    public ScannerViewMode view_mode;
     public CurrentContext current_context = new CurrentContext();
 
     [Header("Parameters")]
@@ -21,10 +28,12 @@ public class ContextScanner : MonoBehaviour
     [SerializeField] string floor_layer = "Floor";
     [SerializeField] string wall_layer = "Wall";
     [SerializeField] string damageable_layer = "Damageable";
+    [SerializeField] float scan_interval = 0.005f;
 
     [Header("References")]
-    [SerializeField] Transform forward_transform;
-    [SerializeField] ContextIndicator context_indicator;
+    [SerializeField] Transform fps_transform;
+    [SerializeField] Transform tactical_transform;
+    [SerializeField] ContextIndicator context_indicator;    
 
     private int floor_layer_value;
     private int wall_layer_value;
@@ -37,17 +46,16 @@ public class ContextScanner : MonoBehaviour
         wall_layer_value = LayerMask.NameToLayer(wall_layer);
         damageable_layer_value = LayerMask.NameToLayer(damageable_layer);
 
-        InvokeRepeating("Raycast", 0, 0.005f);
+        InvokeRepeating("ScanContext", 0, scan_interval);
     }
 
 
-    void Raycast()
+    void ScanContext()
     {
-        // Find Wall or Floor.
         RaycastHit first_hit;
-        bool first_ray_success = Physics.Raycast(forward_transform.position, forward_transform.forward,
-            out first_hit, Mathf.Infinity, hit_layers);
+        bool first_ray_success;
 
+        Raycast(out first_hit, out first_ray_success);
         EvaluateContext(first_ray_success, first_hit);
 
         if (current_context.type != ContextType.NONE)
@@ -56,6 +64,28 @@ public class ContextScanner : MonoBehaviour
         }
 
         context_indicator.ChangeIndicator(current_context.type);
+    }
+
+
+    void Raycast(out RaycastHit _hit, out bool _ray_success)
+    {
+        _hit = new RaycastHit();
+        _ray_success = false;
+
+        switch (view_mode)
+        {
+            case ScannerViewMode.FPS:
+            {
+                _ray_success = Physics.Raycast(fps_transform.position, fps_transform.forward,
+                    out _hit, Mathf.Infinity, hit_layers);
+            } break;
+
+            case ScannerViewMode.TACTICAL:
+            {
+                Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
+                _ray_success = Physics.Raycast(ray, out _hit, Mathf.Infinity, hit_layers);
+            } break;
+        }
     }
 
 
@@ -161,13 +191,13 @@ public class ContextScanner : MonoBehaviour
 
     void OnEnable()
     {
-        InvokeRepeating("Raycast", 0, 0.005f);
+        InvokeRepeating("ScanContext", 0, 0.005f);
     }
 
 
     void OnDisable()
     {
-        CancelInvoke("Raycast");
+        CancelInvoke("ScanContext");
 
         current_context.type = ContextType.NONE;
         context_indicator.ChangeIndicator(current_context.type);

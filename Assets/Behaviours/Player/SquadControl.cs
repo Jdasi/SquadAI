@@ -72,7 +72,8 @@ public class SquadControl : MonoBehaviour
 
         if (Input.GetButtonDown("Command"))
             IssueContextCommand();
-        else if (Input.GetButtonDown("CancelOrder"))
+
+        if (Input.GetButtonDown("CancelOrder"))
             ResetSelection();
         else if (Input.GetKeyDown(KeyCode.F))
             IssueFollowCommand();

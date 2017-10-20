@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 124371597872749666}
   - component: {fileID: 81363003894395020}
   m_Layer: 8
-  m_Name: PerspectiveCamera
+  m_Name: FPSCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 54392084295809804}
   - component: {fileID: 114467129234851988}
   - component: {fileID: 114928925687701330}
-  - component: {fileID: 114536312683400648}
   - component: {fileID: 114438397176304598}
   - component: {fileID: 114611498175746318}
   - component: {fileID: 114432360575913182}
@@ -607,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_squads: 3
   settings: {fileID: 11400000, guid: 84061cc01d0f8414e8e92e333a326a00, type: 2}
-  context_scanner: {fileID: 114536312683400648}
+  context_scanner: {fileID: 0}
   squad_hud_manager: {fileID: 0}
 --- !u!114 &114467129234851988
 MonoBehaviour:
@@ -674,35 +673,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
---- !u!114 &114536312683400648
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1052003227015208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 756ce4a118f8ea5488b4619e3fa3fbcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  current_context:
-    type: 0
-    indicator_position: {x: 0, y: 0, z: 0}
-    indicator_hit: {fileID: 0}
-    indicator_normal: {x: 0, y: 0, z: 0}
-    indicator_up: {x: 0, y: 0, z: 0}
-    indicator_right: {x: 0, y: 0, z: 0}
-    indicator_forward: {x: 0, y: 0, z: 0}
-  dist_from_first_ray: 0.05
-  dist_from_second_ray: 0.5
-  hit_layers:
-    serializedVersion: 2
-    m_Bits: 19456
-  floor_layer: Floor
-  wall_layer: Wall
-  damageable_layer: Damageable
-  forward_transform: {fileID: 4204696551115548}
-  context_indicator: {fileID: 0}
 --- !u!114 &114611498175746318
 MonoBehaviour:
   m_ObjectHideFlags: 1
