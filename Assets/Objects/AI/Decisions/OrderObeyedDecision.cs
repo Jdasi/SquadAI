@@ -11,9 +11,7 @@ public class OrderObeyedDecision : Decision
 
         if (_squaddie.knowledge.current_order == OrderType.MOVE)
         {
-            order_obeyed &= Vector3.Distance(_squaddie.transform.position,
-                _squaddie.knowledge.order_waypoint) <= _squaddie.nav.stoppingDistance +
-                _squaddie.nav.radius;
+            order_obeyed &= !_squaddie.nav.hasPath;
         }
         else if (_squaddie.knowledge.current_order == OrderType.ATTACK)
         {
@@ -21,6 +19,7 @@ public class OrderObeyedDecision : Decision
         }
         else if (_squaddie.knowledge.current_order == OrderType.FOLLOW)
         {
+            // Follow until new order.
             order_obeyed = false;
         }
 

@@ -21,9 +21,7 @@ public class FollowPlayerAction : Action
                 return;
         }
 
-        _squaddie.nav.isStopped = _squaddie.nav.remainingDistance <=
-            _squaddie.nav.stoppingDistance + _squaddie.nav.radius;
-
+        _squaddie.nav.isStopped = _squaddie.nav.remainingDistance <= _squaddie.nav.stoppingDistance;
         _squaddie.nav.destination = _squaddie.knowledge.follow_target.position;
     }
 

@@ -75,4 +75,14 @@ public class JHelper
         return !ray_blocked && dist <= _max_distance;
     }
 
+
+    public static bool RaycastCameraToFloor(out RaycastHit _hit)
+    {
+        Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
+        bool _ray_success = Physics.Raycast(ray, out _hit, Mathf.Infinity,
+            1 << LayerMask.NameToLayer("Floor"));
+
+        return _ray_success;
+    }
+
 }

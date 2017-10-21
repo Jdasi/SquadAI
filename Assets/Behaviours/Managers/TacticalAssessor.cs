@@ -44,26 +44,35 @@ public class TacticalAssessor : MonoBehaviour
 
     public List<CoverPoint> FindFlankingPositions(SquaddieAI _flanker, SquaddieAI _flank_target, float _radius)
     {
-        var cover_points = ClosestCoverPoints(_flank_target.transform.position, _radius);
+        // Consider nearby cover points, as well as those near the enemy.
+        var cover_to_consider = ClosestCoverPoints(_flanker.transform.position, _radius);
+        cover_to_consider.AddRange(ClosestCoverPoints(_flank_target.transform.position, _radius));
 
-        for (int i = cover_points.Count - 1; i > 0; --i)
+        // The actual points that will be returned.
+        List<CoverPoint> flanking_positions = new List<CoverPoint>();
+
+        foreach (CoverPoint cover_point in cover_to_consider)
         {
-            CoverPoint cover_point = cover_points[i];
             float distance = Vector3.Distance(_flank_target.transform.position, cover_point.position);
 
             bool too_far = distance > _flanker.settings.maximum_engage_distance;
             bool too_close = distance < _flanker.settings.minimum_engage_distance;
-            bool bad_flank = !_flanker.TestSightToPosition(cover_point.position, _flank_target.torso_transform.position);
+
+            if (too_far || too_close)
+                continue;
+
+            bool bad_flank = !_flanker.TestSightToPosition(cover_point.position,
+                _flank_target.torso_transform.position);
             bool enemy_los = _flank_target.TestSightToPosition(cover_point.position);
 
-            if (too_far || too_close || bad_flank || enemy_los)
-            {
-                cover_points.Remove(cover_point);
-            }
+            if (bad_flank || enemy_los)
+                continue;
+
+            flanking_positions.Add(cover_point);
         }
 
-        cover_points = cover_points.OrderByDescending(elem => elem.weighting).ToList();
-        return cover_points;
+        flanking_positions = flanking_positions.OrderBy(elem => elem.weighting).ToList();
+        return flanking_positions;
     }
 
 

@@ -34,8 +34,7 @@ public class ShootEnemyAction : Action
         _squaddie.torso_transform.rotation = Quaternion.RotateTowards(_squaddie.torso_transform.rotation,
             rot, (_squaddie.nav.angularSpeed * 2) * Time.deltaTime);
 
-        _squaddie.knowledge.chain_gun.cycle = _squaddie.knowledge.sight_hit.transform ==
-            _squaddie.knowledge.current_target.transform;
+        _squaddie.knowledge.chain_gun.cycle = _squaddie.knowledge.current_target_visible;
     }
 
 }

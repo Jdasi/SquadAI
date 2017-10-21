@@ -42,6 +42,38 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1416048121048050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4394731166779492}
+  - component: {fileID: 114042041052787734}
+  m_Layer: 0
+  m_Name: ContextScanner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1442222333014620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4931244176866036}
+  - component: {fileID: 114696914233167304}
+  m_Layer: 0
+  m_Name: PlayerSquadControl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1712361789547016
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,8 +132,23 @@ Transform:
   - {fileID: 4057959416299630}
   - {fileID: 4746445137339116}
   - {fileID: 4854560693287212}
+  - {fileID: 4931244176866036}
+  - {fileID: 4394731166779492}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4394731166779492
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416048121048050}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4097686717860104}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4746445137339116
 Transform:
@@ -129,6 +176,53 @@ Transform:
   m_Father: {fileID: 4097686717860104}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4931244176866036
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442222333014620}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4097686717860104}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114042041052787734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416048121048050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756ce4a118f8ea5488b4619e3fa3fbcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view_mode: 1
+  current_context:
+    type: 0
+    indicator_position: {x: 0, y: 0, z: 0}
+    indicator_hit: {fileID: 0}
+    indicator_normal: {x: 0, y: 0, z: 0}
+    indicator_up: {x: 0, y: 0, z: 0}
+    indicator_right: {x: 0, y: 0, z: 0}
+    indicator_forward: {x: 0, y: 0, z: 0}
+    current_faction: {fileID: 0}
+  dist_from_first_ray: 0.05
+  dist_from_second_ray: 0.5
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 150528
+  scan_interval: 0.005
+  floor_layer: Floor
+  wall_layer: Wall
+  damageable_layer: Damageable
+  hackable_layer: Hackable
+  fps_transform: {fileID: 0}
+  tactical_transform: {fileID: 0}
+  context_indicator: {fileID: 0}
 --- !u!114 &114273642492229202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -166,6 +260,25 @@ MonoBehaviour:
   grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
   cover_point_size: 0.5
   update_on_select: 0
+--- !u!114 &114696914233167304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442222333014620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8225afaa817484db09d71e065716e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squad_hud_manager: {fileID: 0}
+  squad_spawn_size: 4
+  spawn_settings:
+  - spawn_key: 93
+    faction: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
+  - spawn_key: 91
+    faction: {fileID: 11400000, guid: 3a1ba0df674700043abc8c72c776a39b, type: 2}
+  remove_squaddie_key: 8
 --- !u!114 &114956022241646026
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -64,20 +64,10 @@ public class SquadManager
 
         switch (context.type)
         {
-            case ContextType.FLOOR:
-            {
-                SquadMoveCommand(context);
-            } break;
-
-            case ContextType.COVER:
-            {
-                SquadCoverCommand(context);
-            } break;
-
-            case ContextType.ATTACK:
-            {
-                SquadAttackCommand(context);
-            } break;
+            case ContextType.FLOOR: SquadMoveCommand(context); break;
+            case ContextType.COVER: SquadCoverCommand(context); break;
+            case ContextType.ATTACK: SquadAttackCommand(context); break;
+            case ContextType.HACK: SquadHackCommand(context); break;
         }
     }
 
@@ -85,7 +75,8 @@ public class SquadManager
     public void IssueFollowCommand()
     {
         squad_sense.follow_targets.Clear();
-        squad_sense.follow_targets.Add(GameManager.scene.player.transform);
+        squad_sense.follow_targets.Add(GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
+            GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform);
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
@@ -101,6 +92,15 @@ public class SquadManager
         }
 
         squad_sense.follow_targets.Clear();
+    }
+
+    
+    public void ClearAllCommands()
+    {
+        foreach (SquaddieAI squaddie in squad_sense.squaddies)
+        {
+            squaddie.ResetOrderKnowledge();
+        }
     }
 
 
@@ -196,6 +196,12 @@ public class SquadManager
             squaddie.knowledge.order_target = target;
             squaddie.knowledge.current_order = OrderType.ATTACK;
         }
+    }
+
+
+    void SquadHackCommand(CurrentContext _context)
+    {
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,7 +9,8 @@ public enum OrderType
     NONE,
     MOVE,
     FOLLOW,
-    ATTACK
+    ATTACK,
+    HACK
 }
 
 public class PlayerSquadControl : MonoBehaviour
@@ -19,6 +21,7 @@ public class PlayerSquadControl : MonoBehaviour
     [SerializeField] SquadHUDManager squad_hud_manager;
 
     [Header("Debug")]
+    [SerializeField] int squad_spawn_size;
     [SerializeField] SpawnSettings[] spawn_settings;
 
     [Space]
@@ -30,6 +33,9 @@ public class PlayerSquadControl : MonoBehaviour
 
     void Update()
     {
+        if (issuing_order && selected_squad.num_squaddies == 0)
+            OrderFinished();
+
         squads.RemoveAll(elem => elem.num_squaddies == 0);
 
         HandleSquadSpawning();
@@ -42,10 +48,8 @@ public class PlayerSquadControl : MonoBehaviour
         if (Input.GetButtonDown("CancelOrder"))
             OrderFinished();
         
-        /* COMMENTED OUT UNTIL NEW FOLLOW COMMAND IS IMPLEMENTED.
         if (Input.GetKeyDown(KeyCode.F))
             IssueFollowCommand();
-        */
 
         UpdateAllSquads();
     }
@@ -57,23 +61,42 @@ public class PlayerSquadControl : MonoBehaviour
 
         foreach (SpawnSettings settings in spawn_settings)
         {
-            if (Input.GetKeyDown(settings.spawn_key))
+            if (!Input.GetKeyDown(settings.spawn_key))
+                continue;
+
+            if (selected_squad == null)
             {
-                Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                bool _ray_success = Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Floor"));
-
-                if (!_ray_success)
-                    break;
-
-                Vector3 mouse_position = hit.point;
-
-                SquadManager squad = squad_spawner.CreateSquad(settings.faction, 4, mouse_position);
-                squad_hud_manager.CreateUIBlock(squad);
-
-                squads.Add(squad);
+                SquadSpawn(settings, squad_spawner);
+            }
+            else
+            {
+                IndividualSpawn(settings, squad_spawner);
             }
         }
+    }
+
+
+    void SquadSpawn(SpawnSettings _settings, SquadSpawner _spawner)
+    {
+        RaycastHit hit;
+        if (!JHelper.RaycastCameraToFloor(out hit))
+            return;
+
+        SquadManager squad = _spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point);
+        squad_hud_manager.CreateUIBlock(squad);
+
+        squads.Add(squad);
+    }
+
+
+    void IndividualSpawn(SpawnSettings _settings, SquadSpawner _spawner)
+    {
+        RaycastHit hit;
+        if (!JHelper.RaycastCameraToFloor(out hit))
+            return;
+
+        selected_squad.AddSquaddie(_spawner.CreateSquaddie(_settings.faction, hit.point));
+        selected_squad.SelectSquad();
     }
 
 
@@ -82,10 +105,7 @@ public class PlayerSquadControl : MonoBehaviour
         if (selected_squad == null || !Input.GetKeyDown(remove_squaddie_key))
             return;
 
-        foreach (SquaddieAI squaddie in selected_squad.squad_sense.squaddies)
-            Destroy(squaddie.gameObject);
-
-        OrderFinished();
+        selected_squad.RemoveSquaddie();
     }
 
 
@@ -139,7 +159,12 @@ public class PlayerSquadControl : MonoBehaviour
         if (selected_squad != null)
             selected_squad.DeselectSquad();
 
-        selected_squad = squads[_squad_number];
+        SquadManager target_squad = squads[_squad_number];
+
+        if (selected_squad != target_squad)
+            OrderFinished();
+
+        selected_squad = target_squad;
         selected_squad.SelectSquad();
     }
 
@@ -161,8 +186,6 @@ public class PlayerSquadControl : MonoBehaviour
             return;
 
         selected_squad.IssueFollowCommand();
-
-        OrderFinished();
     }
 
 
@@ -171,9 +194,16 @@ public class PlayerSquadControl : MonoBehaviour
         if (selected_squad == null)
             return;
 
-        selected_squad.DeselectSquad();
-        issuing_order = false;
+        bool squad_following = selected_squad.squad_sense.squaddies.Any(
+            elem => elem.knowledge.current_order == OrderType.FOLLOW);
 
+        if (squad_following)
+            selected_squad.ClearAllCommands();
+
+        selected_squad.DeselectSquad();
+        selected_squad = null;
+
+        issuing_order = false;
         GameManager.scene.context_scanner.Deactivate();
     }
 

@@ -338,7 +338,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116222830393566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.8201761, y: 0.00000011920929, z: -5.3837075}
+  m_LocalPosition: {x: -10.5348215, y: 0.00000011920929, z: -66.47519}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4975400138607812}
@@ -534,13 +534,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 6ab6e7a7b3deaf24890d5573afc1e011, type: 2}
   current_state: {fileID: 11400000, guid: beda4edfa03840f449968b16a1283b4f, type: 2}
-  sight_blocking_layers:
-    serializedVersion: 2
-    m_Bits: 18432
   sight_test_layers:
     serializedVersion: 2
-    m_Bits: 2048
-  evaluation_interval: 0.5
+    m_Bits: 133120
   crouch_height: 0.6
   knowledge:
     squad_sense:

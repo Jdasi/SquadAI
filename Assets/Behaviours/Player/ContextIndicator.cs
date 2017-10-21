@@ -8,6 +8,7 @@ public class ContextIndicator : MonoBehaviour
     [SerializeField] GameObject waypoint_indicator;
     [SerializeField] GameObject cover_indicator;
     [SerializeField] GameObject attack_indicator;
+    [SerializeField] GameObject hack_indicator;
 
 
     public void ChangeIndicator(ContextType _type)
@@ -18,6 +19,9 @@ public class ContextIndicator : MonoBehaviour
             case ContextType.FLOOR: SwitchToIndicator(waypoint_indicator); break;
             case ContextType.COVER: SwitchToIndicator(cover_indicator); break;
             case ContextType.ATTACK: SwitchToIndicator(attack_indicator); break;
+            case ContextType.HACK: SwitchToIndicator(hack_indicator); break;
+
+            default: SwitchToIndicator(null); break;
         }
     }
 
@@ -25,6 +29,7 @@ public class ContextIndicator : MonoBehaviour
     public void SetScreenPosition(Vector3 _position)
     {
         attack_indicator.transform.position = _position;
+        hack_indicator.transform.position = _position;
     }
 
 
@@ -33,6 +38,7 @@ public class ContextIndicator : MonoBehaviour
         SetIndicatorActive(waypoint_indicator, false);
         SetIndicatorActive(cover_indicator, false);
         SetIndicatorActive(attack_indicator, false);
+        SetIndicatorActive(hack_indicator, false);
 
         if (_indicator != null)
             _indicator.SetActive(true);

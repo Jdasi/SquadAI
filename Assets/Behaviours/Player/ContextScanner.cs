@@ -7,7 +7,8 @@ public enum ContextType
     NONE,
     FLOOR,
     COVER,
-    ATTACK
+    ATTACK,
+    HACK
 }
 
 public enum ScannerViewMode
@@ -20,15 +21,19 @@ public class ContextScanner : MonoBehaviour
 {
     public ScannerViewMode view_mode;
     public CurrentContext current_context = new CurrentContext();
+    public Transform indicator_transform { get { return context_indicator.transform; } }
 
     [Header("Parameters")]
     [SerializeField] float dist_from_first_ray;
     [SerializeField] float dist_from_second_ray;
     [SerializeField] LayerMask hit_layers;
+    [SerializeField] float scan_interval = 0.005f;
+
+    [Header("Layers")]
     [SerializeField] string floor_layer = "Floor";
     [SerializeField] string wall_layer = "Wall";
     [SerializeField] string damageable_layer = "Damageable";
-    [SerializeField] float scan_interval = 0.005f;
+    [SerializeField] string hackable_layer = "Hackable";
 
     [Header("References")]
     [SerializeField] Transform fps_transform;
@@ -38,6 +43,7 @@ public class ContextScanner : MonoBehaviour
     private int floor_layer_value;
     private int wall_layer_value;
     private int damageable_layer_value;
+    private int hackable_layer_value;
 
 
     public void Activate(FactionSettings _faction)
@@ -67,6 +73,7 @@ public class ContextScanner : MonoBehaviour
         floor_layer_value = LayerMask.NameToLayer(floor_layer);
         wall_layer_value = LayerMask.NameToLayer(wall_layer);
         damageable_layer_value = LayerMask.NameToLayer(damageable_layer);
+        hackable_layer_value = LayerMask.NameToLayer(hackable_layer);
     }
 
 
@@ -131,6 +138,10 @@ public class ContextScanner : MonoBehaviour
             else if (_first_hit.collider.gameObject.layer == damageable_layer_value)
             {
                 current_context.type = ContextType.ATTACK;
+            }
+            else if (_first_hit.collider.gameObject.layer == hackable_layer_value)
+            {
+                current_context.type = ContextType.HACK;
             }
             else
             {
@@ -202,6 +213,11 @@ public class ContextScanner : MonoBehaviour
             } break;
 
             case ContextType.ATTACK:
+            {
+                context_indicator.SetScreenPosition(Input.mousePosition);
+            } break;
+
+            case ContextType.HACK:
             {
                 context_indicator.SetScreenPosition(Input.mousePosition);
             } break;

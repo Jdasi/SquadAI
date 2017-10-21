@@ -9,9 +9,7 @@ public class SquaddieAI : MonoBehaviour
     [Header("Parameters")]
     public SquaddieSettings settings;
     [SerializeField] State current_state;
-    [SerializeField] LayerMask sight_blocking_layers;
     [SerializeField] LayerMask sight_test_layers;
-    [SerializeField] float evaluation_interval = 0.1f;
     [SerializeField] float crouch_height;
 
     [Header("Knowledge")]
@@ -57,7 +55,12 @@ public class SquaddieAI : MonoBehaviour
     public void SetSelected(bool _selected)
     {
         foreach (Outline outline in outlines)
+        {
+            if (outline == null)
+                continue;
+
             outline.enabled = _selected;
+        }
     }
 
 
@@ -84,6 +87,14 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    public void ResetOrderKnowledge()
+    {
+        knowledge.current_order = OrderType.NONE;
+        knowledge.order_target = null;
+        knowledge.order_waypoint = Vector3.zero;
+    }
+
+
     public void IssueMoveCommand(Vector3 _target)
     {
         knowledge.current_order = OrderType.MOVE;
@@ -100,7 +111,7 @@ public class SquaddieAI : MonoBehaviour
         var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
             _position, settings.cover_search_radius);
 
-        if (cover_points.Count <= 0)
+        if (cover_points.Count == 0)
             return;
 
         CoverPoint target_point = cover_points[0];
@@ -113,11 +124,38 @@ public class SquaddieAI : MonoBehaviour
         var cover_points = GameManager.scene.tactical_assessor.FindFlankingPositions(
             this, _target, settings.cover_search_radius);
 
-        if (cover_points.Count <= 0)
-            return;
+        if (cover_points.Count == 0)
+        {
+            nav.destination = _target.transform.position;
+        }
+        else
+        {
+            foreach (CoverPoint cover_point in cover_points)
+            {
+                bool unique_pos = true;
 
-        CoverPoint target_point = cover_points[0];
-        nav.destination = target_point.position;
+                foreach (SquaddieAI ally in knowledge.squad_sense.squaddies)
+                {
+                    if (ally == this)
+                        continue;
+
+                    if ((cover_point.position - ally.nav.destination).magnitude >
+                        ally.settings.move_stop_distance + ally.nav.radius)
+                    {
+                        continue;
+                    }
+
+                    unique_pos = false;
+                    break;
+                }
+
+                if (!unique_pos)
+                    continue;
+
+                nav.destination = cover_point.position;
+                break;
+            }
+        }
     }
 
 
@@ -206,7 +244,7 @@ public class SquaddieAI : MonoBehaviour
         nav.isStopped = true;
         TransitionToState(current_state);
 
-        InvokeRepeating("EvaluationTick", 0, evaluation_interval);
+        InvokeRepeating("EvaluationTick", 0, settings.sense_delay);
     }
 
 
@@ -218,6 +256,20 @@ public class SquaddieAI : MonoBehaviour
                              cover_right || cover_left;
 
         HandleCrouch();
+    }
+
+
+    void OnEnable()
+    {
+        CancelInvoke("EvaluationTick");
+        InvokeRepeating("EvaluationTick", 0, settings.sense_delay);
+    }
+
+
+    void OnDisable()
+    {
+        CancelInvoke("EvaluationTick");
+        knowledge.chain_gun.cycle = false;
     }
 
 
@@ -254,7 +306,6 @@ public class SquaddieAI : MonoBehaviour
 
     void EvaluationTick()
     {
-        EvaluateSightHit();
         EvaluateClosestTarget();
         EvaluateCurrentTarget();
 
@@ -268,13 +319,6 @@ public class SquaddieAI : MonoBehaviour
             knowledge.current_target_visible = false;
             knowledge.current_target_in_range = false;
         }
-    }
-
-
-    void EvaluateSightHit()
-    {
-        Physics.Raycast(view_point.position, view_point.forward, out knowledge.sight_hit,
-            settings.sight_distance, sight_blocking_layers);
     }
 
 
@@ -337,12 +381,6 @@ public class SquaddieAI : MonoBehaviour
         bool too_far = distance > settings.maximum_engage_distance;
 
         knowledge.current_target_in_range = !too_close && !too_far;
-    }
-
-
-    void OnDisable()
-    {
-        knowledge.chain_gun.cycle = false;
     }
 
 

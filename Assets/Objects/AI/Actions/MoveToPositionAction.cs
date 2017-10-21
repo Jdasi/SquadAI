@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [CreateAssetMenu (menuName = "PluggableAI/Actions/Move To Position")]
 public class MoveToPositionAction : Action
@@ -20,19 +21,15 @@ public class MoveToPositionAction : Action
 
     void MoveToPosition(SquaddieAI _squaddie)
     {
-        if (_squaddie.knowledge.current_order == OrderType.MOVE &&
-            _squaddie.nav.destination != _squaddie.knowledge.order_waypoint)
-        {
-            _squaddie.nav.destination = _squaddie.knowledge.order_waypoint;
-        }
-
-        if (_squaddie.nav.isStopped && _squaddie.nav.hasPath)
-            _squaddie.nav.isStopped = false;
-
-        if (_squaddie.nav.hasPath && _squaddie.nav.remainingDistance <= _squaddie.nav.stoppingDistance)
+        if (_squaddie.nav.hasPath && _squaddie.nav.remainingDistance <=
+            _squaddie.nav.stoppingDistance)
         {
             _squaddie.nav.isStopped = true;
             _squaddie.nav.ResetPath();
+        }
+        else
+        {
+            _squaddie.nav.isStopped = false;
         }
     }
 
