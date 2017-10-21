@@ -12,8 +12,7 @@ public enum SquaddieFaction
 public class FactionSettings : ScriptableObject
 {
     public SquaddieFaction faction;
-    public Material select_material;
-    public Material deselect_material;
+    public Material base_material;
 
     public Color arrow_color;
     public Color text_color;

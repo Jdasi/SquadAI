@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using cakeslice;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,7 +22,12 @@ public class SquaddieAI : MonoBehaviour
     public Transform view_point;
     public Transform torso_transform;
     public SquaddieStats stats;
+
+    [Space]
+    [SerializeField] Outline[] outlines;
     [SerializeField] MeshRenderer[] meshes;
+
+    [Space]
     [SerializeField] Transform mesh_transform;
     [SerializeField] Transform leg_transform;
     [SerializeField] SquaddieCanvas squaddie_canvas;
@@ -40,17 +46,18 @@ public class SquaddieAI : MonoBehaviour
     {
         stats.faction_settings = _faction;
         squaddie_canvas.Init(_faction);
+
+        foreach (MeshRenderer renderer in meshes)
+            renderer.material = _faction.base_material;
+
         SetSelected(false);
     }
 
 
     public void SetSelected(bool _selected)
     {
-        Material material = _selected ? stats.faction_settings.select_material :
-            stats.faction_settings.deselect_material;
-        
-        foreach (MeshRenderer mesh in meshes)
-            mesh.material = material;
+        foreach (Outline outline in outlines)
+            outline.enabled = _selected;
     }
 
 

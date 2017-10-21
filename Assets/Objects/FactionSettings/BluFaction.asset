@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Name: BluFaction
   m_EditorClassIdentifier: 
   faction: 0
-  select_material: {fileID: 2100000, guid: 2260ede504dd4294b9fece2e86dbc3da, type: 2}
-  deselect_material: {fileID: 2100000, guid: 5ed834b87bcb2c84b9c57fa77133beac, type: 2}
+  base_material: {fileID: 2100000, guid: 5ed834b87bcb2c84b9c57fa77133beac, type: 2}
   arrow_color: {r: 0, g: 0.91724133, b: 1, a: 1}
   text_color: {r: 0, g: 0.91724133, b: 1, a: 1}

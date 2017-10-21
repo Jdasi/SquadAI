@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4022209247994706}
   m_Layer: 0
   m_Name: Viewpoint
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 23127679062100482}
   - component: {fileID: 65245914528365254}
   - component: {fileID: 114042330614621874}
+  - component: {fileID: 114035692701947064}
   m_Layer: 14
   m_Name: Box
   m_TagString: DamageableBody
@@ -177,6 +178,7 @@ GameObject:
   - component: {fileID: 23196185087604998}
   - component: {fileID: 65447529601312432}
   - component: {fileID: 114316083207740752}
+  - component: {fileID: 114728752399150436}
   m_Layer: 14
   m_Name: Box
   m_TagString: DamageableBody
@@ -336,7 +338,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116222830393566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9184957, y: 0.00000011920929, z: -71.90463}
+  m_LocalPosition: {x: 0.8201761, y: 0.00000011920929, z: -5.3837075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4975400138607812}
@@ -477,6 +479,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114035692701947064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1480839484629414}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterials: []
 --- !u!114 &114042330614621874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -527,9 +544,11 @@ MonoBehaviour:
   crouch_height: 0.6
   knowledge:
     squad_sense:
+      faction: {fileID: 0}
       squaddies: []
       squad_center: {x: 0, y: 0, z: 0}
       follow_targets: []
+      squad_target: {fileID: 0}
     nearby_targets: []
     chain_gun: {fileID: 0}
     state_time_elapsed: 0
@@ -548,6 +567,9 @@ MonoBehaviour:
   view_point: {fileID: 4022209247994706}
   torso_transform: {fileID: 4031968911856356}
   stats: {fileID: 114537214391118060}
+  outlines:
+  - {fileID: 114728752399150436}
+  - {fileID: 114035692701947064}
   meshes:
   - {fileID: 23196185087604998}
   - {fileID: 23127679062100482}
@@ -777,6 +799,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Current State
+--- !u!114 &114728752399150436
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1779424133173664}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterials: []
 --- !u!114 &114732633781502538
 MonoBehaviour:
   m_ObjectHideFlags: 1
