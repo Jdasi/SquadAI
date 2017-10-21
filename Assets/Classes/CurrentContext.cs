@@ -13,4 +13,7 @@ public class CurrentContext
     public Vector3 indicator_up;
     public Vector3 indicator_right;
     public Vector3 indicator_forward;
+
+    public FactionSettings current_faction;
+
 }

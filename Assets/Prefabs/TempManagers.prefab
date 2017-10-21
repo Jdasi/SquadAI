@@ -141,14 +141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   all_units: []
-  friendly_settings:
-    spawn_key: 93
-    faction: {fileID: 11400000, guid: 418d5033bd1e7c24cb4ad0f6f9febe67, type: 2}
-  enemy_settings:
-    spawn_key: 91
-    faction: {fileID: 11400000, guid: 3a1ba0df674700043abc8c72c776a39b, type: 2}
-  remove_squaddie_key: 8
-  player_squad_control: {fileID: 0}
   squaddie_prefab: {fileID: 1116222830393566, guid: 93182f6c9f271434e8c5b72ef52f916c,
     type: 2}
 --- !u!114 &114439405980444042

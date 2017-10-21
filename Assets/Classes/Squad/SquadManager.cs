@@ -1,21 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
+[System.Serializable]
 public class SquadManager
 {
+    public bool selected { get; private set; }
+    public SquadSense squad_sense = new SquadSense();
+    public FactionSettings squad_faction { get { return squad_sense.faction; } }
     public int num_squaddies { get { return squad_sense.squaddies.Count; } }
-    public SquadSettings settings;
 
-    private SquadSense squad_sense = new SquadSense();
-    private SquadBlock ui_block;
+    private const float SQUADDIE_SPACING = 1;
 
 
-    public SquadManager(SquadSettings _settings, ref SquadBlock _ui_block)
+    public SquadManager(FactionSettings _faction)
     {
-        settings = _settings;
-        ui_block = _ui_block;
+        squad_sense.faction = _faction;
     }
 
 
@@ -24,7 +24,7 @@ public class SquadManager
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
             squaddie.SetSelected(true);
 
-        ui_block.Select();
+        selected = true;
     }
 
 
@@ -33,7 +33,7 @@ public class SquadManager
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
             squaddie.SetSelected(false);
 
-        ui_block.Deselect();
+        selected = false;
     }
 
 
@@ -42,12 +42,10 @@ public class SquadManager
         if (squad_sense.squaddies.Contains(_squaddie_ai))
             return;
 
-        squad_sense.squaddies.Add(_squaddie_ai);
-
+        _squaddie_ai.Init(squad_faction);
         _squaddie_ai.LinkSquadSense(ref squad_sense);
-        _squaddie_ai.SetSelected(true);
 
-        ui_block.UpdateUnitCount(squad_sense.squaddies.Count);
+        squad_sense.squaddies.Add(_squaddie_ai);
     }
 
 
@@ -60,23 +58,25 @@ public class SquadManager
     }
 
 
-    public void IssueContextCommand(CurrentContext _context)
+    public void IssueContextCommand()
     {
-        switch (_context.type)
+        CurrentContext context = GameManager.scene.context_scanner.current_context;
+
+        switch (context.type)
         {
             case ContextType.FLOOR:
             {
-                SquadMoveCommand(_context);
+                SquadMoveCommand(context);
             } break;
 
             case ContextType.COVER:
             {
-                SquadCoverCommand(_context);
+                SquadCoverCommand(context);
             } break;
 
             case ContextType.ATTACK:
             {
-                SquadAttackCommand(_context);
+                SquadAttackCommand(context);
             } break;
         }
     }
@@ -106,18 +106,9 @@ public class SquadManager
 
     public void Update()
     {
-        GarbageCollect();
-        EvaluateSquadCenter();
-    }
-
-
-    void GarbageCollect()
-    {
-        int prev_count = squad_sense.squaddies.Count;
         squad_sense.squaddies.RemoveAll(elem => elem == null);
 
-        if (squad_sense.squaddies.Count != prev_count)
-            ui_block.UpdateUnitCount(squad_sense.squaddies.Count);
+        EvaluateSquadCenter();
     }
 
 
@@ -142,13 +133,13 @@ public class SquadManager
         {
             squaddie.nav.stoppingDistance = squaddie.settings.move_stop_distance;
 
-            line_width += squaddie.nav.radius + settings.squaddie_spacing;
+            line_width += squaddie.nav.radius + SQUADDIE_SPACING;
             squaddie_sizes.Add(squaddie.nav.radius);
         }
 
         for (int i = 0; i < num_squaddies; ++i)
         {
-            float padded_squaddie = squad_sense.squaddies[i].nav.radius + settings.squaddie_spacing;
+            float padded_squaddie = squad_sense.squaddies[i].nav.radius + SQUADDIE_SPACING;
 
             Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
             waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);

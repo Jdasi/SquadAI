@@ -22,6 +22,12 @@ public class ContextIndicator : MonoBehaviour
     }
 
 
+    public void SetScreenPosition(Vector3 _position)
+    {
+        attack_indicator.transform.position = _position;
+    }
+
+
     void SwitchToIndicator(GameObject _indicator)
     {
         SetIndicatorActive(waypoint_indicator, false);

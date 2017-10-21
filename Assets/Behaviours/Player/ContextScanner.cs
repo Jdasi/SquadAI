@@ -40,13 +40,33 @@ public class ContextScanner : MonoBehaviour
     private int damageable_layer_value;
 
 
+    public void Activate(FactionSettings _faction)
+    {
+        Deactivate();
+
+        current_context.current_faction = _faction;
+        InvokeRepeating("ScanContext", 0, scan_interval);
+    }
+
+
+    public void Deactivate()
+    {
+        CancelInvoke("ScanContext");
+
+        current_context.type = ContextType.NONE;
+        current_context.current_faction = null;
+
+        context_indicator.ChangeIndicator(current_context.type);
+    }
+
+
     void Start()
     {
+        Deactivate();
+
         floor_layer_value = LayerMask.NameToLayer(floor_layer);
         wall_layer_value = LayerMask.NameToLayer(wall_layer);
         damageable_layer_value = LayerMask.NameToLayer(damageable_layer);
-
-        InvokeRepeating("ScanContext", 0, scan_interval);
     }
 
 
@@ -183,24 +203,9 @@ public class ContextScanner : MonoBehaviour
 
             case ContextType.ATTACK:
             {
-                context_indicator.transform.position = _first_hit.point;
+                context_indicator.SetScreenPosition(Input.mousePosition);
             } break;
         }
-    }
-
-
-    void OnEnable()
-    {
-        InvokeRepeating("ScanContext", 0, 0.005f);
-    }
-
-
-    void OnDisable()
-    {
-        CancelInvoke("ScanContext");
-
-        current_context.type = ContextType.NONE;
-        context_indicator.ChangeIndicator(current_context.type);
     }
 
 }

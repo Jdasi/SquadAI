@@ -13,53 +13,21 @@ public class SquadHUDManager : MonoBehaviour
     private List<SquadBlock> squad_blocks = new List<SquadBlock>();
 
 
-    public void InitSquadBlocks(int _amount)
+    public SquadBlock CreateUIBlock(SquadManager _squad)
     {
-        for (int i = 0; i < _amount; ++i)
-        {
-            GameObject clone = Instantiate(squad_block_prefab, squad_grid_layout);
+        GameObject clone = Instantiate(squad_block_prefab, squad_grid_layout);
             
-            SquadBlock block = clone.GetComponent<SquadBlock>();
-            block.Init(i);
+        SquadBlock block = clone.GetComponent<SquadBlock>();
+        block.Init("Squad " + (squad_blocks.Count + 1).ToString(), ref _squad);
 
-            squad_blocks.Add(block);
-        }
+        squad_blocks.Add(block);
+        return block;
     }
 
 
-    public SquadBlock GetSquadBlock(int _index)
+    void Update()
     {
-        if (!IndexValid(_index))
-            return null;
-
-        return squad_blocks[_index];
-    }
-
-
-    public void SelectSquadBlock(int _block_index)
-    {
-        if (!IndexValid(_block_index))
-            return;
-
-        foreach (SquadBlock block in squad_blocks)
-            block.Deselect();
-
-        squad_blocks[_block_index].Select();
-    }
-
-
-    public void UpdateSquadBlockUnitCount(int _block_index, int _unit_count)
-    {
-        if (!IndexValid(_block_index))
-            return;
-
-        squad_blocks[_block_index].UpdateUnitCount(_unit_count);
-    }
-
-
-    bool IndexValid(int _index)
-    {
-        return _index >= 0 && _index < squad_blocks.Count;
+        squad_blocks.RemoveAll(elem => elem == null);
     }
 
 }

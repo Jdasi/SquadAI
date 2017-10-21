@@ -17,41 +17,67 @@ public class SquadBlock : MonoBehaviour
     [SerializeField] FadableGraphic fade;
 
     private bool selected;
+    private SquadManager attached_squad; // Reference.
 
 
-    public void Init(int _squad_number)
+    public void Init(string _squad_name, ref SquadManager _squad)
     {
-        bg.color = deselect_color;
-        squad_text.text = "Squad " + (_squad_number + 1).ToString();
+        squad_text.text = _squad_name;
+        attached_squad = _squad;
+
+        Deselect();
     }
 
 
-    public void Select()
+    void Update()
+    {
+        if (attached_squad.num_squaddies == 0)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        UpdateUnitCount();
+        HandleSelection();
+    }
+
+
+    void UpdateUnitCount()
+    {
+        int prev_value = int.Parse(num_units_text.text);
+
+        if (attached_squad.num_squaddies > prev_value)
+            fade.FadeColor(Color.green, EvaluateCurrentColor(), fade_time); // Unit gained.
+        else if (attached_squad.num_squaddies < prev_value)
+            fade.FadeColor(Color.red, EvaluateCurrentColor(), fade_time); // Unit lost.
+
+        num_units_text.text = attached_squad.num_squaddies.ToString();
+    }
+
+
+    void HandleSelection()
+    {
+        if (attached_squad.selected && !selected)
+            Select();
+        
+        if (!attached_squad.selected && selected)
+            Deselect();
+    }
+
+
+    void Select()
     {
         bg.color = select_color;
         selected = true;
     }
 
 
-    public void Deselect()
+    void Deselect()
     {
         bg.color = deselect_color;
         selected = false;
 
         fade.CancelFade();
-    }
-
-
-    public void UpdateUnitCount(int _unit_count)
-    {
-        int prev_value = int.Parse(num_units_text.text);
-
-        if (_unit_count > prev_value)
-            fade.FadeColor(Color.green, EvaluateCurrentColor(), fade_time); // Unit gained.
-        else if (_unit_count < prev_value)
-            fade.FadeColor(Color.red, EvaluateCurrentColor(), fade_time); // Unit lost.
-
-        num_units_text.text = _unit_count.ToString();
     }
 
 

@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class SquadSense
 {
+    public FactionSettings faction;
+
     public List<SquaddieAI> squaddies = new List<SquaddieAI>();
     public Vector3 squad_center;
 

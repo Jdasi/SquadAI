@@ -36,12 +36,10 @@ public class SquaddieAI : MonoBehaviour
     private bool cover_right;
 
 
-    public void Init()
+    public void Init(FactionSettings _faction)
     {
-        if (stats.faction_settings == null)
-            return;
-
-        squaddie_canvas.Init(stats.faction_settings);
+        stats.faction_settings = _faction;
+        squaddie_canvas.Init(_faction);
         SetSelected(false);
     }
 

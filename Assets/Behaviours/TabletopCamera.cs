@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class TabletopCamera : MonoBehaviour
 {
+    [Header("Parameters")]
     [SerializeField] float move_speed;
     [SerializeField] float sprint_speed_modifier;
 
+    [Header("Startup")]
     [SerializeField] float starting_pitch;
     [SerializeField] float starting_zoom;
+    [SerializeField] Vector3 origin_start;
 
-    [SerializeField] float min_zoom = 5;
-    [SerializeField] float max_zoom = 20;
-
+    [Header("Sensitivity")]
     [SerializeField] float x_sensitivity;
     [SerializeField] float y_sensitivity;
     [SerializeField] float scroll_sensitivity;
 
+    [Header("Restrictions")]
     [SerializeField] float min_pitch = 0;
     [SerializeField] float max_pitch = 90;
+    [SerializeField] float min_zoom = 5;
+    [SerializeField] float max_zoom = 20;
 
     private Vector3 origin;
     private Vector3 offset;
@@ -34,6 +38,7 @@ public class TabletopCamera : MonoBehaviour
     {
         pitch = starting_pitch;
         offset.z = starting_zoom;
+        origin = origin_start;
 
         HandleOrbit();
     }

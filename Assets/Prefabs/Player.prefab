@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 54392084295809804}
   - component: {fileID: 114467129234851988}
   - component: {fileID: 114928925687701330}
-  - component: {fileID: 114438397176304598}
   - component: {fileID: 114611498175746318}
   - component: {fileID: 114432360575913182}
   - component: {fileID: 114264375939669702}
@@ -593,21 +592,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558c1386f2903d8458462003859eae6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114438397176304598
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1052003227015208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f8225afaa817484db09d71e065716e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_squads: 3
-  settings: {fileID: 11400000, guid: 84061cc01d0f8414e8e92e333a326a00, type: 2}
-  context_scanner: {fileID: 0}
-  squad_hud_manager: {fileID: 0}
 --- !u!114 &114467129234851988
 MonoBehaviour:
   m_ObjectHideFlags: 1
