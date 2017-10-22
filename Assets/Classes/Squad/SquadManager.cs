@@ -60,6 +60,7 @@ public class SquadManager
 
     public void IssueContextCommand()
     {
+        squad_sense.squad_target = null;
         CurrentContext context = GameManager.scene.context_scanner.current_context;
 
         switch (context.type)
@@ -74,6 +75,8 @@ public class SquadManager
 
     public void IssueFollowCommand()
     {
+        squad_sense.squad_target = null;
+
         squad_sense.follow_targets.Clear();
         squad_sense.follow_targets.Add(GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
             GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform);
@@ -97,6 +100,8 @@ public class SquadManager
     
     public void ClearAllCommands()
     {
+        squad_sense.squad_target = null;
+
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
             squaddie.ResetOrderKnowledge();

@@ -68,6 +68,8 @@ public class TacticalAssessor : MonoBehaviour
             if (bad_flank || enemy_los)
                 continue;
 
+            // The further from the flank target the better.
+            cover_point.weighting -= distance;
             flanking_positions.Add(cover_point);
         }
 

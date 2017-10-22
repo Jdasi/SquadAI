@@ -8,8 +8,12 @@ public class EngageEnemyAction : Action
 
     public override bool PreconditionsMet(SquaddieAI _squaddie)
     {
+        OrderType current_order = _squaddie.knowledge.current_order;
+        bool eligible_to_engage = current_order == OrderType.NONE ||
+            current_order == OrderType.ATTACK;
+
         if (_squaddie.knowledge.current_target == null ||
-            _squaddie.knowledge.current_order != OrderType.NONE ||
+            !eligible_to_engage ||
             (_squaddie.knowledge.current_target_visible &&
             _squaddie.knowledge.current_target_in_range))
         {
