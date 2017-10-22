@@ -646,6 +646,8 @@ MonoBehaviour:
     type: 2}
   bullet_casing_prefab: {fileID: 1558819531369080, guid: fd547a3d67e47604d98b8db9bfde8048,
     type: 2}
+  tracer_prefab: {fileID: 1271984604624250, guid: 8c2661d95aed4fb479b301810fbbac39,
+    type: 2}
   hit_layers:
     serializedVersion: 2
     m_Bits: 183552

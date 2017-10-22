@@ -27,6 +27,7 @@ public class ChainGun : MonoBehaviour
     [SerializeField] GameObject shot_particle_prefab;
     [SerializeField] GameObject ricochet_particle_prefab;
     [SerializeField] GameObject bullet_casing_prefab;
+    [SerializeField] GameObject tracer_prefab;
     [SerializeField] LayerMask hit_layers;
 
     private Transform raycast_transform;
@@ -122,10 +123,13 @@ public class ChainGun : MonoBehaviour
         shot_forward += variance;
 
         RaycastHit hit;
-        Physics.Raycast(raycast_transform.position, shot_forward,
+        bool hit_success = Physics.Raycast(raycast_transform.position, shot_forward,
             out hit, Mathf.Infinity, hit_layers);
 
-        if (hit.collider == null)
+        Vector3 tracer_end = hit_success ? hit.point : shot_forward * 1000;
+        SpawnTracer(shot_point.position, tracer_end);
+
+        if (!hit_success)
             return;
 
         Vector3 ricochet_position = hit.point + (hit.normal / 5);
@@ -156,6 +160,17 @@ public class ChainGun : MonoBehaviour
         ejection_velocity += variance;
 
         ejected_casing.GetComponent<Rigidbody>().velocity = ejection_velocity;
+    }
+
+
+    void SpawnTracer(Vector3 _start, Vector3 _end)
+    {
+        GameObject clone = Instantiate(tracer_prefab, this.transform);
+        LineRenderer line = clone.GetComponent<LineRenderer>();
+
+        line.positionCount = 2;
+        line.SetPosition(0, _start);
+        line.SetPosition(1, _end);
     }
 
 }

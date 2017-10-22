@@ -70,6 +70,11 @@ public class TacticalAssessor : MonoBehaviour
 
             // The further from the flank target the better.
             cover_point.weighting -= distance;
+
+            // Encourage squad cohesion.
+            cover_point.weighting += (cover_point.position -
+                _flanker.knowledge.squad_sense.squad_center).magnitude;
+
             flanking_positions.Add(cover_point);
         }
 
