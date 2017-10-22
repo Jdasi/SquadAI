@@ -257,9 +257,10 @@ MonoBehaviour:
     m_Bits: 2048
   cover_point_settings: {fileID: 11400000, guid: 696eeaa3aaf35d447828334671d5a78c,
     type: 2}
-  grid_color: {r: 1, g: 0.9203187, b: 0, a: 1}
+  grid_color: {r: 1, g: 0.9203187, b: 0, a: 0.5882353}
   cover_point_size: 0.5
-  update_on_select: 0
+  update_on_draw: 0
+  draw: 1
 --- !u!114 &114696914233167304
 MonoBehaviour:
   m_ObjectHideFlags: 1

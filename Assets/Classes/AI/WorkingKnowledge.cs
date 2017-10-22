@@ -25,5 +25,6 @@ public class WorkingKnowledge
     public bool current_target_in_range;
     public bool crouched;
     public bool in_cover;
+    public bool position_compromised;
 
 }

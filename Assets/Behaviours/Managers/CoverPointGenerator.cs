@@ -17,7 +17,8 @@ public class CoverPointGenerator : MonoBehaviour
     [Header("Debug")]
     [SerializeField] Color grid_color = Color.yellow;
     [SerializeField] float cover_point_size = 0.5f;
-    [SerializeField] bool update_on_select;
+    [SerializeField] bool update_on_draw;
+    [SerializeField] bool draw;
 
     private Vector3 half_extents;
     private List<RaycastPackage> ray_packs = new List<RaycastPackage>();
@@ -113,10 +114,13 @@ public class CoverPointGenerator : MonoBehaviour
     }
 
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
+        if (!draw)
+            return;
+
         // Debug update.
-        if (update_on_select)
+        if (update_on_draw)
             GenerateCoverPoints();
 
         // Draw volume and grid.

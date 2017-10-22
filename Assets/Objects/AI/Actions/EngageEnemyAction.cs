@@ -12,8 +12,8 @@ public class EngageEnemyAction : Action
         bool eligible_to_engage = current_order == OrderType.NONE ||
             current_order == OrderType.ATTACK;
 
-        if (_squaddie.knowledge.current_target == null ||
-            !eligible_to_engage ||
+        if (!eligible_to_engage ||
+            _squaddie.knowledge.current_target == null ||
             (_squaddie.knowledge.current_target_visible &&
             _squaddie.knowledge.current_target_in_range))
         {

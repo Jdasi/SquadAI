@@ -313,11 +313,13 @@ public class SquaddieAI : MonoBehaviour
         {
             EvaluateCurrentTargetVisibility();
             EvaluateCurrentTargetInRange();
+            EvaluatePositionCompromised();
         }
         else
         {
             knowledge.current_target_visible = false;
             knowledge.current_target_in_range = false;
+            knowledge.position_compromised = false;
         }
     }
 
@@ -381,6 +383,13 @@ public class SquaddieAI : MonoBehaviour
         bool too_far = distance > settings.maximum_engage_distance;
 
         knowledge.current_target_in_range = !too_close && !too_far;
+    }
+
+
+    void EvaluatePositionCompromised()
+    {
+        bool result = knowledge.current_target.TestSightToPosition(transform.position);
+        knowledge.position_compromised = result;
     }
 
 
