@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,6 +10,7 @@ public class SquadManager
     public SquadSense squad_sense = new SquadSense();
     public FactionSettings squad_faction { get { return squad_sense.faction; } }
     public int num_squaddies { get { return squad_sense.squaddies.Count; } }
+    public TargetBobber order_target_bobber { get; private set; }
 
     private const float SQUADDIE_SPACING = 1;
 
@@ -16,6 +18,12 @@ public class SquadManager
     public SquadManager(FactionSettings _faction)
     {
         squad_sense.faction = _faction;
+    }
+
+
+    public void AssignTargetBobber(GameObject _bobber)
+    {
+        order_target_bobber = _bobber.GetComponent<TargetBobber>();
     }
 
 
@@ -76,10 +84,13 @@ public class SquadManager
     public void IssueFollowCommand()
     {
         squad_sense.squad_target = null;
+        Transform follow_target = GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
+            GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
+
+        order_target_bobber.SetTarget(follow_target);
 
         squad_sense.follow_targets.Clear();
-        squad_sense.follow_targets.Add(GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
-            GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform);
+        squad_sense.follow_targets.Add(follow_target);
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
@@ -100,6 +111,7 @@ public class SquadManager
     
     public void ClearAllCommands()
     {
+        order_target_bobber.Deactivate();
         squad_sense.squad_target = null;
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
@@ -112,6 +124,12 @@ public class SquadManager
     public void Update()
     {
         squad_sense.squaddies.RemoveAll(elem => elem == null);
+
+        if (order_target_bobber.active &&
+            squad_sense.squaddies.TrueForAll(elem => elem.knowledge.current_order == OrderType.NONE))
+        {
+            order_target_bobber.Deactivate();
+        }
 
         EvaluateSquadCenter();
     }
@@ -131,6 +149,8 @@ public class SquadManager
 
     void SquadMoveCommand(CurrentContext _context)
     {
+        order_target_bobber.SetTarget(_context.indicator_position);
+
         List<float> squaddie_sizes = new List<float>();
         float line_width = 0;
 
@@ -156,6 +176,8 @@ public class SquadManager
 
     void SquadCoverCommand(CurrentContext _context)
     {
+        order_target_bobber.SetTarget(_context.indicator_position);
+
         List<CoverPoint> allocated_points = new List<CoverPoint>();
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
@@ -191,6 +213,8 @@ public class SquadManager
 
     void SquadAttackCommand(CurrentContext _context)
     {
+        order_target_bobber.SetTarget(_context.indicator_hit);
+
         SquaddieAI target = _context.indicator_hit.GetComponent<SquaddieAI>();
         
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
@@ -206,6 +230,7 @@ public class SquadManager
 
     void SquadHackCommand(CurrentContext _context)
     {
+        order_target_bobber.SetTarget(_context.indicator_hit);
 
     }
 

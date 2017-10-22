@@ -273,6 +273,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squad_hud_manager: {fileID: 0}
+  target_bobber_prefab: {fileID: 1337408254818694, guid: 652dae278e8ab3c4eb02bac7d305aca3,
+    type: 2}
   squad_spawn_size: 4
   spawn_settings:
   - spawn_key: 93

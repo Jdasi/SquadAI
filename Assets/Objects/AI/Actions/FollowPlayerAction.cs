@@ -45,7 +45,10 @@ public class FollowPlayerAction : Action
 
         if (_squaddie.knowledge.follow_target == null)
         {
-            _squaddie.knowledge.follow_target = GameManager.scene.player.transform;
+            Transform follow_target = GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
+                GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
+
+            _squaddie.knowledge.follow_target = follow_target;
         }
 
         return _squaddie.knowledge.follow_target != null;

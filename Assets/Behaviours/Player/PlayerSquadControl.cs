@@ -19,6 +19,7 @@ public class PlayerSquadControl : MonoBehaviour
 
     [Header("References")]
     [SerializeField] SquadHUDManager squad_hud_manager;
+    [SerializeField] GameObject target_bobber_prefab;
 
     [Header("Debug")]
     [SerializeField] int squad_spawn_size;
@@ -83,6 +84,7 @@ public class PlayerSquadControl : MonoBehaviour
             return;
 
         SquadManager squad = _spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point);
+        squad.AssignTargetBobber(Instantiate(target_bobber_prefab));
         squad_hud_manager.CreateUIBlock(squad);
 
         squads.Add(squad);
