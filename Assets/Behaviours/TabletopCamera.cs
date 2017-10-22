@@ -11,7 +11,7 @@ public class TabletopCamera : MonoBehaviour
     [Header("Startup")]
     [SerializeField] float starting_pitch;
     [SerializeField] float starting_zoom;
-    [SerializeField] Vector3 origin_start;
+    [SerializeField] Vector3 origin;
 
     [Header("Sensitivity")]
     [SerializeField] float x_sensitivity;
@@ -24,7 +24,6 @@ public class TabletopCamera : MonoBehaviour
     [SerializeField] float min_zoom = 5;
     [SerializeField] float max_zoom = 20;
 
-    private Vector3 origin;
     private Vector3 offset;
 
     private float yaw;
@@ -38,7 +37,6 @@ public class TabletopCamera : MonoBehaviour
     {
         pitch = starting_pitch;
         offset.z = starting_zoom;
-        origin = origin_start;
 
         HandleOrbit();
     }

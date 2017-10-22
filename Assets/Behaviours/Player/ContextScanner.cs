@@ -125,8 +125,7 @@ public class ContextScanner : MonoBehaviour
             current_context.indicator_normal = _first_hit.normal;
             current_context.indicator_hit = _first_hit.transform;
 
-            if (_first_hit.normal == Vector3.up &&
-                _first_hit.collider.gameObject.layer == floor_layer_value)
+            if (_first_hit.collider.gameObject.layer == floor_layer_value)
             {
                 current_context.type = ContextType.FLOOR;
             }
@@ -183,7 +182,7 @@ public class ContextScanner : MonoBehaviour
                 Vector3 pos = transform.position;
                 pos.y = 0;
 
-                context_indicator.transform.rotation = Quaternion.LookRotation(context_indicator.transform.position - pos);
+                context_indicator.transform.rotation = Quaternion.LookRotation(_first_hit.normal);
             } break;
 
             case ContextType.COVER:
