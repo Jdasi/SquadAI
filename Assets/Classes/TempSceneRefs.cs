@@ -4,6 +4,18 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
+    public PerspectiveManager perspective_manager
+    {
+        get
+        {
+            if (perspective_manager_ == null)
+                perspective_manager_ = GameObject.FindObjectOfType<PerspectiveManager>();
+
+            return perspective_manager_;
+        }
+    }
+
+
     public PlayerSquadControl player_squad_control
     {
         get
@@ -76,6 +88,7 @@ public struct TempSceneRefs
     }
 
 
+    private PerspectiveManager perspective_manager_;
     private PlayerSquadControl player_squad_control_;
     private FirstPersonMovement player_;
     private TacticalAssessor tactical_assessor_;

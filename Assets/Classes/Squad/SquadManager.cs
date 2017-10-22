@@ -84,7 +84,7 @@ public class SquadManager
     public void IssueFollowCommand()
     {
         squad_sense.squad_target = null;
-        Transform follow_target = GameManager.scene.context_scanner.view_mode == ScannerViewMode.FPS ?
+        Transform follow_target = GameManager.scene.perspective_manager.perspective == PerspectiveMode.FPS ?
             GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
 
         order_target_bobber.SetTarget(follow_target);

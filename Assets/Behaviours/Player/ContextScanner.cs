@@ -11,15 +11,8 @@ public enum ContextType
     HACK
 }
 
-public enum ScannerViewMode
-{
-    FPS,
-    TACTICAL
-}
-
 public class ContextScanner : MonoBehaviour
 {
-    public ScannerViewMode view_mode;
     public CurrentContext current_context = new CurrentContext();
     public Transform indicator_transform { get { return context_indicator.transform; } }
 
@@ -99,15 +92,15 @@ public class ContextScanner : MonoBehaviour
         _hit = new RaycastHit();
         _ray_success = false;
 
-        switch (view_mode)
+        switch (GameManager.scene.perspective_manager.perspective)
         {
-            case ScannerViewMode.FPS:
+            case PerspectiveMode.FPS:
             {
                 _ray_success = Physics.Raycast(fps_transform.position, fps_transform.forward,
                     out _hit, Mathf.Infinity, hit_layers);
             } break;
 
-            case ScannerViewMode.TACTICAL:
+            case PerspectiveMode.TACTICAL:
             {
                 Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
                 _ray_success = Physics.Raycast(ray, out _hit, Mathf.Infinity, hit_layers);
