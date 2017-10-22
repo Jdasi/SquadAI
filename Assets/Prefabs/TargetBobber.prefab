@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f494be6e6de9745a6371226bb4a65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotation_speed: -100
+  rotation_speed: -150
   rotation_axis: {x: 0, y: 0, z: 1}
 --- !u!114 &114904090944886080
 MonoBehaviour:
@@ -267,7 +267,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 3, z: 0}
-  destroy_on_target_lost: 0
 --- !u!119 &119340030084059984
 Projector:
   m_ObjectHideFlags: 1
@@ -278,7 +277,7 @@ Projector:
   serializedVersion: 2
   m_NearClipPlane: 0.01
   m_FarClipPlane: 100
-  m_FieldOfView: 50
+  m_FieldOfView: 70
   m_AspectRatio: 1
   m_Orthographic: 0
   m_OrthographicSize: 2
@@ -296,7 +295,7 @@ Projector:
   serializedVersion: 2
   m_NearClipPlane: 0.01
   m_FarClipPlane: 100
-  m_FieldOfView: 35
+  m_FieldOfView: 55
   m_AspectRatio: 1
   m_Orthographic: 0
   m_OrthographicSize: 2
