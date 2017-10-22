@@ -357,6 +357,11 @@ public class SquaddieAI : MonoBehaviour
         {
             knowledge.current_target = knowledge.squad_sense.squad_target;
         }
+
+        if (knowledge.current_target != null && knowledge.squad_sense.squad_target == null)
+        {
+            knowledge.squad_sense.squad_target = knowledge.current_target;
+        }
     }
 
 
