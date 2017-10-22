@@ -350,17 +350,10 @@ public class SquaddieAI : MonoBehaviour
 
         if (knowledge.order_target != null)
         {
-            float distance = Vector3.Distance(knowledge.order_target.transform.position,
-                transform.position);
-
-            if (distance < settings.maximum_engage_distance ||
-                knowledge.closest_target == null)
-            {
-                knowledge.current_target = knowledge.order_target;
-            }
+            knowledge.current_target = knowledge.order_target;
         }
         else if (knowledge.squad_sense.squad_target != null &&
-            knowledge.closest_target == null)
+            knowledge.current_target == null)
         {
             knowledge.current_target = knowledge.squad_sense.squad_target;
         }

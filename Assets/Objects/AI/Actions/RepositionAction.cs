@@ -15,13 +15,14 @@ public class RepositionAction : Action
         if (!eligible_to_reposition || _squaddie.knowledge.current_target == null)
             return false;
 
-        bool new_cover_needed = (!_squaddie.nav.hasPath && !_squaddie.knowledge.in_cover) ||
-            (_squaddie.knowledge.in_cover && _squaddie.knowledge.position_compromised);
+        bool moving = _squaddie.nav.hasPath;
+        if (!moving && (!_squaddie.knowledge.in_cover ||
+            _squaddie.knowledge.position_compromised))
+        {
+            return true;
+        }
 
-        if (!new_cover_needed)
-            return false;
-
-        return true;
+        return false;
     }
 
 
