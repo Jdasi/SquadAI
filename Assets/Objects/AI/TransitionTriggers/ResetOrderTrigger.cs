@@ -9,6 +9,8 @@ public class ResetOrderTrigger : TransitionTrigger
     {
         _squaddie.knowledge.current_order = OrderType.NONE;
         _squaddie.knowledge.order_waypoint = Vector3.zero;
+        _squaddie.knowledge.hacking = false;
+        _squaddie.knowledge.squad_sense.hacker_squaddie = null;
     }
 
 }

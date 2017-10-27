@@ -92,6 +92,9 @@ public class SquaddieAI : MonoBehaviour
         knowledge.current_order = OrderType.NONE;
         knowledge.order_target = null;
         knowledge.order_waypoint = Vector3.zero;
+        knowledge.order_console = null;
+
+        nav.stoppingDistance = settings.move_stop_distance;
     }
 
 
@@ -119,8 +122,10 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    public void MoveToFlankEnemy(SquaddieAI _target)
+    public void MoveToFlankEnemy(SquaddieAI _target, float _chase_range = -1)
     {
+        _chase_range = _chase_range < 0 ? settings.chase_range : float.MaxValue;
+
         var cover_points = GameManager.scene.tactical_assessor.FindFlankingPositions(
             this, _target, settings.cover_search_radius);
 
@@ -407,6 +412,24 @@ public class SquaddieAI : MonoBehaviour
     void OnDrawGizmosSelected()
     {
 
+    }
+
+
+    void OnTriggerEnter(Collider _other)
+    {
+        if (_other.CompareTag("Console"))
+        {
+            knowledge.nearby_console = _other.GetComponentInParent<HackableConsole>();
+        }
+    }
+
+
+    void OnTriggerExit(Collider _other)
+    {
+        if (_other.CompareTag("Console"))
+        {
+            knowledge.nearby_console = null;
+        }
     }
 
 }

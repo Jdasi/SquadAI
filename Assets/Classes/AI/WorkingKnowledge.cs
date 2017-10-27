@@ -27,4 +27,8 @@ public class WorkingKnowledge
     public bool in_cover;
     public bool position_compromised;
 
+    public HackableConsole order_console;
+    public HackableConsole nearby_console;
+    public bool hacking;
+
 }

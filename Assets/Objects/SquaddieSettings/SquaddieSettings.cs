@@ -24,5 +24,6 @@ public class SquaddieSettings : ScriptableObject
     public float maximum_engage_distance;
     public float accuracy_penalty;
     public float cover_preference;
+    public float chase_range;
 
 }

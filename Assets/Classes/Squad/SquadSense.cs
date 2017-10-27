@@ -12,5 +12,6 @@ public class SquadSense
 
     public List<Transform> follow_targets = new List<Transform>();
     public SquaddieAI squad_target;
+    public SquaddieAI hacker_squaddie;
 
 }

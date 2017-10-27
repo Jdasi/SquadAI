@@ -9,18 +9,32 @@ public class OrderObeyedDecision : Decision
     {
         bool order_obeyed = true;
 
-        if (_squaddie.knowledge.current_order == OrderType.MOVE)
+        switch (_squaddie.knowledge.current_order)
         {
-            order_obeyed &= !_squaddie.nav.hasPath;
-        }
-        else if (_squaddie.knowledge.current_order == OrderType.ATTACK)
-        {
-            order_obeyed &= _squaddie.knowledge.order_target == null;
-        }
-        else if (_squaddie.knowledge.current_order == OrderType.FOLLOW)
-        {
-            // Follow until new order.
-            order_obeyed = false;
+            case OrderType.MOVE:
+            {
+                order_obeyed &= !_squaddie.nav.hasPath;
+            } break;
+
+            case OrderType.FOLLOW:
+            {
+                order_obeyed = false;
+            } break;
+
+            case OrderType.ATTACK:
+            {
+                order_obeyed &= _squaddie.knowledge.order_target == null;
+            } break;
+
+            case OrderType.HACK:
+            {
+                order_obeyed &= _squaddie.knowledge.order_console.hacked;
+            } break;
+
+            case OrderType.GUARD:
+            {
+                order_obeyed &= _squaddie.knowledge.squad_sense.hacker_squaddie == null;
+            } break;
         }
 
         return order_obeyed;

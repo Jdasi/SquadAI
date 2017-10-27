@@ -10,7 +10,7 @@ public class RepositionAction : Action
     {
         OrderType current_order = _squaddie.knowledge.current_order;
         bool eligible_to_reposition = current_order == OrderType.NONE ||
-            current_order == OrderType.ATTACK;
+            current_order == OrderType.ATTACK || current_order == OrderType.GUARD;
 
         if (!eligible_to_reposition || _squaddie.knowledge.current_target == null)
             return false;

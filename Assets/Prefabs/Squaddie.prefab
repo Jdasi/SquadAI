@@ -338,7 +338,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116222830393566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.5348215, y: 0.00000011920929, z: -66.47519}
+  m_LocalPosition: {x: -3.732884, y: 0.00000011920929, z: -28.587214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4975400138607812}
@@ -545,6 +545,7 @@ MonoBehaviour:
       squad_center: {x: 0, y: 0, z: 0}
       follow_targets: []
       squad_target: {fileID: 0}
+      hacker_squaddie: {fileID: 0}
     nearby_targets: []
     chain_gun: {fileID: 0}
     state_time_elapsed: 0
@@ -560,6 +561,9 @@ MonoBehaviour:
     crouched: 0
     in_cover: 0
     position_compromised: 0
+    order_console: {fileID: 0}
+    nearby_console: {fileID: 0}
+    hacking: 0
   nav: {fileID: 195571041401606838}
   view_point: {fileID: 4022209247994706}
   torso_transform: {fileID: 4031968911856356}
@@ -784,11 +788,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
+    m_MinSize: 1
+    m_MaxSize: 120
     m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1086,7 +1090,7 @@ NavMeshAgent:
   m_Radius: 0.75
   m_Speed: 5
   m_Acceleration: 10
-  avoidancePriority: 70
+  avoidancePriority: 99
   m_AngularSpeed: 150
   m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
@@ -1181,15 +1185,15 @@ RectTransform:
   m_GameObject: {fileID: 1393539627310286}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_Children: []
   m_Father: {fileID: 224181150333584780}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000059604645, y: 0.2}
-  m_SizeDelta: {x: 299, y: 56.6}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.0000059604645, y: 0.178}
+  m_SizeDelta: {x: 2000, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224910397006216888
 RectTransform:

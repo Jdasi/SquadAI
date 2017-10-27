@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Squaddie
   - DamageableBody
+  - Console
   layers:
   - Default
   - TransparentFX

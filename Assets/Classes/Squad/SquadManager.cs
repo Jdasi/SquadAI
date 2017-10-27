@@ -68,7 +68,7 @@ public class SquadManager
 
     public void IssueContextCommand()
     {
-        squad_sense.squad_target = null;
+        ClearAllCommands();
         CurrentContext context = GameManager.scene.context_scanner.current_context;
 
         switch (context.type)
@@ -83,7 +83,8 @@ public class SquadManager
 
     public void IssueFollowCommand()
     {
-        squad_sense.squad_target = null;
+        ClearAllCommands();
+        
         Transform follow_target = GameManager.scene.perspective_manager.perspective == PerspectiveMode.FPS ?
             GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
 
@@ -113,6 +114,7 @@ public class SquadManager
     {
         order_target_bobber.Deactivate();
         squad_sense.squad_target = null;
+        squad_sense.hacker_squaddie = null;
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
@@ -156,8 +158,6 @@ public class SquadManager
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
-            squaddie.nav.stoppingDistance = squaddie.settings.move_stop_distance;
-
             line_width += squaddie.nav.radius + SQUADDIE_SPACING;
             squaddie_sizes.Add(squaddie.nav.radius);
         }
@@ -182,8 +182,6 @@ public class SquadManager
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
-            squaddie.nav.stoppingDistance = squaddie.settings.move_stop_distance;
-
             var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
                 _context.indicator_position, squaddie.settings.cover_search_radius);
 
@@ -213,9 +211,8 @@ public class SquadManager
 
     void SquadAttackCommand(CurrentContext _context)
     {
-        order_target_bobber.SetTarget(_context.indicator_hit);
-
         SquaddieAI target = _context.indicator_hit.GetComponent<SquaddieAI>();
+        order_target_bobber.SetTarget(_context.indicator_hit);
         
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
@@ -230,8 +227,34 @@ public class SquadManager
 
     void SquadHackCommand(CurrentContext _context)
     {
+        HackableConsole console = _context.indicator_hit.GetComponent<HackableConsole>();
+        if (console.hacked)
+            return;
+
         order_target_bobber.SetTarget(_context.indicator_hit);
 
+        squad_sense.hacker_squaddie = squad_sense.squaddies[Random.Range(0, num_squaddies)];
+        for (int i = 0; i < num_squaddies; ++i)
+        {
+            SquaddieAI squaddie = squad_sense.squaddies[i];
+            squaddie.knowledge.order_console = console;
+
+            if (squaddie == squad_sense.hacker_squaddie)
+            {
+                squaddie.knowledge.current_order = OrderType.HACK;
+                squaddie.nav.destination = console.hack_point.position;
+            }
+            else
+            {
+                float theta = ((2 * Mathf.PI) / num_squaddies) * i;
+                float x_pos = Mathf.Sin(theta);
+                float z_pos = Mathf.Cos(theta);
+                Vector3 pos = console.hack_point.position + (new Vector3(x_pos, 0, z_pos) * 5);
+
+                squaddie.knowledge.current_order = OrderType.GUARD;
+                squaddie.MoveToCoverNearPosition(pos);
+            }
+        }
     }
 
 }
