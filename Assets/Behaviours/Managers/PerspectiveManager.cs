@@ -8,6 +8,10 @@ public enum PerspectiveMode
     TACTICAL
 }
 
+/// <summary>
+/// Handles the transition between First-Person and Tactical perspectives.
+/// Other classes can specialise their behaviour based on the current perspective mode.
+/// </summary>
 public class PerspectiveManager : MonoBehaviour
 {
     public PerspectiveMode perspective { get; private set; }

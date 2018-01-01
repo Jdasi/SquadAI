@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Adds variety to each play through by randomising console placement and enemy spawns.
+/// </summary>
 public class SceneArranger : MonoBehaviour
 {
     [SerializeField] List<HackableConsole> consoles_back_row;
@@ -16,6 +19,7 @@ public class SceneArranger : MonoBehaviour
 
     void Start()
     {
+        // Enable one random console in reach row: back, middle, front.
         EnableRandomConsole(consoles_back_row);
         EnableRandomConsole(consoles_middle_row);
         EnableRandomConsole(consoles_front_row);
@@ -24,6 +28,10 @@ public class SceneArranger : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Disables all consoles in the passed list, except for one.
+    /// </summary>
+    /// <param name="_consoles">List of consoles to process.</param>
     void EnableRandomConsole(List<HackableConsole> _consoles)
     {
         int index = Random.Range(0, _consoles.Count);
@@ -39,6 +47,11 @@ public class SceneArranger : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Processes the list of spawn points and activates some at random, based on the
+    /// number set in the GameManager.
+    /// Activated spawn points are removed from the list, preventing duplicate spawns.
+    /// </summary>
     void SpawnBadGuys()
     {
         int spawn_counter = 0;

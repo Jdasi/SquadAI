@@ -45,7 +45,7 @@ public class FollowPlayerAction : Action
 
         if (_squaddie.knowledge.follow_target == null)
         {
-            Transform follow_target = GameManager.scene.perspective_manager.perspective == PerspectiveMode.FPS ?
+            Transform follow_target = GameManager.scene.perspective_manager.FPSModeActive() ?
                 GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
 
             _squaddie.knowledge.follow_target = follow_target;

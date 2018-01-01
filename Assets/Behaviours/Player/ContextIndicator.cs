@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wrapper class to encapsulate the indicator icons that differentiate context
+/// sensitive commands that the player can issue to squads.
+/// </summary>
 public class ContextIndicator : MonoBehaviour
 {
     [Header("References")]

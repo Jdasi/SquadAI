@@ -31,7 +31,6 @@ namespace cakeslice
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [ExecuteInEditMode]
     public class OutlineEffect : MonoBehaviour
     {
         private static OutlineEffect m_instance;

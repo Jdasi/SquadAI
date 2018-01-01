@@ -109,7 +109,7 @@ public class PlayerSquadControl : MonoBehaviour
     void SquadSpawn(SpawnSettings _settings, SquadSpawner _spawner)
     {
         RaycastHit hit;
-        if (!JHelper.RaycastCameraToLayer("Floor", out hit))
+        if (!JHelper.RaycastMousePosToLayer("Floor", out hit))
             return;
 
         AddSquad(_spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point));
@@ -119,7 +119,7 @@ public class PlayerSquadControl : MonoBehaviour
     void IndividualSpawn(SpawnSettings _settings, SquadSpawner _spawner)
     {
         RaycastHit hit;
-        if (!JHelper.RaycastCameraToLayer("Floor", out hit))
+        if (!JHelper.RaycastMousePosToLayer("Floor", out hit))
             return;
 
         selected_squad.AddSquaddie(_spawner.CreateSquaddie(_settings.faction, hit.point));
@@ -146,7 +146,7 @@ public class PlayerSquadControl : MonoBehaviour
     void DestroyMouseOverSquaddie()
     {
         RaycastHit hit;
-        var success = JHelper.RaycastCameraToLayer("Damageable", out hit);
+        var success = JHelper.RaycastMousePosToLayer("Damageable", out hit);
 
         if (!success)
             return;

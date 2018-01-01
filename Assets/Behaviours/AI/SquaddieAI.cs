@@ -4,32 +4,37 @@ using cakeslice;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// The core driving system of an individual AI agent.
+/// This behaviour handles the AI's state and working knowledge, and has functionality to 
+/// update and query the AI's senses.
+/// </summary>
 public class SquaddieAI : MonoBehaviour
 {
     [Header("Parameters")]
-    public SquaddieSettings settings;
-    [SerializeField] State current_state;
-    [SerializeField] LayerMask sight_test_layers;
-    [SerializeField] float crouch_height;
+    public SquaddieSettings settings;                             // Describes the AI's capabilities.
+    [SerializeField] State current_state;                         // Defines the AI's current mindset.
+    [SerializeField] LayerMask sight_test_layers;                 // Layers that block the AI's line of sight.
+    [SerializeField] float crouch_height;                         // The height reduction percentage of the AI when crouched.
 
     [Header("Knowledge")]
-    public WorkingKnowledge knowledge = new WorkingKnowledge();
+    public WorkingKnowledge knowledge = new WorkingKnowledge();   // A representation of the AI's known state of the world.
 
     [Header("References")]
-    public NavMeshAgent nav;
-    public Transform view_point;
-    public Transform torso_transform;
-    public SquaddieStats stats;
+    public NavMeshAgent nav;                                      // Enables AI pathfinding.
+    public Transform view_point;                                  // Transform of the agent's eyes.
+    public Transform torso_transform;                             // Transform of the agent's chest.
+    public SquaddieStats stats;                                   // The AI's lifeforce and alliegence.
 
     [Space]
-    [SerializeField] Outline[] outlines;
-    [SerializeField] MeshRenderer[] meshes;
+    [SerializeField] Outline[] outlines;                          // Used to control the outline visualisation around the agents form.
+    [SerializeField] MeshRenderer[] meshes;                       // Used to texture the agent, based on faction.
 
     [Space]
-    [SerializeField] Transform mesh_transform;
-    [SerializeField] Transform leg_transform;
-    [SerializeField] SquaddieCanvas squaddie_canvas;
-    [SerializeField] SphereCollider scan_sphere;
+    [SerializeField] Transform mesh_transform;                    // Used to crouch the agent.
+    [SerializeField] Transform leg_transform;                     // Used to crouch the agent.
+    [SerializeField] SquaddieCanvas squaddie_canvas;              // Visual representation of the AI's state.
+    [SerializeField] SphereCollider scan_sphere;                  // Detection radius of the agent.
 
     private float original_height;
     private Vector3 original_leg_scale;
@@ -40,6 +45,10 @@ public class SquaddieAI : MonoBehaviour
     private bool cover_right;
 
 
+    /// <summary>
+    /// Must be called after a squaddie is created to initialise key variables.
+    /// </summary>
+    /// <param name="_faction">The faction settings of the squaddie.</param>
     public void Init(FactionSettings _faction)
     {
         stats.faction_settings = _faction;
@@ -64,6 +73,7 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    // ChaingunEquipper event.
     public void SetChainGun(ChainGun _gun)
     {
         knowledge.chain_gun = _gun;
@@ -76,6 +86,10 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Causes the agent to transition to a new state.
+    /// </summary>
+    /// <param name="_target_state">The state to enter.</param>
     public void TransitionToState(State _target_state)
     {
         if (_target_state == null)
@@ -87,6 +101,9 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Clears all the agent's knowledge relating to orders.
+    /// </summary>
     public void ResetOrderKnowledge()
     {
         knowledge.current_order = OrderType.NONE;
@@ -98,6 +115,10 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Issue the squaddie an order to move to the target location.
+    /// </summary>
+    /// <param name="_target">The target location.</param>
     public void IssueMoveCommand(Vector3 _target)
     {
         knowledge.current_order = OrderType.MOVE;
@@ -109,6 +130,10 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Cause the agent to seek cover near the target location.
+    /// </summary>
+    /// <param name="_position">Location to seek cover near.</param>
     public void MoveToCoverNearPosition(Vector3 _position)
     {
         var cover_points = GameManager.scene.tactical_assessor.ClosestCoverPoints(
@@ -122,10 +147,12 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
-    public void MoveToFlankEnemy(SquaddieAI _target, float _chase_range = -1)
+    /// <summary>
+    /// Cause the agent to seek a position that allows it to safely engage the target.
+    /// </summary>
+    /// <param name="_target">The flank target.</param>
+    public void MoveToFlankEnemy(SquaddieAI _target)
     {
-        _chase_range = _chase_range < 0 ? settings.chase_range : float.MaxValue;
-
         var cover_points = GameManager.scene.tactical_assessor.FindFlankingPositions(
             this, _target, settings.cover_search_radius);
 
@@ -135,35 +162,49 @@ public class SquaddieAI : MonoBehaviour
         }
         else
         {
-            foreach (CoverPoint cover_point in cover_points)
-            {
-                bool unique_pos = true;
-
-                foreach (SquaddieAI ally in knowledge.squad_sense.squaddies)
-                {
-                    if (ally == this || ally == null)
-                        continue;
-
-                    if ((cover_point.position - ally.nav.destination).magnitude >
-                        ally.settings.move_stop_distance + ally.nav.radius)
-                    {
-                        continue;
-                    }
-
-                    unique_pos = false;
-                    break;
-                }
-
-                if (!unique_pos)
-                    continue;
-
-                nav.destination = cover_point.position;
-                break;
-            }
+            nav.destination = EvaluateUniqueCoverPoint(cover_points);
         }
     }
 
 
+    
+    Vector3 EvaluateUniqueCoverPoint(List<CoverPoint> _cover_points)
+    {
+        foreach (CoverPoint cover_point in _cover_points)
+        {
+            bool unique_pos = true;
+
+            foreach (SquaddieAI ally in knowledge.squad_sense.squaddies)
+            {
+                if (ally == this || ally == null)
+                    continue;
+
+                if ((cover_point.position - ally.nav.destination).magnitude >
+                    ally.settings.move_stop_distance + ally.nav.radius)
+                {
+                    continue;
+                }
+
+                unique_pos = false;
+                break;
+            }
+
+            if (!unique_pos)
+                continue;
+
+            return cover_point.position;
+        }
+
+        return transform.position;
+    }
+
+
+
+    /// <summary>
+    /// Tests the agent's sight to a position from its current location.
+    /// </summary>
+    /// <param name="_position">The sight location to test.</param>
+    /// <returns>Returns true if it can see the position, otherwise returns false.</returns>
     public bool TestSightToPosition(Vector3 _position)
     {
         return JHelper.RaycastAToB(view_point.position, _position,
@@ -171,6 +212,12 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Tests the agent's sight to a position, as if it were standing in a specific location.
+    /// </summary>
+    /// <param name="_standing_pos">The hypothetical standing location of the agent.</param>
+    /// <param name="_position">The sight location to test.</param>
+    /// <returns>Returns true if it can see the position, otherwise returns false.</returns>
     public bool TestSightToPosition(Vector3 _standing_pos, Vector3 _position)
     {
         return JHelper.RaycastAToB(_standing_pos + new Vector3(0, view_point.position.y),
@@ -178,6 +225,7 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    // CollisionEventForwarder event.
     public void TriggerEnter(Collider _other)
     {
         if (!_other.CompareTag("DamageableBody"))
@@ -194,6 +242,7 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    // CollisionEventForwarder event.
     public void TriggerExit(Collider _other)
     {
         if (!_other.CompareTag("DamageableBody"))
@@ -209,24 +258,28 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    // RaycastArray event.
     public void CoverForward(RaycastHit _hit)
     {
         cover_forward = HitValid(_hit);
     }
 
 
+    // RaycastArray event.
     public void CoverBackward(RaycastHit _hit)
     {
         cover_backward = HitValid(_hit);
     }
 
 
+    // RaycastArray event.
     public void CoverLeft(RaycastHit _hit)
     {
         cover_left = HitValid(_hit);
     }
 
 
+    // RaycastArray event.
     public void CoverRight(RaycastHit _hit)
     {
         cover_right = HitValid(_hit);
@@ -253,6 +306,11 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// A single update tick of the AI agent.
+    /// Most of the AI's behaviour takes place inside the state system.
+    /// The remainder of code handles animations or state-independent functionality.
+    /// </summary>
     void Update()
     {
         current_state.UpdateState(this);
@@ -278,6 +336,9 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Animates the agent based on its crouched status, which is set through Actions.
+    /// </summary>
     void HandleCrouch()
     {
         // Move mesh down when crouched as nav agent always stays at same height.
@@ -295,12 +356,20 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Called when the AI transitions into a new state.
+    /// </summary>
+    /// <param name="_state">State that the AI is entering.</param>
     void OnStateEnter(State _state)
     {
         squaddie_canvas.UpdateStateDisplay(_state.display_text);
     }
 
 
+    /// <summary>
+    /// Called when the AI leaves its current state.
+    /// </summary>
+    /// <param name="_state">State that the AI is leaving.</param>
     void OnStateExit(State _state)
     {
         knowledge.state_time_elapsed = 0;
@@ -308,6 +377,9 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Refreshes the agent's combat awareness with up to date information.
+    /// </summary>
     void EvaluationTick()
     {
         EvaluateClosestTarget();
@@ -348,6 +420,12 @@ public class SquaddieAI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Target Priority:
+    /// 1. Order Target
+    /// 2. Squad Target
+    /// 3. Closest Target
+    /// </summary>
     void EvaluateCurrentTarget()
     {
         knowledge.current_target = knowledge.closest_target;
@@ -362,6 +440,7 @@ public class SquaddieAI : MonoBehaviour
             knowledge.current_target = knowledge.squad_sense.squad_target;
         }
 
+        // Inform squad of current target if the squad has no shared target.
         if (knowledge.current_target != null && knowledge.squad_sense.squad_target == null)
         {
             knowledge.squad_sense.squad_target = knowledge.current_target;
@@ -405,12 +484,6 @@ public class SquaddieAI : MonoBehaviour
 
         Gizmos.DrawLine(view_point.position,
             view_point.position + (view_point.forward * settings.sight_distance));
-    }
-
-
-    void OnDrawGizmosSelected()
-    {
-
     }
 
 

@@ -58,7 +58,14 @@ public class JHelper
     }
 
 
-    // Returns True if raycast from A reaches B, otherwise returns False.
+    /// <summary>
+    /// Test if a raycast from A can reach B without being blocked.
+    /// </summary>
+    /// <param name="_a">From position.</param>
+    /// <param name="_b">To position.</param>
+    /// <param name="_max_distance">Max distance of the raycast.</param>
+    /// <param name="_blocking_layers">Object layers that can block the ray.</param>
+    /// <returns>True if raycast from A reaches B, otherwise False.</returns>
     public static bool RaycastAToB(Vector3 _a, Vector3 _b, float _max_distance,
         LayerMask _blocking_layers)
     {
@@ -76,7 +83,7 @@ public class JHelper
     }
 
 
-    public static bool RaycastCameraToLayer(string _layer, out RaycastHit _hit)
+    public static bool RaycastMousePosToLayer(string _layer, out RaycastHit _hit)
     {
         Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
         bool _ray_success = Physics.Raycast(ray, out _hit, Mathf.Infinity,

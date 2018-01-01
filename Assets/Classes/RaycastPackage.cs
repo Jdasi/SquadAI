@@ -8,5 +8,4 @@ public class RaycastPackage
     public Vector3 to;
     public Vector3 direction;
     public float length;
-
 }

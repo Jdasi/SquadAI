@@ -5,14 +5,14 @@ using UnityEngine.Events;
 
 public class FirstPersonMouseLook : MonoBehaviour
 {
-    public bool mouse_locked = true;
+    public bool mouse_locked = true;                                // Is mouse look enabled?
 
     [Header("Parameters")]
-    [SerializeField] float horizontal_look_sensitivity = 150.0f;
-    [SerializeField] float vertical_look_sensitivity = 100.0f;
-    [SerializeField] bool y_flipped;
-    [SerializeField] UnityEvent look_enabled_events;
-    [SerializeField] UnityEvent look_disabled_events;
+    [SerializeField] float horizontal_look_sensitivity = 150.0f;    // Sensitivity of the mouse X axis.
+    [SerializeField] float vertical_look_sensitivity = 100.0f;      // Sensitivity of the mouse Y axis.
+    [SerializeField] bool y_flipped;                                // Should the mouse Y axis be flipped?
+    [SerializeField] UnityEvent look_enabled_events;                // Events that fire when mouse look is enabled.
+    [SerializeField] UnityEvent look_disabled_events;               // Events that fire when mouse look is disabled.
 
     [Header("References")]
     [SerializeField] Transform x_rotate_transform;

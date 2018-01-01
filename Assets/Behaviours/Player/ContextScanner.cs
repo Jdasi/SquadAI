@@ -11,16 +11,21 @@ public enum ContextType
     HACK
 }
 
+/// <summary>
+/// Contains contextual information which can be used to drive other game systems.
+/// This information is recorded based on the current PerspectiveMode: mouse position 
+/// in Tactical mode, and the screen center in FPS mode.
+/// </summary>
 public class ContextScanner : MonoBehaviour
 {
-    public CurrentContext current_context = new CurrentContext();
+    public CurrentContext current_context = new CurrentContext();   // The current context information.
     public Transform indicator_transform { get { return context_indicator.transform; } }
 
     [Header("Parameters")]
-    [SerializeField] float dist_from_first_ray;
-    [SerializeField] float dist_from_second_ray;
-    [SerializeField] LayerMask hit_layers;
-    [SerializeField] float scan_interval = 0.005f;
+    [SerializeField] float dist_from_first_ray;                     // How far from a surface the downward raycast should be performed to check for the floor.
+    [SerializeField] float dist_from_second_ray;                    // How far above the floor the move indicator should be shown.
+    [SerializeField] LayerMask hit_layers;                          // The layers that represent different contextual options.
+    [SerializeField] float scan_interval = 0.005f;                  // How often the current context is updated.
 
     [Header("Layers")]
     [SerializeField] string floor_layer = "Floor";
@@ -29,9 +34,9 @@ public class ContextScanner : MonoBehaviour
     [SerializeField] string hackable_layer = "Hackable";
 
     [Header("References")]
-    [SerializeField] Transform fps_transform;
-    [SerializeField] Transform tactical_transform;
-    [SerializeField] ContextIndicator context_indicator;    
+    [SerializeField] Transform fps_transform;                       // Transform of the FPS camera.
+    [SerializeField] Transform tactical_transform;                  // Transform of the Tactical camera.
+    [SerializeField] ContextIndicator context_indicator;            // Reference to the class that encapsulates the contextual indicators.
 
     private int floor_layer_value;
     private int wall_layer_value;
@@ -39,6 +44,10 @@ public class ContextScanner : MonoBehaviour
     private int hackable_layer_value;
 
 
+    /// <summary>
+    /// Should be called when an order is about to be issued.
+    /// </summary>
+    /// <param name="_faction">Determines the current faction being ordered.</param>
     public void Activate(FactionSettings _faction)
     {
         Deactivate();
@@ -48,6 +57,9 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Should be called once an order has been issued.
+    /// </summary>
     public void Deactivate()
     {
         CancelInvoke("ScanContext");
@@ -70,13 +82,16 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Called every evaluation interval to update the current context.
+    /// </summary>
     void ScanContext()
     {
         RaycastHit first_hit;
         bool first_ray_success;
 
-        Raycast(out first_hit, out first_ray_success);
-        EvaluateContext(first_ray_success, first_hit);
+        Raycast(out first_hit, out first_ray_success); // Try to hit a contextual object.
+        EvaluateContext(first_ray_success, first_hit); // Evaluate the hit.
 
         if (current_context.type != ContextType.NONE)
         {
@@ -87,6 +102,12 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Performs a raycast from either the screen or the fps camera, based on the current PerspectiveMode.
+    /// The results are transcribed into the passed hit and bool variables.
+    /// </summary>
+    /// <param name="_hit">RaycastHit structure to store hit details.</param>
+    /// <param name="_ray_success">Boolean to describe raycast success.</param>
     void Raycast(out RaycastHit _hit, out bool _ray_success)
     {
         _hit = new RaycastHit();
@@ -109,6 +130,11 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Determines the current context, based on the passed RaycastHit.
+    /// </summary>
+    /// <param name="_hit_successful">Was the raycast successful?</param>
+    /// <param name="_first_hit">Details of the initial raycast.</param>
     void EvaluateContext(bool _hit_successful, RaycastHit _first_hit)
     {
         UpdateContextValues();
@@ -164,44 +190,23 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Updates the position of the context indicator based on the context.
+    /// Sometimes additional tests are performed to determine the validity of the current context.
+    /// </summary>
+    /// <param name="_first_hit"></param>
     void ProcessContext(RaycastHit _first_hit)
     {
         switch (current_context.type)
         {
             case ContextType.FLOOR:
             {
-                context_indicator.transform.position = _first_hit.point + (_first_hit.normal * dist_from_first_ray);
-
-                Vector3 pos = transform.position;
-                pos.y = 0;
-
-                context_indicator.transform.rotation = Quaternion.LookRotation(_first_hit.normal);
+                ProcessFloorContext(_first_hit);
             } break;
 
             case ContextType.COVER:
             {
-                // Find Floor from Wall.
-                RaycastHit second_hit;
-                bool ray_2 = Physics.Raycast(_first_hit.point + (_first_hit.normal * dist_from_first_ray),
-                    -Vector3.up, out second_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
-
-                if (second_hit.collider != null && second_hit.collider.gameObject.layer == floor_layer_value)
-                {
-                    context_indicator.transform.position = second_hit.point + (Vector3.up * dist_from_second_ray);
-                    context_indicator.transform.rotation = Quaternion.LookRotation(_first_hit.normal);
-                    context_indicator.transform.Rotate(0, -180, 0);
-
-                    // Check for overhangs.
-                    if (!Physics.Raycast(second_hit.point + (Vector3.up * dist_from_second_ray), -_first_hit.normal, 1,
-                        1 << floor_layer_value | 1 << wall_layer_value))
-                    {
-                        current_context.type = ContextType.NONE;
-                    }
-                }
-                else
-                {
-                    current_context.type = ContextType.NONE;
-                }
+                ProcessCoverContext(_first_hit);
             } break;
 
             case ContextType.ATTACK:
@@ -213,6 +218,49 @@ public class ContextScanner : MonoBehaviour
             {
                 context_indicator.SetScreenPosition(Input.mousePosition);
             } break;
+        }
+    }
+
+
+    void ProcessFloorContext(RaycastHit _hit)
+    {
+        context_indicator.transform.position = _hit.point + (_hit.normal * dist_from_first_ray);
+
+        Vector3 pos = transform.position;
+        pos.y = 0;
+
+        context_indicator.transform.rotation = Quaternion.LookRotation(_hit.normal);
+    }
+
+
+    /// <summary>
+    /// Performs various checks to assess the legitimacy of the cover context hit.
+    /// The context type is set to NONE if any of the tests fail.
+    /// </summary>
+    /// <param name="_hit"></param>
+    void ProcessCoverContext(RaycastHit _hit)
+    {
+        // Find Floor from Wall.
+        RaycastHit second_hit;
+        bool ray_2 = Physics.Raycast(_hit.point + (_hit.normal * dist_from_first_ray),
+            -Vector3.up, out second_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
+
+        if (second_hit.collider != null && second_hit.collider.gameObject.layer == floor_layer_value)
+        {
+            context_indicator.transform.position = second_hit.point + (Vector3.up * dist_from_second_ray);
+            context_indicator.transform.rotation = Quaternion.LookRotation(_hit.normal);
+            context_indicator.transform.Rotate(0, -180, 0);
+
+            // Check for overhangs.
+            if (!Physics.Raycast(second_hit.point + (Vector3.up * dist_from_second_ray), -_hit.normal, 1,
+                1 << floor_layer_value | 1 << wall_layer_value))
+            {
+                current_context.type = ContextType.NONE;
+            }
+        }
+        else
+        {
+            current_context.type = ContextType.NONE;
         }
     }
 

@@ -26,7 +26,7 @@ public class ChainGunEquipper : MonoBehaviour
         chain_gun = gun_clone.GetComponent<ChainGun>();
         chain_gun.Init(ray_cast_origin);
 
-        // Set layer for rendering / collisions.
+        // Mainly used to allow the player's gun to be rendered above all else in FPS view.
         int layer = instantiate_layer != "" ? LayerMask.NameToLayer(instantiate_layer) : 0;
         JHelper.SetLayerRecursive(gun_clone, layer);
 
