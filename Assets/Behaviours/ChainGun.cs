@@ -42,12 +42,14 @@ public class ChainGun : MonoBehaviour
     }
 
 
+    // Used by mouse look toggle events.
     public void EnableShooting()
     {
         can_shoot = true;
     }
 
 
+    // Used by mouse look toggle events.
     public void DisableShooting()
     {
         can_shoot = false;
@@ -80,7 +82,7 @@ public class ChainGun : MonoBehaviour
         }
 
         current_cycling_speed = Mathf.Clamp(current_cycling_speed, 0, max_cycle_speed);
-        gun_cycler.Rotate(0, 0, -current_cycling_speed);
+        gun_cycler.Rotate(0, 0, -current_cycling_speed * Time.timeScale);
     }
 
 
