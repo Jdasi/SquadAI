@@ -13,7 +13,7 @@ public class OrderObeyedDecision : Decision
         {
             case OrderType.MOVE:
             {
-                order_obeyed &= !_squaddie.nav.hasPath;
+                order_obeyed &= (!_squaddie.nav.hasPath && !_squaddie.nav.pathPending);
             } break;
 
             case OrderType.FOLLOW:

@@ -18,13 +18,16 @@ public class SquadSpawner : MonoBehaviour
     [SerializeField] GameObject squaddie_prefab;
 
 
-    public SquadManager CreateSquad(FactionSettings _faction, int _num_squaddies, Vector3 _position)
+    public SquadManager CreateSquad(FactionSettings _faction, int _num_squaddies, Vector3 _pos)
     {
         SquadManager squad_manager = new SquadManager(_faction);
 
         for (int i = 0; i < _num_squaddies; ++i)
         {
-            squad_manager.AddSquaddie(CreateSquaddie(_faction, _position));
+            SquaddieAI squaddie = CreateSquaddie(_faction, _pos);
+            squaddie.transform.position = JHelper.PosToCirclePos(_pos, _num_squaddies, i, _num_squaddies * 0.5f);
+
+            squad_manager.AddSquaddie(squaddie);
         }
 
         return squad_manager;

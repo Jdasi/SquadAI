@@ -211,15 +211,15 @@ public class SquadManager
 
     void SquadAttackCommand(CurrentContext _context)
     {
-        SquaddieAI target = _context.indicator_hit.GetComponent<SquaddieAI>();
-        order_target_bobber.SetTarget(_context.indicator_hit);
+        SquaddieAI attack_target = _context.indicator_hit.GetComponent<SquaddieAI>();
+        order_target_bobber.SetTarget(attack_target.transform);
         
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
-            if (JHelper.SameFaction(squaddie, target))
+            if (JHelper.SameFaction(squaddie, attack_target))
                 continue;
 
-            squaddie.knowledge.order_target = target;
+            squaddie.knowledge.order_target = attack_target;
             squaddie.knowledge.current_order = OrderType.ATTACK;
         }
     }
@@ -228,10 +228,11 @@ public class SquadManager
     void SquadHackCommand(CurrentContext _context)
     {
         HackableConsole console = _context.indicator_hit.GetComponent<HackableConsole>();
+
         if (console.hacked)
             return;
 
-        order_target_bobber.SetTarget(_context.indicator_hit);
+        order_target_bobber.SetTarget(console.transform);
 
         squad_sense.hacker_squaddie = squad_sense.squaddies[Random.Range(0, num_squaddies)];
         for (int i = 0; i < num_squaddies; ++i)
@@ -246,10 +247,7 @@ public class SquadManager
             }
             else
             {
-                float theta = ((2 * Mathf.PI) / num_squaddies) * i;
-                float x_pos = Mathf.Sin(theta);
-                float z_pos = Mathf.Cos(theta);
-                Vector3 pos = console.hack_point.position + (new Vector3(x_pos, 0, z_pos) * 5);
+                Vector3 pos = JHelper.PosToCirclePos(console.hack_point.position, num_squaddies, i, 5);
 
                 squaddie.knowledge.current_order = OrderType.GUARD;
                 squaddie.MoveToCoverNearPosition(pos);

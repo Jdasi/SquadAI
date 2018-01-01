@@ -15,11 +15,4 @@ MonoBehaviour:
   sfx_volume: 0.3
   music_clips:
   - {fileID: 0}
-  sfx_clips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  sfx_clips: []

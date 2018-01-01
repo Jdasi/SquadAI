@@ -1,14 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static TempSceneRefs scene = new TempSceneRefs();
+    public static int squads_to_spawn { get { return instance.squads_to_spawn_; } }
 
     private static GameManager instance;
+
+    [SerializeField] GameObject game_over_panel;
+    [SerializeField] Text game_over_text;
+    [SerializeField] int squads_to_spawn_;
+
+    private bool game_over;
+
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+
+    public void RestartScene()
+    {
+        AudioManager.StopAllSFX();
+        SceneManager.LoadScene(0);
+    }
 
 
     void Awake()
@@ -38,10 +59,44 @@ public class GameManager : MonoBehaviour
             Application.Quit();
 
         if (Input.GetKeyDown(KeyCode.R))
+            RestartScene();
+
+        GameLoop();
+    }
+
+
+    void GameLoop()
+    {
+        if (game_over)
+            return;
+
+        bool all_consoles_hacked = GameManager.scene.scene_arranger.active_consoles.TrueForAll(elem => elem.hacked);
+        if (all_consoles_hacked)
         {
-            AudioManager.StopAllSFX();
-            SceneManager.LoadScene(0);
+            PlayerWin(true);
         }
+
+        bool no_player_squads = GameManager.scene.player_squad_control.squad_count == 0;
+        if (no_player_squads)
+        {
+            PlayerWin(false);
+        }
+    }
+
+
+    void PlayerWin(bool _win)
+    {
+        game_over = true;
+        game_over_panel.SetActive(true);
+
+        game_over_text.text = "You " + (_win ? "Win!" : "Lose");
+    }
+
+
+    void OnLevelWasLoaded(int _level)
+    {
+        game_over = false;
+        game_over_panel.SetActive(false);
     }
 
 }

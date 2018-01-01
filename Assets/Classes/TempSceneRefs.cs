@@ -4,6 +4,18 @@ using UnityEngine;
 
 public struct TempSceneRefs
 {
+    public SceneArranger scene_arranger
+    {
+        get
+        {
+            if (scene_arranger_ == null)
+                scene_arranger_ = GameObject.FindObjectOfType<SceneArranger>();
+
+            return scene_arranger_;
+        }
+    }
+
+
     public PerspectiveManager perspective_manager
     {
         get
@@ -95,5 +107,6 @@ public struct TempSceneRefs
     private SquadSpawner squad_spawner_;
     private CoverPointGenerator cover_point_generator_;
     private ContextScanner context_scanner_;
+    private SceneArranger scene_arranger_;
 
 }

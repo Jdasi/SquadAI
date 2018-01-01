@@ -141,7 +141,7 @@ public class SquaddieAI : MonoBehaviour
 
                 foreach (SquaddieAI ally in knowledge.squad_sense.squaddies)
                 {
-                    if (ally == this)
+                    if (ally == this || ally == null)
                         continue;
 
                     if ((cover_point.position - ally.nav.destination).magnitude >
@@ -292,7 +292,6 @@ public class SquaddieAI : MonoBehaviour
             crouch_height, original_leg_scale.z) : original_leg_scale;
 
         leg_transform.localScale = leg_scale;
-            
     }
 
 

@@ -16,6 +16,7 @@ public enum OrderType
 public class PlayerSquadControl : MonoBehaviour
 {
     public bool issuing_order { get; private set; }
+    public int squad_count { get { return squads.Count; } }
 
     [Header("References")]
     [SerializeField] SquadHUDManager squad_hud_manager;
@@ -30,6 +31,15 @@ public class PlayerSquadControl : MonoBehaviour
 
     private List<SquadManager> squads = new List<SquadManager>();
     private SquadManager selected_squad;
+
+
+    public void AddSquad(SquadManager _squad)
+    {
+        _squad.AssignTargetBobber(Instantiate(target_bobber_prefab));
+        squad_hud_manager.CreateUIBlock(_squad);
+
+        squads.Add(_squad);
+    }
 
 
     void Update()
@@ -83,11 +93,7 @@ public class PlayerSquadControl : MonoBehaviour
         if (!JHelper.RaycastCameraToFloor(out hit))
             return;
 
-        SquadManager squad = _spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point);
-        squad.AssignTargetBobber(Instantiate(target_bobber_prefab));
-        squad_hud_manager.CreateUIBlock(squad);
-
-        squads.Add(squad);
+        AddSquad(_spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point));
     }
 
 

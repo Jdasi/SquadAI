@@ -85,4 +85,16 @@ public class JHelper
         return _ray_success;
     }
 
+
+    public static Vector3 PosToCirclePos(Vector3 _pos, int _num_elems, int _elem_index, float _circle_size)
+    {
+        _elem_index = Mathf.Clamp(_elem_index, 0, _num_elems);
+
+        float theta = ((2 * Mathf.PI) / _num_elems) * _elem_index;
+        float x_pos = Mathf.Sin(theta);
+        float z_pos = Mathf.Cos(theta);
+
+        return _pos + (new Vector3(x_pos, 0, z_pos) * _circle_size);
+    }
+
 }
