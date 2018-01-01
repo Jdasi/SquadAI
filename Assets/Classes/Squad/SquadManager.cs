@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Encapsulates the details of a grouping of squaddies.
+/// The SquadManager allows micro-management over the squaddies, whilst
+/// maintaining important shared information used by the squaddies.
+/// </summary>
 [System.Serializable]
 public class SquadManager
 {
@@ -66,6 +70,11 @@ public class SquadManager
     }
 
 
+    /// <summary>
+    /// Primary method for issuing commands to squads.
+    /// This function automatically pulls information from the ContextScanner
+    /// to issue the most relevant command to the squad.
+    /// </summary>
     public void IssueContextCommand()
     {
         ClearAllCommands();
@@ -85,11 +94,14 @@ public class SquadManager
     {
         ClearAllCommands();
         
+        // Tailor to the current PerspectiveMode.
         Transform follow_target = GameManager.scene.perspective_manager.FPSModeActive() ?
             GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
 
+        // Visual feedback.
         order_target_bobber.SetTarget(follow_target);
 
+        // Prepare follow lists for new information.
         squad_sense.follow_targets.Clear();
         squad_sense.follow_targets.Add(follow_target);
 
@@ -110,6 +122,10 @@ public class SquadManager
     }
 
     
+    /// <summary>
+    /// Should be called before each new order to avoid conflicting information.
+    /// Clears out information from the squad sense, and resets order-specific knowledge held by each squaddie.
+    /// </summary>
     public void ClearAllCommands()
     {
         order_target_bobber.Deactivate();
@@ -125,8 +141,10 @@ public class SquadManager
 
     public void Update()
     {
+        // Maintain the list of squaddies.
         squad_sense.squaddies.RemoveAll(elem => elem == null);
 
+        // Order visualisation should only display while an order is underway.
         if (order_target_bobber.active &&
             squad_sense.squaddies.TrueForAll(elem => elem.knowledge.current_order == OrderType.NONE))
         {
@@ -149,35 +167,45 @@ public class SquadManager
     }
 
 
+    /// <summary>
+    /// Moves the squaddies to the context indicator position and arranges them in a line.
+    /// </summary>
+    /// <param name="_context">The current context.</param>
     void SquadMoveCommand(CurrentContext _context)
     {
         order_target_bobber.SetTarget(_context.indicator_position);
 
-        List<float> squaddie_sizes = new List<float>();
         float line_width = 0;
 
+        // Prepare to arrange the squaddies in a line at the move location.
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
         {
             line_width += squaddie.nav.radius + SQUADDIE_SPACING;
-            squaddie_sizes.Add(squaddie.nav.radius);
         }
 
+        // Issue waypoints to each squaddie. The line is treated as if it's center aligned at the target location.
         for (int i = 0; i < num_squaddies; ++i)
         {
             float padded_squaddie = squad_sense.squaddies[i].nav.radius + SQUADDIE_SPACING;
 
             Vector3 waypoint = _context.indicator_position + (_context.indicator_right * (padded_squaddie * i));
-            waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2);
+            waypoint -= _context.indicator_right * ((line_width - padded_squaddie) / 2); // Center align.
 
             squad_sense.squaddies[i].IssueMoveCommand(waypoint);
         }
     }
 
 
+    /// <summary>
+    /// Moves the squaddies to cover near the context indicator position.
+    /// A working list is used to prevent squaddies being issued the same cover points.
+    /// </summary>
+    /// <param name="_context"></param>
     void SquadCoverCommand(CurrentContext _context)
     {
         order_target_bobber.SetTarget(_context.indicator_position);
 
+        // Working list to prevent squaddies being issued the same cover.
         List<CoverPoint> allocated_points = new List<CoverPoint>();
 
         foreach (SquaddieAI squaddie in squad_sense.squaddies)
@@ -209,6 +237,10 @@ public class SquadManager
     }
 
 
+    /// <summary>
+    /// Causes the squad to engage the context indicator target.
+    /// </summary>
+    /// <param name="_context">The current context.</param>
     void SquadAttackCommand(CurrentContext _context)
     {
         SquaddieAI attack_target = _context.indicator_hit.GetComponent<SquaddieAI>();
@@ -225,6 +257,12 @@ public class SquadManager
     }
 
 
+    /// <summary>
+    /// Causes the squad to move to hack the context indicator target.
+    /// One squad member is randomly chosen to hack while the others occupy cover points
+    /// near the target.
+    /// </summary>
+    /// <param name="_context"></param>
     void SquadHackCommand(CurrentContext _context)
     {
         HackableConsole console = _context.indicator_hit.GetComponent<HackableConsole>();
@@ -242,11 +280,13 @@ public class SquadManager
 
             if (squaddie == squad_sense.hacker_squaddie)
             {
+                // Hacker squaddie moves to hack.
                 squaddie.knowledge.current_order = OrderType.HACK;
                 squaddie.nav.destination = console.hack_point.position;
             }
             else
             {
+                // The other squaddies move to defend.
                 Vector3 pos = JHelper.PosToCirclePos(console.hack_point.position, num_squaddies, i, 5);
 
                 squaddie.knowledge.current_order = OrderType.GUARD;

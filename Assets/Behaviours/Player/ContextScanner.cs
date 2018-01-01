@@ -242,7 +242,7 @@ public class ContextScanner : MonoBehaviour
     {
         // Find Floor from Wall.
         RaycastHit second_hit;
-        bool ray_2 = Physics.Raycast(_hit.point + (_hit.normal * dist_from_first_ray),
+        Physics.Raycast(_hit.point + (_hit.normal * dist_from_first_ray),
             -Vector3.up, out second_hit, Mathf.Infinity, 1 << floor_layer_value | 1 << wall_layer_value);
 
         if (second_hit.collider != null && second_hit.collider.gameObject.layer == floor_layer_value)

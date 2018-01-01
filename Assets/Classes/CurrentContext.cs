@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Describes the current context, based on what the player is looking at or hovering the mouse over.
+/// Other classes can use this information to issue context sensitive commands.
+/// </summary>
 [System.Serializable]
 public class CurrentContext
 {
@@ -14,6 +18,6 @@ public class CurrentContext
     public Vector3 indicator_right;
     public Vector3 indicator_forward;
 
-    public FactionSettings current_faction;
+    public FactionSettings current_faction; // Unused.
 
 }

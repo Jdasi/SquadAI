@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Describes the overall ability and awareness of a squaddie.
+/// </summary>
 [CreateAssetMenu(menuName = "Squad/Squaddie Settings")]
 public class SquaddieSettings : ScriptableObject
 {

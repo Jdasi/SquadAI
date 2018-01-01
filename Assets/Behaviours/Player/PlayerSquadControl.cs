@@ -13,6 +13,11 @@ public enum OrderType
     GUARD
 }
 
+/// <summary>
+/// The core class which enables player control over multiple squads of AI agents.
+/// This class tailors its output to the current PerspectiveMode, enabling control in both FPS and Tactical perspectives.
+/// A SquadHUDManager is used to help visualise the state of the player's forces.
+/// </summary>
 public class PlayerSquadControl : MonoBehaviour
 {
     public bool issuing_order { get; private set; }
@@ -42,6 +47,10 @@ public class PlayerSquadControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Should be called whenever the player has finished issuing a command,
+    /// or if a command should be aborted.
+    /// </summary>
     public void OrderFinished()
     {
         if (selected_squad == null)

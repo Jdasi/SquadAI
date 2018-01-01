@@ -107,7 +107,7 @@ public class ChainGun : MonoBehaviour
 
     void HandleShot()
     {
-        var shot_clone = Instantiate(shot_particle_prefab, shot_point.position,
+        Instantiate(shot_particle_prefab, shot_point.position,
             Quaternion.LookRotation(shot_point.forward));
 
         HitScan();
@@ -135,7 +135,7 @@ public class ChainGun : MonoBehaviour
             return;
 
         Vector3 ricochet_position = hit.point + (hit.normal / 5);
-        var ricochet_clone = Instantiate(ricochet_particle_prefab, ricochet_position,
+        Instantiate(ricochet_particle_prefab, ricochet_position,
             Quaternion.LookRotation(hit.normal));
 
         if (hit.collider.CompareTag("DamageableBody"))

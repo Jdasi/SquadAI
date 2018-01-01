@@ -8,13 +8,16 @@ public enum SquaddieFaction
     RED
 }
 
+/// <summary>
+/// Small container which describes the appearance and identity of a faction.
+/// </summary>
 [CreateAssetMenu(menuName = "Custom/Faction Settings")]
 public class FactionSettings : ScriptableObject
 {
-    public SquaddieFaction faction;
-    public Material base_material;
+    public SquaddieFaction faction;     // Enum identifier.
+    public Material base_material;      // Material to be applied to squaddies of this faction.
 
-    public Color arrow_color;
-    public Color text_color;
+    public Color arrow_color;           // Color of SquaddieCanvas elements.
+    public Color text_color;            // Color of SquaddieCanvas elements.
 
 }

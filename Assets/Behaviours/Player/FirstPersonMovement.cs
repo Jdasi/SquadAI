@@ -27,9 +27,6 @@ public class FirstPersonMovement : MonoBehaviour
     private bool sprinting;
     private bool grounded;
 
-    private int player_layer_value;
-    private int noclip_layer_value;
-
     private Vector3 original_leg_scale;
 
 
@@ -58,7 +55,7 @@ public class FirstPersonMovement : MonoBehaviour
         sprinting = !crouched && Input.GetButton("Sprint");
 
         grounded = Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0),
-            Vector3.down, 0.2f, ~player_layer_value);
+            Vector3.down, 0.2f, ~0);
 
         legs_transform.localScale = crouched ? crouch_scale : original_leg_scale;
 

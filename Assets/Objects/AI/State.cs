@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A class which represents a particular mindset of an AI agent.
+/// States contain Actions, which describe the agent's abilities when in this State.
+/// Transitions use Decisions to determine when to enter a new State.
+/// </summary>
 [CreateAssetMenu (menuName = "PluggableAI/State")]
 public class State : ScriptableObject
 {
-    public string display_text;
-    public Action[] actions;
-    public Transition[] transitions;
-    public Color state_color = Color.grey;
+    public string display_text;             // Visual identifier, used by SquaddieCanvas.
+    public Action[] actions;                // The abilties available in this State.
+    public Transition[] transitions;        // Logic which governs transitions to other States.
+    public Color state_color = Color.grey;  // Debug gizmo colour.
 
 
     public void UpdateState(SquaddieAI _squaddie)
@@ -45,11 +50,16 @@ public class State : ScriptableObject
             if (target_state == null)
                 continue;
 
-            TransitionTrigger[] triggers = decision_success ?
-                transition.true_triggers : transition.false_triggers;
-
-            foreach (TransitionTrigger trigger in triggers)
-                trigger.Trigger(_squaddie);
+            if (decision_success)
+            {
+                foreach (TransitionTrigger trigger in transition.true_triggers)
+                    trigger.Trigger(_squaddie);
+            }
+            else
+            {
+                foreach (TransitionTrigger trigger in transition.false_triggers)
+                    trigger.Trigger(_squaddie);
+            }
 
             _squaddie.TransitionToState(target_state);
         }

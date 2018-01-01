@@ -43,14 +43,14 @@ public class TargetBobber : MonoBehaviour
     
     void Update()
     {
-        if (trans_target != null)
-            UpdatePosition();
+        UpdatePosition();
     }
 
 
     void UpdatePosition()
     {
-        transform.position = trans_target.transform.position + offset;
+        transform.position = (trans_target != null ?
+            trans_target.transform.position : vec_target) + offset;
     }
 
 }

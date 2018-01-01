@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Helper functions that don't belong anywhere and are useful in many parts of the program.
+/// </summary>
 public class JHelper
 {
     private static Camera main_camera_;
