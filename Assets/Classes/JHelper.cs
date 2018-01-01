@@ -76,11 +76,11 @@ public class JHelper
     }
 
 
-    public static bool RaycastCameraToFloor(out RaycastHit _hit)
+    public static bool RaycastCameraToLayer(string _layer, out RaycastHit _hit)
     {
         Ray ray = JHelper.main_camera.ScreenPointToRay(Input.mousePosition);
         bool _ray_success = Physics.Raycast(ray, out _hit, Mathf.Infinity,
-            1 << LayerMask.NameToLayer("Floor"));
+            1 << LayerMask.NameToLayer(_layer));
 
         return _ray_success;
     }

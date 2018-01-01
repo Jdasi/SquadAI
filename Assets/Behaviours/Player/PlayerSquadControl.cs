@@ -69,7 +69,7 @@ public class PlayerSquadControl : MonoBehaviour
         squads.RemoveAll(elem => elem.num_squaddies == 0);
 
         HandleSquadSpawning();
-        HandleSquadRemoval();
+        HandleSquaddieRemoval();
         HandleSquadSelection();
 
         if (Input.GetButtonDown("Command"))
@@ -109,7 +109,7 @@ public class PlayerSquadControl : MonoBehaviour
     void SquadSpawn(SpawnSettings _settings, SquadSpawner _spawner)
     {
         RaycastHit hit;
-        if (!JHelper.RaycastCameraToFloor(out hit))
+        if (!JHelper.RaycastCameraToLayer("Floor", out hit))
             return;
 
         AddSquad(_spawner.CreateSquad(_settings.faction, squad_spawn_size, hit.point));
@@ -119,7 +119,7 @@ public class PlayerSquadControl : MonoBehaviour
     void IndividualSpawn(SpawnSettings _settings, SquadSpawner _spawner)
     {
         RaycastHit hit;
-        if (!JHelper.RaycastCameraToFloor(out hit))
+        if (!JHelper.RaycastCameraToLayer("Floor", out hit))
             return;
 
         selected_squad.AddSquaddie(_spawner.CreateSquaddie(_settings.faction, hit.point));
@@ -127,12 +127,35 @@ public class PlayerSquadControl : MonoBehaviour
     }
 
 
-    void HandleSquadRemoval()
+    void HandleSquaddieRemoval()
     {
-        if (selected_squad == null || !Input.GetKeyDown(remove_squaddie_key))
+        if (!Input.GetKeyDown(remove_squaddie_key))
             return;
 
-        selected_squad.RemoveSquaddie();
+        if (selected_squad != null)
+        {
+            selected_squad.RemoveSquaddie();
+        }
+        else
+        {
+            DestroyMouseOverSquaddie();
+        }
+    }
+
+
+    void DestroyMouseOverSquaddie()
+    {
+        RaycastHit hit;
+        var success = JHelper.RaycastCameraToLayer("Damageable", out hit);
+
+        if (!success)
+            return;
+
+        SquaddieAI squaddie = hit.collider.transform.root.GetComponent<SquaddieAI>();
+        if (squaddie != null)
+        {
+            Destroy(squaddie.gameObject);
+        }
     }
 
 
