@@ -21,6 +21,18 @@ public class PerspectiveManager : MonoBehaviour
     [SerializeField] GameObject tabletop_cam_obj;
 
 
+    public bool FPSModeActive()
+    {
+        return perspective == PerspectiveMode.FPS;
+    }
+
+
+    public bool TacticalModeActive()
+    {
+        return perspective == PerspectiveMode.TACTICAL;
+    }
+
+
     void Start()
     {
         perspective = starting_perspective;
@@ -37,6 +49,8 @@ public class PerspectiveManager : MonoBehaviour
 
     void TogglePerspective()
     {
+        GameManager.scene.player_squad_control.OrderFinished();
+
         perspective = perspective == PerspectiveMode.FPS ?
             PerspectiveMode.TACTICAL : PerspectiveMode.FPS;
 

@@ -11,7 +11,7 @@ public class JHelper
     {
         get
         {
-            if (main_camera_ == null)
+            if (main_camera_ == null || Camera.current != main_camera_)
                 main_camera_ = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
             return main_camera_;

@@ -85,7 +85,7 @@ public class SquadManager
     {
         ClearAllCommands();
         
-        Transform follow_target = GameManager.scene.perspective_manager.perspective == PerspectiveMode.FPS ?
+        Transform follow_target = GameManager.scene.perspective_manager.FPSModeActive() ?
             GameManager.scene.player.transform : GameManager.scene.context_scanner.indicator_transform;
 
         order_target_bobber.SetTarget(follow_target);

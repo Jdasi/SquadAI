@@ -242,10 +242,24 @@ namespace cakeslice
 
         void OnDestroy()
         {
-            if(renderTexture != null)
+            CleanUp();
+        }
+
+
+        void OnDisable()
+        {
+            CleanUp();
+        }
+
+
+        void CleanUp()
+        {
+            if (renderTexture != null)
                 renderTexture.Release();
-            if(extraRenderTexture != null)
+
+            if (extraRenderTexture != null)
                 extraRenderTexture.Release();
+
             DestroyMaterials();
         }
 

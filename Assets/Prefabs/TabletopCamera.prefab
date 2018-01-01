@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1157958801811052}
   m_LocalRotation: {x: -0.00071004743, y: 0.99827605, z: -0.057324298, w: -0.0125870695}
-  m_LocalPosition: {x: 1, y: 8.43, z: 56.32}
+  m_LocalPosition: {x: 1.9, y: 12.3, z: 90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4636993446538498}
@@ -205,7 +205,7 @@ MonoBehaviour:
   sprint_speed_modifier: 2
   starting_pitch: -20
   starting_zoom: 25
-  origin: {x: 0, y: 1, z: 40}
+  origin: {x: 0, y: 1, z: 64.46}
   x_sensitivity: 100
   y_sensitivity: 100
   scroll_sensitivity: 500

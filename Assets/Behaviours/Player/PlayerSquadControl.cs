@@ -42,6 +42,25 @@ public class PlayerSquadControl : MonoBehaviour
     }
 
 
+    public void OrderFinished()
+    {
+        if (selected_squad == null)
+            return;
+
+        bool squad_following = selected_squad.squad_sense.squaddies.Any(
+            elem => elem.knowledge.current_order == OrderType.FOLLOW);
+
+        if (squad_following && GameManager.scene.perspective_manager.TacticalModeActive())
+            selected_squad.ClearAllCommands();
+
+        selected_squad.DeselectSquad();
+        selected_squad = null;
+
+        issuing_order = false;
+        GameManager.scene.context_scanner.Deactivate();
+    }
+
+
     void Update()
     {
         if (issuing_order && selected_squad.num_squaddies == 0)
@@ -194,25 +213,9 @@ public class PlayerSquadControl : MonoBehaviour
             return;
 
         selected_squad.IssueFollowCommand();
-    }
 
-
-    void OrderFinished()
-    {
-        if (selected_squad == null)
-            return;
-
-        bool squad_following = selected_squad.squad_sense.squaddies.Any(
-            elem => elem.knowledge.current_order == OrderType.FOLLOW);
-
-        if (squad_following)
-            selected_squad.ClearAllCommands();
-
-        selected_squad.DeselectSquad();
-        selected_squad = null;
-
-        issuing_order = false;
-        GameManager.scene.context_scanner.Deactivate();
+        if (GameManager.scene.perspective_manager.FPSModeActive())
+            OrderFinished();
     }
 
 }
