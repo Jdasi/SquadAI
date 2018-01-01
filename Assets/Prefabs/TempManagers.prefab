@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starting_perspective: 1
-  toggle_perspective_key: 112
+  toggle_perspective_key: 111
   player_obj: {fileID: 0}
   tabletop_cam_obj: {fileID: 0}
 --- !u!114 &114696914233167304
@@ -405,4 +405,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  squads_to_spawn: 5
+  active_consoles: []

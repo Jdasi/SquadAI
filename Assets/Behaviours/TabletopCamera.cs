@@ -63,8 +63,8 @@ public class TabletopCamera : MonoBehaviour
 
     void HandleOrbit()
     {
-        yaw += Input.GetAxis("Mouse X") * Time.deltaTime * x_sensitivity;
-        pitch += Input.GetAxis("Mouse Y") * Time.deltaTime * y_sensitivity;
+        yaw += Input.GetAxis("Mouse X") * Time.unscaledDeltaTime * x_sensitivity;
+        pitch += Input.GetAxis("Mouse Y") * Time.unscaledDeltaTime * y_sensitivity;
 
         pitch = Mathf.Clamp(pitch, min_pitch, max_pitch);
     }
@@ -74,7 +74,7 @@ public class TabletopCamera : MonoBehaviour
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel") * speed_modifier * scroll_sensitivity;
 
-        offset.z -= scroll * Time.deltaTime;
+        offset.z -= scroll * Time.unscaledDeltaTime;
         offset.z = Mathf.Clamp(offset.z, min_zoom, max_zoom);
     }
 
@@ -86,8 +86,8 @@ public class TabletopCamera : MonoBehaviour
         Vector3 forward_move = rot * Vector3.forward * move_speed;
         Vector3 side_move = rot * Vector3.right * move_speed;
 
-        origin -= forward_move * Input.GetAxis("Vertical") * speed_modifier * Time.deltaTime;
-        origin -= side_move * Input.GetAxis("Horizontal") * speed_modifier * Time.deltaTime;
+        origin -= forward_move * Input.GetAxisRaw("Vertical") * speed_modifier * Time.unscaledDeltaTime;
+        origin -= side_move * Input.GetAxisRaw("Horizontal") * speed_modifier * Time.unscaledDeltaTime;
     }
 
 

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject game_over_panel;
     [SerializeField] Text game_over_text;
+    [SerializeField] Text paused_text;
     [SerializeField] int squads_to_spawn_;
 
     private bool game_over;
@@ -60,6 +61,14 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
             RestartScene();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            bool paused = Time.timeScale == 1;
+
+            Time.timeScale = paused ? 0 : 1;
+            paused_text.gameObject.SetActive(paused);
+        }
 
         GameLoop();
     }
