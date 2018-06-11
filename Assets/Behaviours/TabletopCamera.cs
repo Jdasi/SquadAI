@@ -7,6 +7,7 @@ public class TabletopCamera : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] float move_speed;
     [SerializeField] float sprint_speed_modifier;
+    [SerializeField] float walk_speed_modifier;
 
     [Header("Startup")]
     [SerializeField] float starting_pitch;
@@ -44,8 +45,20 @@ public class TabletopCamera : MonoBehaviour
     
     void Update()
     {
-        orbiting = Input.GetMouseButton(1);    
-        speed_modifier = Input.GetButton("Sprint") ? sprint_speed_modifier : 1;
+        orbiting = Input.GetMouseButton(1);
+
+        if (Input.GetButton("Sprint"))
+        {
+            speed_modifier = sprint_speed_modifier;
+        }
+        else if (Input.GetButton("Walk"))
+        {
+            speed_modifier = walk_speed_modifier;
+        }
+        else
+        {
+            speed_modifier = 1;
+        }
 
         Cursor.visible = !orbiting;
         Cursor.lockState = orbiting ? CursorLockMode.Locked : CursorLockMode.None;

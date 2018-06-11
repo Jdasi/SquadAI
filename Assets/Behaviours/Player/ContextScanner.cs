@@ -12,7 +12,7 @@ public enum ContextType
 }
 
 /// <summary>
-/// Contains contextual information which can be used to drive other game systems.
+/// System that constantly scans the environment for a context (Floor, Cover, Attack, Hack).
 /// This information is recorded based on the current PerspectiveMode: mouse position 
 /// in Tactical mode, and the screen center in FPS mode.
 /// </summary>
@@ -45,6 +45,7 @@ public class ContextScanner : MonoBehaviour
 
 
     /// <summary>
+    /// Causes the system to begin scanning for contexts.
     /// Should be called when an order is about to be issued.
     /// </summary>
     /// <param name="_faction">Determines the current faction being ordered.</param>
@@ -58,16 +59,13 @@ public class ContextScanner : MonoBehaviour
 
 
     /// <summary>
+    /// Causes the system to cease scanning for contexts.
     /// Should be called once an order has been issued.
     /// </summary>
     public void Deactivate()
     {
         CancelInvoke("ScanContext");
-
-        current_context.type = ContextType.NONE;
-        current_context.current_faction = null;
-
-        context_indicator.ChangeIndicator(current_context.type);
+        ResetContext();
     }
 
 
@@ -137,7 +135,8 @@ public class ContextScanner : MonoBehaviour
     /// <param name="_first_hit">Details of the initial raycast.</param>
     void EvaluateContext(bool _hit_successful, RaycastHit _first_hit)
     {
-        UpdateContextValues();
+        // Get the most up to date information about the context indicator.
+        UpdateContextIndicatorValues();
 
         if (_hit_successful)
         {
@@ -173,7 +172,7 @@ public class ContextScanner : MonoBehaviour
     }
 
 
-    void UpdateContextValues()
+    void UpdateContextIndicatorValues()
     {
         current_context.indicator_position = context_indicator.transform.position;
         current_context.indicator_forward = context_indicator.transform.forward;
@@ -182,11 +181,16 @@ public class ContextScanner : MonoBehaviour
     }
 
 
+    // Reset current context, as if the player is not currently aiming at anything.
     void ResetContext()
     {
         current_context.type = ContextType.NONE;
+        current_context.current_faction = null;
+
         current_context.indicator_hit = null;
         current_context.indicator_normal = Vector3.zero;
+
+        context_indicator.ChangeIndicator(current_context.type);
     }
 
 
@@ -234,7 +238,7 @@ public class ContextScanner : MonoBehaviour
 
 
     /// <summary>
-    /// Performs various checks to assess the legitimacy of the cover context hit.
+    /// Performs ray/collision checks to assess the legitimacy of the cover context hit.
     /// The context type is set to NONE if any of the tests fail.
     /// </summary>
     /// <param name="_hit"></param>
